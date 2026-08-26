@@ -7,7 +7,45 @@
     <!-- Library Konfeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        /* Efek Zoom Pas di-Hover */
+.card:hover {
+  transform: scale(1.03); /* Zoom sedikit */
+  transition: transform 0.3s ease;
+}
+
+/* Efek Tombol Bergetar Pas di-Hover */
+button:hover {
+  animation: wiggle 0.5s ease-in-out infinite;
+}
+
+/* Definisi Gerakan Bergetar */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* CSS untuk Efek Mengetik */
+.typing-effect {
+  font-family: monospace; /* Biar kayak mesin ketik */
+  overflow: hidden; /* Sembunyikan teks yang belum "diketik" */
+  border-right: .15em solid orange; /* Garis kursor kedip */
+  white-space: nowrap; /* Teks jangan turun ke bawah */
+  margin: 0 auto;
+  letter-spacing: .15em;
+  animation: typing 3.5s steps(30, end), blink-caret .5s step-end infinite;
+}
+
+/* Definisi Gerakan Mengetik */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* Definisi Kursor Kedip */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange }
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
@@ -18,7 +56,32 @@
             text-align: center;
             padding: 20px;
         }
+/* CSS untuk Balon Berterbangan */
+    balloon {
+  display: inline-block;
+  width: 100px;
+  height: 120px;
+  background: rgba(255, 107, 129, 0.7); /* Warna balon (bisa diganti) */
+  border-radius: 80%;
+  position: fixed; /* Biar posisinya tetap di layar */
+  bottom: -150px; /* Mulai dari bawah layar */
+  transition: transform 0.5s ease;
+  z-index: -1; /* Biar balonnya ada di belakang kartu utama */
+  animation: balloons 10s ease-in-out infinite; /* Panggil animasinya */
+}
 
+/* Biar warna balonnya beda-beda */
+.balloon:nth-child(2) { background: rgba(106, 176, 245, 0.7); animation-duration: 12s; animation-delay: 2s; }
+.balloon:nth-child(3) { background: rgba(123, 237, 159, 0.7); animation-duration: 9s; animation-delay: 4s; }
+.balloon:nth-child(4) { background: rgba(255, 165, 2, 0.7); animation-duration: 11s; animation-delay: 1s; }
+.balloon:nth-child(5) { background: rgba(255, 71, 87, 0.7); animation-duration: 8s; animation-delay: 3s; }
+
+/* Definisi Gerakan Animasi */
+@keyframes balloons {
+  0% { bottom: -150px; transform: translateX(0px) rotate(10deg); }
+  50% { transform: translateX(50px) rotate(-10deg); }
+  100% { bottom: 110%; transform: translateX(-50px) rotate(10deg); } /* Terbang sampai keluar layar */
+}
         /* Desain Kotak Utama */
         .card {
             background: white;
@@ -66,7 +129,8 @@
             margin-bottom: 15px;
         }
         h1 { color: #ff4757; font-size: 1.8rem; margin-bottom: 10px; }
-        p { color: #57606f; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
+        p { color: #57606f; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; } 
+        <p class="typing-effect">Semoga panjang umur dan sehat selalu!</p>
         
         button {
             background-color: #ff4757;
@@ -92,7 +156,16 @@
     </style>
 </head>
 <body>
+    
 
+    <!-- Elemen Balon -->
+<div class="balloons-container">
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+</div>
     <div class="card">
         <!-- LAYAR 1: Input Nama -->
         <div id="loginBox" class="login-box">
