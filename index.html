@@ -3,65 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
-    <!-- Library Konfeti -->
+    <title>Birthday Vending Machine</title>
+    <!-- Library Animasi Konfeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Courier New', Courier, monospace;
+            background: #2f3542;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
             padding: 20px;
-            overflow: hidden; /* Biar balon nggak bikin scrollbar muncul */
-            position: relative;
         }
 
-        /* 1. ANIMASI BALON */
-        .balloon {
-            width: 80px;
-            height: 100px;
-            background: rgba(255, 107, 129, 0.7);
-            border-radius: 80% 80% 80% 80%;
-            position: absolute;
-            bottom: -120px;
-            z-index: 1;
-            animation: moveBalloon 8s linear infinite;
-        }
-        .balloon:nth-child(1) { left: 10%; background: rgba(255, 107, 129, 0.7); animation-duration: 7s; }
-        .balloon:nth-child(2) { left: 30%; background: rgba(106, 176, 245, 0.7); animation-duration: 9s; animation-delay: 2s; }
-        .balloon:nth-child(3) { left: 50%; background: rgba(255, 234, 167, 0.7); animation-duration: 6s; animation-delay: 1s; }
-        .balloon:nth-child(4) { left: 70%; background: rgba(123, 237, 159, 0.7); animation-duration: 8s; animation-delay: 3s; }
-        .balloon:nth-child(5) { left: 85%; background: rgba(255, 159, 243, 0.7); animation-duration: 10s; animation-delay: 1.5s; }
-
-        @keyframes moveBalloon {
-            0% { bottom: -120px; transform: translateX(0) rotate(0deg); }
-            50% { transform: translateX(30px) rotate(15deg); }
-            100% { bottom: 105vh; transform: translateX(-30px) rotate(-15deg); }
-        }
-
-        /* 2. KARTU UTAMA */
+        /* CONTAINER UTAMA & LOGIN */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            background: #1e272e;
+            padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            max-width: 420px;
             width: 100%;
-            z-index: 10; /* Kartu tetap di depan balon */
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
+            text-align: center;
+            border: 4px solid #485460;
+            color: #fff;
         }
 
-        /* Form Input Nama */
-        .login-box h2 { color: #ff4757; margin-bottom: 15px; }
+        .login-box h2 { color: #ff4757; margin-bottom: 12px; font-family: sans-serif; }
         input[type="text"] {
             width: 100%;
             padding: 12px;
@@ -72,22 +43,123 @@
             text-align: center;
             font-size: 1rem;
         }
-        .error-msg { color: #ff4757; font-size: 0.9rem; margin-top: 10px; display: none; }
+        .error-msg { color: #ff4757; font-size: 0.9rem; margin-top: 10px; display: none; font-family: sans-serif; }
 
         #contentUtama { display: none; }
 
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #ff4757;
-            margin-bottom: 15px;
+        /* STRUKTUR MESIN VENDING */
+        .vending-machine {
+            background: #ff4757;
+            border: 5px solid #d63031;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            position: relative;
         }
 
-        /* 3. ANIMASI TOMBOL GOYANG (WIGGLE) */
-        button {
-            background-color: #ff4757;
+        /* LAMPU BERKEDIP */
+        .lights {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        .light {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ffeaa7;
+            animation: blink 0.8s infinite alternate;
+        }
+        .light:nth-child(2) { animation-delay: 0.2s; }
+        .light:nth-child(3) { animation-delay: 0.4s; }
+        .light:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes blink {
+            from { opacity: 0.3; filter: drop-shadow(0 0 0px #ffeaa7); }
+            to { opacity: 1; filter: drop-shadow(0 0 8px #ffeaa7); }
+        }
+
+        /* LAYAR MESIN */
+        .screen {
+            background: #000;
+            color: #00ff66;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 3px solid #57606f;
+            box-shadow: inset 0 0 10px rgba(0,255,102,0.2);
+            text-shadow: 0 0 5px #00ff66;
+        }
+
+        /* KOTAK KELUAR ITEM (SLOT) */
+        .dispenser-window {
+            background: #2f3542;
+            height: 220px;
+            border-radius: 10px;
+            border: 3px solid #57606f;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ANIMASI SLIDE ITEM JATUH */
+        .vending-item {
+            background: #ffffff;
+            color: #2f3542;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: sans-serif;
+            font-weight: bold;
+            text-align: left;
+            transform: translateY(-50px);
+            opacity: 0;
+            animation: dropSlide 0.5s forwards ease-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border-left: 5px solid #ff4757;
+        }
+
+        @keyframes dropSlide {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .special-item {
+            background: #ffeaa7;
+            border-left: 5px solid #fdcb6e;
+            color: #d63031;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* TOMBOL KONTROL MESIN */
+        .btn-coin {
+            background: #ffa502;
+            color: #2f3542;
+            border: 3px solid #e1b12c;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: sans-serif;
+            box-shadow: 0 5px 0 #e1b12c;
+            transition: all 0.1s ease;
+            width: 100%;
+        }
+        .btn-coin:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #e1b12c;
+        }
+
+        .btn-login {
+            background: #ff4757;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -95,61 +167,70 @@
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-        }
-        button:hover {
-            animation: wiggle 0.4s ease-in-out infinite;
-        }
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
+            font-family: sans-serif;
         }
 
         .hidden-message {
             display: none;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px dashed #ffeaa7;
-            color: #2ed573;
-            font-weight: bold;
+            margin-top: 15px;
+            padding: 15px;
+            background: #ffffff;
+            color: #2f3542;
+            border-radius: 10px;
+            font-family: sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
 
-    <!-- Balon Berterbangan -->
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-    <div class="balloon"></div>
-
     <div class="card">
-        <!-- LAYAR 1: Input Nama -->
+        <!-- LAYAR 1: Input Nama (Sama seperti sebelumnya) -->
         <div id="loginBox" class="login-box">
             <h2>🔒 Masukkan Nama Kamu</h2>
-            <p style="margin-bottom: 15px; font-size: 0.9rem;">Siapa nama kamu?</p>
+            <p style="margin-bottom: 15px; font-size: 0.9rem; color: #dcdde1; font-family: sans-serif;">Siapa nama kamu?</p>
             <input type="text" id="inputNama" placeholder="Ketik nama di sini..." onkeypress="handleKeyPress(event)">
-            <button onclick="cekNama()">Buka Akses 🚀</button>
-            <p id="errorMsg" class="error-msg">❌ Maaf, nama kamu nggak terdaftar!</p>
+            <button class="btn-login" onclick="cekNama()">Buka Akses 🚀</button>
+            <p id="errorMsg" class="error-msg">❌ Maaf, nama kamu tidak terdaftar!</p>
         </div>
 
-        <!-- LAYAR 2: Ucapan Ultah -->
+        <!-- LAYAR 2: Birthday Vending Machine -->
         <div id="contentUtama">
-            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300" alt="Foto Ultah" class="profile-img">
-            
-            <h1 id="sapaan" style="color: #ff4757; margin-bottom: 10px;">Selamat Ulang Tahun! 🎉</h1>
-            <p style="color: #57606f; margin-bottom: 20px;">Semoga panjang umur, sehat selalu, dan semua impianmu bisa tercapai tahun ini!</p>
-            
-            <button onclick="kejutan()">Klik Buat Kejutan! 🎁</button>
+            <div class="vending-machine">
+                <!-- Lampu Berkedip -->
+                <div class="lights">
+                    <div class="light"></div>
+                    <div class="light"></div>
+                    <div class="light"></div>
+                    <div class="light"></div>
+                </div>
 
+                <!-- Layar Digital -->
+                <div class="screen" id="machineScreen">
+                    INSERT BIRTHDAY COIN
+                </div>
+
+                <!-- Slot Item Keluar -->
+                <div class="dispenser-window" id="dispenser">
+                    <!-- Item yang jatuh akan muncul di sini secara dinamis -->
+                </div>
+
+                <!-- Tombol Koin -->
+                <button class="btn-coin" id="coinBtn" onclick="dispenseItems()">
+                    🪙 INSERT COIN
+                </button>
+            </div>
+
+            <!-- Pesan / Hadiah Utama -->
             <div id="pesanRahasia" class="hidden-message">
-                <p>Wish you all the best ya! Ditunggu makan-makannya 😆✨</p>
+                <p>🎁 <strong>HADIAH UTAMA:</strong><br>Selamat Ulang Tahun! Semoga panjang umur, sehat selalu, dan semua impianmu tercapai tahun ini! Ditunggu makan-makannya 😆✨</p>
             </div>
         </div>
     </div>
 
     <script>
-        // DAFTAR NAMA YANG BISA MASUK (Pake huruf kecil semua)
+        // DAFTAR NAMA YANG BOLEH MASUK (Sesuai kode awal)
         const daftarNama = ["budi", "budi santoso", "budin"];
 
         function cekNama() {
@@ -159,9 +240,6 @@
             if (daftarNama.includes(input)) {
                 document.getElementById("loginBox").style.display = "none";
                 document.getElementById("contentUtama").style.display = "block";
-                
-                // Konfeti saat berhasil login
-                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
             } else {
                 error.style.display = "block";
             }
@@ -171,9 +249,57 @@
             if (event.key === "Enter") cekNama();
         }
 
-        function kejutan() {
-            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-            document.getElementById("pesanRahasia").style.display = "block";
+        // KELUARKAN ITEM VENDING MACHINE BERTURUT-TURUT
+        function dispenseItems() {
+            const btn = document.getElementById("coinBtn");
+            const screen = document.getElementById("machineScreen");
+            const dispenser = document.getElementById("dispenser");
+            
+            // Matikan tombol saat proses berlangsung
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.innerText = "PROCESSING...";
+            dispenser.innerHTML = "";
+            screen.innerText = "DISPENSING...";
+
+            const items = [
+                "🎁 memory",
+                "🎵 song",
+                "💌 message",
+                "📸 photo"
+            ];
+
+            let delay = 0;
+
+            // Efek item jatuh satu per satu
+            items.forEach((itemText) => {
+                delay += 800;
+                setTimeout(() => {
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "vending-item";
+                    itemDiv.innerText = itemText;
+                    dispenser.appendChild(itemDiv);
+                    dispenser.scrollTop = dispenser.scrollHeight;
+                }, delay);
+            });
+
+            // Efek Item Spesial Terakhir
+            delay += 1000;
+            setTimeout(() => {
+                screen.innerText = "SPECIAL UNLOCKED!";
+                
+                const specialDiv = document.createElement("div");
+                specialDiv.className = "vending-item special-item";
+                specialDiv.innerText = "🌟 SPECIAL ITEM UNLOCKED 🌟";
+                dispenser.appendChild(specialDiv);
+                dispenser.scrollTop = dispenser.scrollHeight;
+
+                // Tampilkan Hadiah Utama & Konfeti
+                document.getElementById("pesanRahasia").style.display = "block";
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+
+                btn.innerText = "VENDING COMPLETE!";
+            }, delay);
         }
     </script>
 </body>
