@@ -7,45 +7,8 @@
     <!-- Library Konfeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* Efek Zoom Pas di-Hover */
-.card:hover {
-  transform: scale(1.03); /* Zoom sedikit */
-  transition: transform 0.3s ease;
-}
-
-/* Efek Tombol Bergetar Pas di-Hover */
-button:hover {
-  animation: wiggle 0.5s ease-in-out infinite;
-}
-
-/* Definisi Gerakan Bergetar */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
-}
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        /* CSS untuk Efek Mengetik */
-.typing-effect {
-  font-family: monospace; /* Biar kayak mesin ketik */
-  overflow: hidden; /* Sembunyikan teks yang belum "diketik" */
-  border-right: .15em solid orange; /* Garis kursor kedip */
-  white-space: nowrap; /* Teks jangan turun ke bawah */
-  margin: 0 auto;
-  letter-spacing: .15em;
-  animation: typing 3.5s steps(30, end), blink-caret .5s step-end infinite;
-}
-
-/* Definisi Gerakan Mengetik */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-/* Definisi Kursor Kedip */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: orange }
-}
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
@@ -55,49 +18,50 @@ button:hover {
             align-items: center;
             text-align: center;
             padding: 20px;
+            overflow: hidden; /* Biar balon nggak bikin scrollbar muncul */
+            position: relative;
         }
-/* CSS untuk Balon Berterbangan */
-    balloon {
-  display: inline-block;
-  width: 100px;
-  height: 120px;
-  background: rgba(255, 107, 129, 0.7); /* Warna balon (bisa diganti) */
-  border-radius: 80%;
-  position: fixed; /* Biar posisinya tetap di layar */
-  bottom: -150px; /* Mulai dari bawah layar */
-  transition: transform 0.5s ease;
-  z-index: -1; /* Biar balonnya ada di belakang kartu utama */
-  animation: balloons 10s ease-in-out infinite; /* Panggil animasinya */
-}
 
-/* Biar warna balonnya beda-beda */
-.balloon:nth-child(2) { background: rgba(106, 176, 245, 0.7); animation-duration: 12s; animation-delay: 2s; }
-.balloon:nth-child(3) { background: rgba(123, 237, 159, 0.7); animation-duration: 9s; animation-delay: 4s; }
-.balloon:nth-child(4) { background: rgba(255, 165, 2, 0.7); animation-duration: 11s; animation-delay: 1s; }
-.balloon:nth-child(5) { background: rgba(255, 71, 87, 0.7); animation-duration: 8s; animation-delay: 3s; }
+        /* 1. ANIMASI BALON */
+        .balloon {
+            width: 80px;
+            height: 100px;
+            background: rgba(255, 107, 129, 0.7);
+            border-radius: 80% 80% 80% 80%;
+            position: absolute;
+            bottom: -120px;
+            z-index: 1;
+            animation: moveBalloon 8s linear infinite;
+        }
+        .balloon:nth-child(1) { left: 10%; background: rgba(255, 107, 129, 0.7); animation-duration: 7s; }
+        .balloon:nth-child(2) { left: 30%; background: rgba(106, 176, 245, 0.7); animation-duration: 9s; animation-delay: 2s; }
+        .balloon:nth-child(3) { left: 50%; background: rgba(255, 234, 167, 0.7); animation-duration: 6s; animation-delay: 1s; }
+        .balloon:nth-child(4) { left: 70%; background: rgba(123, 237, 159, 0.7); animation-duration: 8s; animation-delay: 3s; }
+        .balloon:nth-child(5) { left: 85%; background: rgba(255, 159, 243, 0.7); animation-duration: 10s; animation-delay: 1.5s; }
 
-/* Definisi Gerakan Animasi */
-@keyframes balloons {
-  0% { bottom: -150px; transform: translateX(0px) rotate(10deg); }
-  50% { transform: translateX(50px) rotate(-10deg); }
-  100% { bottom: 110%; transform: translateX(-50px) rotate(10deg); } /* Terbang sampai keluar layar */
-}
-        /* Desain Kotak Utama */
+        @keyframes moveBalloon {
+            0% { bottom: -120px; transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(30px) rotate(15deg); }
+            100% { bottom: 105vh; transform: translateX(-30px) rotate(-15deg); }
+        }
+
+        /* 2. KARTU UTAMA */
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             max-width: 400px;
             width: 100%;
+            z-index: 10; /* Kartu tetap di depan balon */
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
 
-        /* Form Input Nama di Awal */
-        .login-box h2 {
-            color: #ff4757;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
+        /* Form Input Nama */
+        .login-box h2 { color: #ff4757; margin-bottom: 15px; }
         input[type="text"] {
             width: 100%;
             padding: 12px;
@@ -108,30 +72,20 @@ button:hover {
             text-align: center;
             font-size: 1rem;
         }
-        .error-msg {
-            color: #ff4757;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            display: none;
-        }
+        .error-msg { color: #ff4757; font-size: 0.9rem; margin-top: 10px; display: none; }
 
-        /* Isi Konten Ulang Tahun (Sembunyi dulu) */
-        #contentUtama {
-            display: none;
-        }
+        #contentUtama { display: none; }
 
         .profile-img {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid #ff4757;
             margin-bottom: 15px;
         }
-        h1 { color: #ff4757; font-size: 1.8rem; margin-bottom: 10px; }
-        p { color: #57606f; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; } 
-        <p class="typing-effect">Semoga panjang umur dan sehat selalu!</p>
-        
+
+        /* 3. ANIMASI TOMBOL GOYANG (WIGGLE) */
         button {
             background-color: #ff4757;
             color: white;
@@ -141,9 +95,14 @@ button:hover {
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s;
         }
-        button:hover { transform: scale(1.05); }
+        button:hover {
+            animation: wiggle 0.4s ease-in-out infinite;
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
 
         .hidden-message {
             display: none;
@@ -156,71 +115,64 @@ button:hover {
     </style>
 </head>
 <body>
-    
 
-    <!-- Elemen Balon -->
-<div class="balloons-container">
+    <!-- Balon Berterbangan -->
     <div class="balloon"></div>
     <div class="balloon"></div>
     <div class="balloon"></div>
     <div class="balloon"></div>
     <div class="balloon"></div>
-</div>
+
     <div class="card">
         <!-- LAYAR 1: Input Nama -->
         <div id="loginBox" class="login-box">
-            <h2>🔒 Enter your name</h2>
-            <p style="margin-bottom: 15px; font-size: 0.9rem;">Cuma kamu yang bisa masuk!</p>
-            <input type="text" id="inputNama" placeholder="Ketik nama kamu di sini..." onkeypress="handleKeyPress(event)">
+            <h2>🔒 Masukkan Nama Kamu</h2>
+            <p style="margin-bottom: 15px; font-size: 0.9rem;">Siapa nama kamu?</p>
+            <input type="text" id="inputNama" placeholder="Ketik nama di sini..." onkeypress="handleKeyPress(event)">
             <button onclick="cekNama()">Buka Akses 🚀</button>
-            <p id="errorMsg" class="error-msg">❌ Uppss! Salah kocak, penyusup elu yaak?</p>
+            <p id="errorMsg" class="error-msg">❌ Maaf, nama kamu nggak terdaftar!</p>
         </div>
 
-        <!-- LAYAR 2: Konten Ulang Tahun -->
+        <!-- LAYAR 2: Ucapan Ultah -->
         <div id="contentUtama">
             <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300" alt="Foto Ultah" class="profile-img">
             
-            <h1 id="sapaan">Selamat Ulang Tahun! 🎉</h1>
-            <p>Semoga di umur yang baru ini makin sukses, sehat selalu, dan semua cita-citanya tercapai!</p>
+            <h1 id="sapaan" style="color: #ff4757; margin-bottom: 10px;">Selamat Ulang Tahun! 🎉</h1>
+            <p style="color: #57606f; margin-bottom: 20px;">Semoga panjang umur, sehat selalu, dan semua impianmu bisa tercapai tahun ini!</p>
             
             <button onclick="kejutan()">Klik Buat Kejutan! 🎁</button>
 
             <div id="pesanRahasia" class="hidden-message">
-                <p>Wish you all the best ya! Jangan lupa makan-makannya 😆✨</p>
+                <p>Wish you all the best ya! Ditunggu makan-makannya 😆✨</p>
             </div>
         </div>
     </div>
 
     <script>
-        // ATUR NAMA RAHASIA DI SINI (Ganti dengan nama temenmu, bisa huruf kecil/kapital)
-        const namaBenar = "Zilless";
+        // DAFTAR NAMA YANG BISA MASUK (Pake huruf kecil semua)
+        const daftarNama = ["budi", "budi santoso", "budin"];
 
         function cekNama() {
-            const input = document.getElementById("inputNama").value.trim();
+            const input = document.getElementById("inputNama").value.trim().toLowerCase();
             const error = document.getElementById("errorMsg");
 
-            // Mengecek nama tanpa peduli huruf besar/kecil (lowercase)
-            if (input.toLowerCase() === namaBenar.toLowerCase()) {
+            if (daftarNama.includes(input)) {
                 document.getElementById("loginBox").style.display = "none";
                 document.getElementById("contentUtama").style.display = "block";
-                document.getElementById("sapaan").innerText = "Selamat Ulang Tahun, " + namaBenar + "! 🎉";
                 
-                // Efek konfeti langsung saat berhasil masuk
+                // Konfeti saat berhasil login
                 confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
             } else {
                 error.style.display = "block";
             }
         }
 
-        // Fitur tekan 'Enter' langsung di keyboard
         function handleKeyPress(event) {
-            if (event.key === "Enter") {
-                cekNama();
-            }
+            if (event.key === "Enter") cekNama();
         }
 
         function kejutan() {
-            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
             document.getElementById("pesanRahasia").style.display = "block";
         }
     </script>
