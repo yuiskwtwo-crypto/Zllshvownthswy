@@ -186,7 +186,7 @@
 <body>
 
     <div class="card">
-        <!-- LAYAR 1: Input Nama (Sama seperti sebelumnya) -->
+        <!-- LAYAR 1: Input Nama -->
         <div id="loginBox" class="login-box">
             <h2>🔒 Enter your name</h2>
             <p style="margin-bottom: 15px; font-size: 0.9rem; color: #dcdde1; font-family: sans-serif;">Siapa nama kamu?</p>
@@ -230,16 +230,18 @@
     </div>
 
     <script>
-        // DAFTAR NAMA YANG BOLEH MASUK (Sesuai kode awal)
-        const namaBenar = "Zilless"
+        // NAMA RAHASIA UNTUK MASUK (Bebas huruf besar/kecil)
+        const namaBenar = "zilless";
 
         function cekNama() {
             const input = document.getElementById("inputNama").value.trim().toLowerCase();
             const error = document.getElementById("errorMsg");
 
-            if (namaBenar.includes(input)) {
+            // PERBAIKAN: Gunakan '===' untuk pencocokan persis 1 nama
+            if (input === namaBenar) {
                 document.getElementById("loginBox").style.display = "none";
                 document.getElementById("contentUtama").style.display = "block";
+                error.style.display = "none";
             } else {
                 error.style.display = "block";
             }
