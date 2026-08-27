@@ -231,13 +231,13 @@
 
     <script>
         // DAFTAR NAMA YANG BOLEH MASUK (Sesuai kode awal)
-        const daftarNama = "Zilless";
+        const namaBenar = "Zilless";
 
         function cekNama() {
             const input = document.getElementById("inputNama").value.trim().toLowerCase();
             const error = document.getElementById("errorMsg");
 
-            if (daftarNama.includes(input)) {
+            if (namaBenar.includes(input)) {
                 document.getElementById("loginBox").style.display = "none";
                 document.getElementById("contentUtama").style.display = "block";
             } else {
