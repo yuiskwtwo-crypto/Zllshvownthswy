@@ -36,7 +36,7 @@ function blowCandle() {
     smoke.classList.add("active");
     
     candleBlown = true;
-    blowHint.innerText = "✨ Wahh Selamat Ulang Tahun! ✨";
+    blowHint.innerText = "✨ Widiihh happy birthday ✨";
     
     // Konfeti ringan saat lilin ditiup
     confetti({
