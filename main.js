@@ -1,7 +1,7 @@
 const namaBenar = "zilless";
-const tanggalLahirBenar = "0101"; // Format DDMM
+const tanggalLahirBenar = "2708"; 
 
-// WEB AUDIO API FOR SOUND EFFECTS
+// WEB AUDIO API
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -13,44 +13,34 @@ function playSound(type) {
     const now = audioCtx.currentTime;
 
     if (type === 'click') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+        gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
     } else if (type === 'coin') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(987.77, now);
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(987.77, now);
         osc.frequency.setValueAtTime(1318.51, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
     } else if (type === 'drop') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(659.25, now);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(659.25, now);
         osc.frequency.setValueAtTime(880.00, now + 0.1);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
         osc.start(now); osc.stop(now + 0.25);
     } else if (type === 'success') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.setValueAtTime(659.25, now + 0.08);
         osc.frequency.setValueAtTime(783.99, now + 0.16);
         osc.frequency.setValueAtTime(1046.50, now + 0.24);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
         osc.start(now); osc.stop(now + 0.4);
     } else if (type === 'error') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now);
+        gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
         osc.start(now); osc.stop(now + 0.2);
     }
 }
 
-// BGM & FAVORITE MUSIC MANAGEMENT
+// MANAGEMENT AUDIO
 const bgm = document.getElementById("bgmAudio");
 const favAudio = document.getElementById("audioPlayer");
 
@@ -63,17 +53,6 @@ function startBGM() {
 
 function stopBGM() {
     if (bgm) bgm.pause();
-}
-
-// Auto resume BGM jika lagu favorit selesai
-if (favAudio) {
-    favAudio.onended = () => {
-        const playBtn = document.getElementById("playBtn");
-        const disc = document.getElementById("musicDisc");
-        if (playBtn) playBtn.innerText = "▶️ Play Track";
-        if (disc) disc.classList.remove("spinning");
-        startBGM();
-    };
 }
 
 function cekNama() {
@@ -97,22 +76,30 @@ function handleKeyPress(event) {
     if (event.key === "Enter") cekNama();
 }
 
-// LILIN HD & ASAP REALISTIS LOGIC
+// TIUP LILIN SLOW-MOTION & CONFETTI DILAY
 let candleBlown = false;
 function blowCandle() {
     if (candleBlown) return;
-    playSound('success');
-    
-    document.getElementById("flame").classList.add("extinguished");
-    document.getElementById("smokeGroup").classList.add("active");
-    
     candleBlown = true;
-    document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
-    if (typeof confetti === "function") confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
+    playSound('success');
 
+    // Meredupkan api secara perlahan
+    document.getElementById("flame").classList.add("extinguished");
+
+    // Menampilkan asap bertahap
     setTimeout(() => {
+        document.getElementById("smokeGroup").classList.add("active");
+    }, 300);
+
+    document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
+
+    // Confetti baru meledak setelah asap selesai (3.5 detik kemudian)
+    setTimeout(() => {
+        if (typeof confetti === "function") {
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        }
         document.getElementById("nextToVendingBtn").classList.remove("hidden");
-    }, 1200);
+    }, 3500);
 }
 
 function goToVending() {
@@ -122,7 +109,7 @@ function goToVending() {
     document.getElementById("hiddenCoin").classList.remove("hidden");
 }
 
-// MODAL PIN KEYPAD
+// MODAL PIN
 let inputPin = "";
 let hasCoin = false;
 
@@ -166,7 +153,7 @@ function submitPin() {
     }
 }
 
-// KEYPAD VENDING MACHINE LOGIC
+// KEYPAD & VENDING
 let currentCode = "";
 const validSlots = {
     "A1": { name: "🎁 Special Memory", pageId: "pageMemory" },
@@ -199,7 +186,6 @@ function submitCode() {
     if (currentCode.length < 2) { playSound('error'); return; }
 
     const led = document.getElementById("codeLed");
-    const hint = document.getElementById("dispenserHint");
 
     if (validSlots[currentCode]) {
         if (dispensedSlots.includes(currentCode)) {
@@ -210,7 +196,10 @@ function submitCode() {
         }
 
         playSound('drop');
-        if (hint) hint.remove();
+        
+        // Hapus animasi gembok saat item pertama muncul
+        const lockedAnim = document.getElementById("dispenserLocked");
+        if (lockedAnim) lockedAnim.remove();
 
         const slot = validSlots[currentCode];
         dispensedSlots.push(currentCode);
@@ -243,20 +232,17 @@ function createDispenserItem(text, targetPageId, isSpecial) {
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// NAVIGASI HALAMAN & LAYOUT MEMANJANG (TALL CARD)
+// NAVIGASI
 function openPage(pageId) {
     playSound('click');
     document.getElementById("vendingStep").classList.add("hidden");
     document.getElementById(pageId).classList.remove("hidden");
-    // Ubah wadah utama jadi lebih memanjang & elegan
     document.getElementById("mainCard").classList.add("card-tall");
 }
 
 function backToVending() {
     playSound('click');
-    // Kembalikan ukuran wadah ke mode normal Vending
     document.getElementById("mainCard").classList.remove("card-tall");
-
     const detailPages = ["pageMemory", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
     detailPages.forEach(id => {
         const el = document.getElementById(id);
@@ -265,26 +251,61 @@ function backToVending() {
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// TOGGLE FAVORITE MUSIC (MENIHILKAN KONTRA BGM)
+// MUSIC PLAYER REALISTIS & HD LOGIC
+function formatTime(sec) {
+    if (isNaN(sec)) return "0:00";
+    const minutes = Math.floor(sec / 60);
+    const seconds = Math.floor(sec % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
 function togglePlayMusic() {
     playSound('click');
     const playBtn = document.getElementById("playBtn");
     const disc = document.getElementById("musicDisc");
 
     if (favAudio.paused) {
-        stopBGM(); // Hentikan BGM saat lagu favorit dimainkan
+        stopBGM();
         favAudio.play();
-        playBtn.innerText = "⏸️ Pause Track";
+        playBtn.innerText = "⏸️";
         disc.classList.add("spinning");
     } else {
         favAudio.pause();
-        playBtn.innerText = "▶️ Play Track";
+        playBtn.innerText = "▶️";
         disc.classList.remove("spinning");
-        startBGM(); // Resume BGM setelah lagu dipause
+        startBGM();
     }
 }
 
-// POLAROID GALLERY LOGIC
+function rewindAudio() { playSound('click'); favAudio.currentTime -= 5; }
+function forwardAudio() { playSound('click'); favAudio.currentTime += 5; }
+
+function seekAudio(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    favAudio.currentTime = pos * favAudio.duration;
+}
+
+// EVENT LISTENERS MUSIC PLAYER DURATION & PROGRESS
+if (favAudio) {
+    favAudio.ontimeupdate = () => {
+        const progress = (favAudio.currentTime / favAudio.duration) * 100;
+        document.getElementById("progressBar").style.width = `${progress}%`;
+        document.getElementById("currentTime").innerText = formatTime(favAudio.currentTime);
+    };
+
+    favAudio.onloadedmetadata = () => {
+        document.getElementById("totalDuration").innerText = formatTime(favAudio.duration);
+    };
+
+    favAudio.onended = () => {
+        document.getElementById("playBtn").innerText = "▶️";
+        document.getElementById("musicDisc").classList.remove("spinning");
+        startBGM();
+    };
+}
+
+// POLAROID GALLERY
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
