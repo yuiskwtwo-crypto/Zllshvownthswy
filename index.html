@@ -6,8 +6,8 @@
     <title>Birthday Surprise & Interactive Vending Machine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Font Arcade, Elegant Serif, dan Luxurious Calligraphy -->
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@500;700;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Google Fonts HD: Calligraphy, Retro Arcade, & Hand-written Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Sacramento&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -164,38 +164,29 @@
         <div id="pageCertificate" class="step-box detail-page hidden">
             <div class="certificate-wrapper" id="certificateWrapper">
                 <div class="certificate-container" id="certContainer">
-                    <!-- Frame Border Berlapis -->
                     <div class="cert-border-outer">
                         <div class="cert-border-inner">
-                            
-                            <!-- Ornamen Sudut Geometris -->
                             <div class="cert-corner corner-tl"></div>
                             <div class="cert-corner corner-tr"></div>
                             <div class="cert-corner corner-bl"></div>
                             <div class="cert-corner corner-br"></div>
 
-                            <!-- Logo Kecil Kiri & Kanan atas -->
                             <div class="cert-logo logo-left">👑</div>
                             <div class="cert-logo logo-right">✨</div>
 
-                            <!-- Konten Utama Sertifikat -->
                             <div class="cert-content">
                                 <h2 class="cert-title cert-anim-1">SERTIFIKAT PENGHARGAAN</h2>
                                 <div class="cert-divider cert-anim-1"></div>
                                 
                                 <p class="cert-subtitle cert-anim-2">Dengan bangga diberikan kepada:</p>
-
                                 <h1 class="cert-recipient cert-anim-recipient">Syakira Zilfa Munawwaroh</h1>
-
                                 <p class="cert-as cert-anim-3">Sebagai:</p>
-
                                 <h3 class="cert-award-title cert-anim-4">The Best Serendipity of Panacea's</h3>
 
                                 <p class="cert-description cert-anim-5">
                                     Atas dedikasinya dalam menciptakan keistimewaan menjadi teman sekaligus obat bagiku.
                                 </p>
 
-                                <!-- Bagian Bawah: Tanggal, Stempel Gold, & Pemberi -->
                                 <div class="cert-footer cert-anim-6">
                                     <div class="cert-footer-col">
                                         <p class="cert-footer-label">Tanggal</p>
@@ -215,7 +206,6 @@
                                         <p class="cert-footer-value cert-signature">Hylda Adha</p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -224,54 +214,67 @@
             <button class="btn-cert-close" id="btnCertClose" onclick="backToVending()">CLOSE</button>
         </div>
 
-        <!-- HALAMAN LAGU FAVORIT -->
+        <!-- HALAMAN A2: FAVORITE SONGS (REALISTIS TURNTABLE VINYL PLAYER) -->
         <div id="pageSong" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">🎵 Favorite Songs</h2>
+                <h2 class="title-aesthetic mini">🎵 Vinyl Player HD</h2>
             </div>
-            <div class="content-box music-card tall-content">
-                <div class="player-hd-container">
-                    <div class="turntable-wrapper">
-                        <div class="tonearm" id="tonearmArm"></div>
-                        <div class="disc-animation-hd" id="musicDisc">
-                            <div class="disc-center">🎧</div>
+            <div class="real-turntable-deck">
+                <div class="wood-deck-body">
+                    <!-- Metal Plate -->
+                    <div class="metal-platter-plate">
+                        <div class="turntable-wrapper">
+                            <div class="tonearm-hd" id="tonearmArm">
+                                <div class="tonearm-headshell"></div>
+                            </div>
+                            <div class="vinyl-disc-hd" id="musicDisc">
+                                <div class="vinyl-grooves"></div>
+                                <div class="disc-label">
+                                    <span id="discLabelTitle">Blank Space</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <h3 class="song-title" id="currentSongTitle">Blank Space</h3>
-                    <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
+                    <!-- Display Info & Control Panel -->
+                    <div class="deck-controls">
+                        <div class="song-info-badge">
+                            <h3 class="song-title" id="currentSongTitle">Blank Space</h3>
+                            <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
+                        </div>
 
-                    <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                        <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-                    <div class="progress-container" onclick="seekAudio(event)">
-                        <div class="progress-bar" id="progressBar"></div>
-                    </div>
+                        <div class="progress-container" onclick="seekAudio(event)">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
 
-                    <div class="time-container">
-                        <span id="currentTime">0:00</span>
-                        <span id="totalDuration">0:00</span>
-                    </div>
+                        <div class="time-container">
+                            <span id="currentTime">0:00</span>
+                            <span id="totalDuration">0:00</span>
+                        </div>
 
-                    <div class="player-controls-hd">
-                        <button class="btn-ctrl" onclick="prevTrack()">⏮️</button>
-                        <button class="btn-play-hd" id="playBtn" onclick="togglePlayMusic()">▶️</button>
-                        <button class="btn-ctrl" onclick="nextTrack()">⏭️</button>
+                        <div class="player-buttons-real">
+                            <button class="btn-knob" onclick="prevTrack()" title="Previous">⏮</button>
+                            <button class="btn-play-real" id="playBtn" onclick="togglePlayMusic()">▶</button>
+                            <button class="btn-knob" onclick="nextTrack()" title="Next">⏭</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="playlist-container">
-                    <p class="playlist-title">Select Song:</p>
+                <div class="playlist-deck-container">
+                    <p class="playlist-title">💿 VINYL COLLECTION:</p>
                     <div class="playlist-scroll" id="playlistItems"></div>
                 </div>
             </div>
         </div>
 
-        <!-- HALAMAN SURAT -->
+        <!-- HALAMAN B1: SECRET MESSAGE (SURAT REALISTIS SERAT KERTAS HD) -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">💌 Secret Message</h2>
+                <h2 class="title-aesthetic mini">💌 Secret Letter</h2>
             </div>
             
             <div class="envelope-scene">
@@ -282,10 +285,12 @@
                         <div class="ribbon-seal">❤️</div>
                     </div>
 
-                    <div class="letter-paper-hd" id="letterPaper">
-                        <div class="stamp-hd">📮 BIRTHDAY</div>
-                        <div class="typed-text-container">
-                            <p class="typed-text" id="typewriterTarget"></p>
+                    <div class="letter-paper-hd parchment-texture" id="letterPaper">
+                        <div class="paper-inner-border">
+                            <div class="stamp-hd">📮 27-08-2026</div>
+                            <div class="typed-text-container">
+                                <p class="typed-text handwritten-font" id="typewriterTarget"></p>
+                            </div>
                         </div>
                     </div>
 
@@ -297,17 +302,19 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <!-- HALAMAN GALERI FOTO -->
+        <!-- HALAMAN B2: GALERI FOTO -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
                 <h2 class="title-aesthetic mini">📸 Cute Photo</h2>
             </div>
             <div class="flash-overlay" id="flashOverlay"></div>
-            <div class="polaroid-frame tall-frame" id="polaroidCard" onclick="shakePolaroid()">
-                <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
+            <div class="polaroid-frame" id="polaroidCard" onclick="shakePolaroid()">
+                <div class="polaroid-img-wrapper">
+                    <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
+                </div>
                 <p id="polaroidCaption" class="polaroid-caption">Aesthetic Birthday Cake 🎂</p>
-                <div class="photo-hint">Klik foto untuk goyang! ✨</div>
+                <div class="photo-hint">Klik foto untuk efek goyang! ✨</div>
             </div>
             <div class="gallery-controls">
                 <button class="btn-small" onclick="prevPhoto()">⬅️ Prev</button>
@@ -315,16 +322,16 @@
             </div>
         </div>
 
-        <!-- HALAMAN SPECIAL -->
+        <!-- HALAMAN SPECIAL ITEM -->
         <div id="pageSpecial" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">🌟 SPECIAL ITEM 🌟</h2>
+                <h2 class="title-aesthetic mini">🌟 SPECIAL UNLOCKED</h2>
             </div>
-            <div class="content-box special-box tall-content">
-                <div style="font-size:3.5rem; margin-bottom:10px;" class="bounce-idle">🎟️</div>
+            <div class="special-card-box">
+                <div class="special-icon-glow">🎟️</div>
                 <h3>VOUCHER SPECIAL TREAT</h3>
-                <p style="margin-top:15px; line-height: 1.6;">Voucher ini berlaku untuk traktiran makanan/minuman favoritmu kapan saja! Bebas klaim, tinggal kasih tahu pembuat web ini 😜🔥</p>
+                <p>Voucher ini berlaku untuk traktiran makanan/minuman favoritmu kapan saja! Bebas diklaim, tinggal tunjukkan ke pembuat web ini 😜🔥</p>
             </div>
         </div>
 
