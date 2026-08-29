@@ -73,20 +73,37 @@
                     <div class="light"></div>
                 </div>
 
-                <!-- Layar Digital -->
+                <!-- Layar Digital dengan Running Text -->
                 <div class="screen" id="machineScreen">
-                    INSERT BIRTHDAY COIN
+                    <div class="marquee-text">✨ READY! INSERT COIN TO UNLOCK SURPRISES ✨</div>
+                </div>
+
+                <!-- Etalase Display Pajangan Item -->
+                <div class="vending-display">
+                    <div class="shelf-item bounce-idle">🎁</div>
+                    <div class="shelf-item bounce-idle delay-1">🎵</div>
+                    <div class="shelf-item bounce-idle delay-2">💌</div>
+                    <div class="shelf-item bounce-idle delay-3">📸</div>
                 </div>
 
                 <!-- Slot Item Keluar -->
                 <div class="dispenser-window" id="dispenser">
-                    <!-- Item yang jatuh akan muncul di sini secara dinamis -->
+                    <p class="dispenser-hint">Item yang keluar akan muncul di sini (Bisa diklik!)</p>
                 </div>
 
-                <!-- Tombol Koin -->
-                <button class="btn-coin" id="coinBtn" onclick="dispenseItems()">
+                <!-- Tombol Koin Berdenyut -->
+                <button class="btn-coin pulse-anim" id="coinBtn" onclick="dispenseItems()">
                     🪙 INSERT COIN
                 </button>
+            </div>
+
+            <!-- Modal / Pop-up Detail Isi Item -->
+            <div id="itemModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModal">&times;</span>
+                    <h3 id="modalTitle">Detail Item</h3>
+                    <div id="modalBody"></div>
+                </div>
             </div>
 
             <!-- Pesan / Hadiah Utama -->
