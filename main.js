@@ -1,7 +1,21 @@
 const namaBenar = "zilless";
-const tanggalLahirBenar = "2708"; 
+const tanggalLahirBenar = "0101"; 
 
-// WEB AUDIO API
+// PLAYLIST LAGU FAVORIT (BGM AWAL = BLANK SPACE)
+const playlist = [
+    { title: "Blank Space", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+    { title: "K.", artist: "Cigarettes After Sex", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { title: "Watch", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+    { title: "Rocketeer", artist: "Far East Movement", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+    { title: "Wildflower", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+    { title: "Cry", artist: "Cigarettes After Sex", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+    { title: "Guilty as Sin?", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+    { title: "All Too Well", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" }
+];
+
+let currentTrackIdx = 0;
+
+// AUDIO API UNTUK SOUND EFFECT
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -40,7 +54,7 @@ function playSound(type) {
     }
 }
 
-// MANAGEMENT AUDIO
+// BGM CONTROL
 const bgm = document.getElementById("bgmAudio");
 const favAudio = document.getElementById("audioPlayer");
 
@@ -76,24 +90,21 @@ function handleKeyPress(event) {
     if (event.key === "Enter") cekNama();
 }
 
-// TIUP LILIN SLOW-MOTION & CONFETTI DILAY
+// LILIN & CONFETTI
 let candleBlown = false;
 function blowCandle() {
     if (candleBlown) return;
     candleBlown = true;
     playSound('success');
 
-    // Meredupkan api secara perlahan
     document.getElementById("flame").classList.add("extinguished");
 
-    // Menampilkan asap bertahap
     setTimeout(() => {
         document.getElementById("smokeGroup").classList.add("active");
     }, 300);
 
     document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
 
-    // Confetti baru meledak setelah asap selesai (3.5 detik kemudian)
     setTimeout(() => {
         if (typeof confetti === "function") {
             confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
@@ -109,7 +120,7 @@ function goToVending() {
     document.getElementById("hiddenCoin").classList.remove("hidden");
 }
 
-// MODAL PIN
+// PIN MODAL
 let inputPin = "";
 let hasCoin = false;
 
@@ -153,11 +164,11 @@ function submitPin() {
     }
 }
 
-// KEYPAD & VENDING
+// KEYPAD & VENDING LOGIC
 let currentCode = "";
 const validSlots = {
     "A1": { name: "🎁 Special Memory", pageId: "pageMemory" },
-    "A2": { name: "🎵 Favorite Song", pageId: "pageSong" },
+    "A2": { name: "🎵 Favorite Songs", pageId: "pageSong" },
     "B1": { name: "💌 Secret Message", pageId: "pageMessage" },
     "B2": { name: "📸 Cute Photo", pageId: "pagePhoto" }
 };
@@ -196,8 +207,6 @@ function submitCode() {
         }
 
         playSound('drop');
-        
-        // Hapus animasi gembok saat item pertama muncul
         const lockedAnim = document.getElementById("dispenserLocked");
         if (lockedAnim) lockedAnim.remove();
 
@@ -238,6 +247,8 @@ function openPage(pageId) {
     document.getElementById("vendingStep").classList.add("hidden");
     document.getElementById(pageId).classList.remove("hidden");
     document.getElementById("mainCard").classList.add("card-tall");
+
+    if (pageId === "pageSong") renderPlaylist();
 }
 
 function backToVending() {
@@ -251,12 +262,81 @@ function backToVending() {
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// MUSIC PLAYER REALISTIS & HD LOGIC
-function formatTime(sec) {
-    if (isNaN(sec)) return "0:00";
-    const minutes = Math.floor(sec / 60);
-    const seconds = Math.floor(sec % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+// AMPLOP & TYPEWRITER EFFECT LOGIC
+let envelopeState = 0; // 0: tertutup, 1: terbuka setengah, 2: terbuka penuh & mengetik
+const fullMessageText = "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan! ✨✨\n\nWith best wishes, ❤️";
+
+function handleEnvelopeClick() {
+    const flap = document.getElementById("envelopeFlap");
+    const paper = document.getElementById("letterPaper");
+    const hint = document.getElementById("envelopeHint");
+
+    if (envelopeState === 0) {
+        playSound('click');
+        flap.style.transform = "rotateX(90deg)";
+        hint.innerText = "Klik sekali lagi untuk membuka penuh (2/2)";
+        envelopeState = 1;
+    } else if (envelopeState === 1) {
+        playSound('click');
+        flap.style.transform = "rotateX(180deg)";
+        flap.style.zIndex = "1";
+        paper.classList.add("paper-extracted");
+        hint.innerText = "✨ Surat Rahasia ✨";
+        envelopeState = 2;
+        
+        setTimeout(startTypewriter, 600);
+    }
+}
+
+function startTypewriter() {
+    const target = document.getElementById("typewriterTarget");
+    target.innerHTML = "";
+    let i = 0;
+    
+    function typeChar() {
+        if (i < fullMessageText.length) {
+            const char = fullMessageText.charAt(i);
+            target.innerHTML += (char === "\n") ? "<br>" : char;
+            i++;
+            setTimeout(typeChar, 40);
+        }
+    }
+    typeChar();
+}
+
+// MUSIC PLAYER & PLAYLIST LOGIC
+function renderPlaylist() {
+    const container = document.getElementById("playlistItems");
+    container.innerHTML = "";
+    playlist.forEach((song, idx) => {
+        const item = document.createElement("div");
+        item.className = idx === currentTrackIdx ? "playlist-item active" : "playlist-item";
+        item.innerHTML = `<span>${idx + 1}. ${song.title}</span> <small>${song.artist}</small>`;
+        item.onclick = () => selectTrack(idx);
+        container.appendChild(item);
+    });
+}
+
+function selectTrack(idx) {
+    playSound('click');
+    currentTrackIdx = idx;
+    loadTrack(currentTrackIdx);
+    playMusic();
+    renderPlaylist();
+}
+
+function loadTrack(idx) {
+    const track = playlist[idx];
+    document.getElementById("currentSongTitle").innerText = track.title;
+    document.getElementById("currentSongArtist").innerText = track.artist;
+    favAudio.src = track.src;
+}
+
+function playMusic() {
+    stopBGM();
+    favAudio.play();
+    document.getElementById("playBtn").innerText = "⏸️";
+    document.getElementById("musicDisc").classList.add("spinning");
 }
 
 function togglePlayMusic() {
@@ -265,10 +345,7 @@ function togglePlayMusic() {
     const disc = document.getElementById("musicDisc");
 
     if (favAudio.paused) {
-        stopBGM();
-        favAudio.play();
-        playBtn.innerText = "⏸️";
-        disc.classList.add("spinning");
+        playMusic();
     } else {
         favAudio.pause();
         playBtn.innerText = "▶️";
@@ -277,8 +354,24 @@ function togglePlayMusic() {
     }
 }
 
-function rewindAudio() { playSound('click'); favAudio.currentTime -= 5; }
-function forwardAudio() { playSound('click'); favAudio.currentTime += 5; }
+function nextTrack() {
+    playSound('click');
+    currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+    selectTrack(currentTrackIdx);
+}
+
+function prevTrack() {
+    playSound('click');
+    currentTrackIdx = (currentTrackIdx - 1 + playlist.length) % playlist.length;
+    selectTrack(currentTrackIdx);
+}
+
+function formatTime(sec) {
+    if (isNaN(sec)) return "0:00";
+    const minutes = Math.floor(sec / 60);
+    const seconds = Math.floor(sec % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
 
 function seekAudio(e) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -286,7 +379,6 @@ function seekAudio(e) {
     favAudio.currentTime = pos * favAudio.duration;
 }
 
-// EVENT LISTENERS MUSIC PLAYER DURATION & PROGRESS
 if (favAudio) {
     favAudio.ontimeupdate = () => {
         const progress = (favAudio.currentTime / favAudio.duration) * 100;
@@ -299,9 +391,7 @@ if (favAudio) {
     };
 
     favAudio.onended = () => {
-        document.getElementById("playBtn").innerText = "▶️";
-        document.getElementById("musicDisc").classList.remove("spinning");
-        startBGM();
+        nextTrack();
     };
 }
 
