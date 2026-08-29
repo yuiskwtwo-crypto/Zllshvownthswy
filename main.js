@@ -1,7 +1,7 @@
 const namaBenar = "zilless";
 const tanggalLahirBenar = "0101"; 
 
-// PLAYLIST LAGU FAVORIT (BGM AWAL = BLANK SPACE)
+// PLAYLIST LAGU FAVORIT
 const playlist = [
     { title: "Blank Space", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
     { title: "K.", artist: "Cigarettes After Sex", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -15,7 +15,7 @@ const playlist = [
 
 let currentTrackIdx = 0;
 
-// AUDIO API UNTUK SOUND EFFECT
+// AUDIO SYNTHESIS UNTUK SFX REALISTIS
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -35,6 +35,11 @@ function playSound(type) {
         osc.frequency.setValueAtTime(1318.51, now + 0.08);
         gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
+    } else if (type === 'paper') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+        gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.start(now); osc.stop(now + 0.15);
     } else if (type === 'drop') {
         osc.type = 'sine'; osc.frequency.setValueAtTime(659.25, now);
         osc.frequency.setValueAtTime(880.00, now + 0.1);
@@ -103,14 +108,14 @@ function blowCandle() {
         document.getElementById("smokeGroup").classList.add("active");
     }, 300);
 
-    document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
+    document.getElementById("blowHint").innerText = "✨ Happy Birthday, zilless! ✨";
 
     setTimeout(() => {
         if (typeof confetti === "function") {
             confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
         }
         document.getElementById("nextToVendingBtn").classList.remove("hidden");
-    }, 3500);
+    }, 2500);
 }
 
 function goToVending() {
@@ -155,12 +160,21 @@ function submitPin() {
 
         setTimeout(() => {
             coin.classList.add("hidden");
-            document.getElementById("marqueeText").innerText = "🪙 UNLOCKED! MASUKKAN KODE SLOT (A1, A2, B1, B2)";
+            document.getElementById("marqueeText").innerText = "🪙 KOIN AKTIF! MASUKKAN KODE SLOT (A1, A2, B1, B2)";
         }, 500);
     } else {
         playSound('error');
         document.getElementById("pinDisplay").innerText = "WRONG";
         setTimeout(clearPin, 800);
+    }
+}
+
+function triggerCoinSlotAnimation() {
+    if(!hasCoin) {
+        playSound('error');
+        openPinModal();
+    } else {
+        playSound('coin');
     }
 }
 
@@ -191,7 +205,7 @@ function clearKeypad() {
 function submitCode() {
     if (!hasCoin) {
         playSound('error');
-        alert("🔒 Koin belum aktif! Klik koin tersembunyi & masukkan PIN tanggal lahir dulu.");
+        alert("🔒 Koin belum dimasukkan! Klik koin tersembunyi & buka PIN tanggal lahir dulu.");
         return;
     }
     if (currentCode.length < 2) { playSound('error'); return; }
@@ -235,13 +249,13 @@ function createDispenserItem(text, targetPageId, isSpecial) {
     const dispenser = document.getElementById("dispenser");
     const itemDiv = document.createElement("div");
     itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
-    itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>(Buka 🚀)</span>`;
+    itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>Buka 🚀</span>`;
     itemDiv.onclick = () => openPage(targetPageId);
     dispenser.appendChild(itemDiv);
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// NAVIGASI
+// NAVIGASI HALAMAN
 function openPage(pageId) {
     playSound('click');
     document.getElementById("vendingStep").classList.add("hidden");
@@ -262,29 +276,43 @@ function backToVending() {
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// AMPLOP & TYPEWRITER EFFECT LOGIC
-let envelopeState = 0; // 0: tertutup, 1: terbuka setengah, 2: terbuka penuh & mengetik
+// REVISI AMPLOP REALISTIS, PITA MERAH & EFEK TYPING INTERAKTIF
+let envelopeStage = 0; // 0: Terkunci/Tertutup, 1: Terbuka Setengah & Kertas Keluar Sedikit, 2: Kertas Penuh di Depan
+let isTypingActive = false;
+let typewriterTimeout = null;
 const fullMessageText = "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan! ✨✨\n\nWith best wishes, ❤️";
 
 function handleEnvelopeClick() {
+    if (isTypingActive) return;
+
     const flap = document.getElementById("envelopeFlap");
+    const ribbon = document.getElementById("ribbonRed");
     const paper = document.getElementById("letterPaper");
     const hint = document.getElementById("envelopeHint");
 
-    if (envelopeState === 0) {
-        playSound('click');
-        flap.style.transform = "rotateX(90deg)";
-        hint.innerText = "Klik sekali lagi untuk membuka penuh (2/2)";
-        envelopeState = 1;
-    } else if (envelopeState === 1) {
-        playSound('click');
-        flap.style.transform = "rotateX(180deg)";
-        flap.style.zIndex = "1";
-        paper.classList.add("paper-extracted");
-        hint.innerText = "✨ Surat Rahasia ✨";
-        envelopeState = 2;
+    if (envelopeStage === 0) {
+        // KLIK 1: Lepas pita, buka flap, kertas keluar sedikit secara halus
+        playSound('paper');
+        ribbon.classList.add("ribbon-detached");
+        flap.classList.add("flap-open");
         
-        setTimeout(startTypewriter, 600);
+        setTimeout(() => {
+            paper.classList.add("paper-peek");
+        }, 300);
+
+        hint.innerText = "Klik sekali lagi untuk membuka kertas penuh (2/2)";
+        envelopeStage = 1;
+    } else if (envelopeStage === 1) {
+        // KLIK 2: Kertas maju ke depan amplop & penuh
+        playSound('paper');
+        paper.classList.remove("paper-peek");
+        paper.classList.add("paper-full-front");
+
+        hint.innerText = "✨ Special Letter ✨";
+        document.getElementById("btnCloseLetter").classList.remove("hidden");
+        envelopeStage = 2;
+
+        setTimeout(startTypewriter, 700);
     }
 }
 
@@ -292,19 +320,47 @@ function startTypewriter() {
     const target = document.getElementById("typewriterTarget");
     target.innerHTML = "";
     let i = 0;
+    isTypingActive = true;
     
     function typeChar() {
         if (i < fullMessageText.length) {
             const char = fullMessageText.charAt(i);
             target.innerHTML += (char === "\n") ? "<br>" : char;
             i++;
-            setTimeout(typeChar, 40);
+            typewriterTimeout = setTimeout(typeChar, 35);
+        } else {
+            isTypingActive = false;
         }
     }
     typeChar();
 }
 
-// MUSIC PLAYER & PLAYLIST LOGIC
+function closeLetterToEnvelope() {
+    playSound('paper');
+    clearTimeout(typewriterTimeout);
+    isTypingActive = false;
+
+    const flap = document.getElementById("envelopeFlap");
+    const ribbon = document.getElementById("ribbonRed");
+    const paper = document.getElementById("letterPaper");
+    const hint = document.getElementById("envelopeHint");
+    const btnClose = document.getElementById("btnCloseLetter");
+
+    // Kembalikan kertas ke dalam amplop
+    paper.classList.remove("paper-full-front");
+    paper.classList.remove("paper-peek");
+    document.getElementById("typewriterTarget").innerHTML = "";
+    btnClose.classList.add("hidden");
+
+    setTimeout(() => {
+        flap.classList.remove("flap-open");
+        ribbon.classList.remove("ribbon-detached");
+        hint.innerText = "Klik amplop untuk membuka (1/2)";
+        envelopeStage = 0;
+    }, 500);
+}
+
+// MUSIC PLAYER & PLAYLIST LOGIC WITH TONEARM ANIMATION
 function renderPlaylist() {
     const container = document.getElementById("playlistItems");
     container.innerHTML = "";
@@ -337,12 +393,14 @@ function playMusic() {
     favAudio.play();
     document.getElementById("playBtn").innerText = "⏸️";
     document.getElementById("musicDisc").classList.add("spinning");
+    document.getElementById("tonearmArm").classList.add("arm-on-record");
 }
 
 function togglePlayMusic() {
     playSound('click');
     const playBtn = document.getElementById("playBtn");
     const disc = document.getElementById("musicDisc");
+    const arm = document.getElementById("tonearmArm");
 
     if (favAudio.paused) {
         playMusic();
@@ -350,6 +408,7 @@ function togglePlayMusic() {
         favAudio.pause();
         playBtn.innerText = "▶️";
         disc.classList.remove("spinning");
+        arm.classList.remove("arm-on-record");
         startBGM();
     }
 }
@@ -395,7 +454,7 @@ if (favAudio) {
     };
 }
 
-// POLAROID GALLERY
+// POLAROID GALLERY WITH SHAKE & FLASH EFEK
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
@@ -403,16 +462,50 @@ const photos = [
 ];
 let photoIdx = 0;
 
+function triggerCameraFlash() {
+    const flash = document.getElementById("flashOverlay");
+    flash.classList.add("flash-active");
+    setTimeout(() => flash.classList.remove("flash-active"), 300);
+}
+
+function shakePolaroid() {
+    playSound('click');
+    const card = document.getElementById("polaroidCard");
+    card.classList.add("polaroid-shake");
+    setTimeout(() => card.classList.remove("polaroid-shake"), 600);
+}
+
 function nextPhoto() {
     playSound('click');
+    triggerCameraFlash();
     photoIdx = (photoIdx + 1) % photos.length;
-    document.getElementById("polaroidImg").src = photos[photoIdx].src;
-    document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
+    setTimeout(() => {
+        document.getElementById("polaroidImg").src = photos[photoIdx].src;
+        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
+    }, 150);
 }
 
 function prevPhoto() {
     playSound('click');
+    triggerCameraFlash();
     photoIdx = (photoIdx - 1 + photos.length) % photos.length;
-    document.getElementById("polaroidImg").src = photos[photoIdx].src;
-    document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
+    setTimeout(() => {
+        document.getElementById("polaroidImg").src = photos[photoIdx].src;
+        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
+    }, 150);
+}
+
+// 3D TILT EFFECT ON MEMORY CARD
+const tiltCard = document.getElementById("tiltMemoryCard");
+if (tiltCard) {
+    tiltCard.addEventListener("mousemove", (e) => {
+        const rect = tiltCard.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        tiltCard.style.transform = `rotateY(${x / 15}deg) rotateX(${-y / 15}deg)`;
+    });
+
+    tiltCard.addEventListener("mouseleave", () => {
+        tiltCard.style.transform = "rotateY(0deg) rotateX(0deg)";
+    });
 }
