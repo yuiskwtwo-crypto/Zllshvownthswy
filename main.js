@@ -165,7 +165,7 @@ function submitPin() {
     }
 }
 
-// DRAG & DROP KOIN REALISTIS (BEBAS TELEPORT & TIDAK ACCIDENTAL DISAPPEAR)
+// DRAG & DROP KOIN REALISTIS
 function initCoinDraggable() {
     const coin = document.getElementById("hiddenCoin");
     const slotHousing = document.getElementById("coinSlotHousing");
@@ -231,7 +231,6 @@ function initCoinDraggable() {
         if (isOverlapping) {
             coinInserted = true;
             playSound('coin');
-
             coin.style.transition = "all 0.4s ease-in";
             coin.style.left = `${slotRect.left + slotRect.width / 2 - coinRect.width / 2}px`;
             coin.style.top = `${slotRect.top + slotRect.height / 2 - coinRect.height / 2}px`;
@@ -260,15 +259,17 @@ function initCoinDraggable() {
 let currentCode = "";
 const validSlots = {
     "A1": { name: "📜 Achivements", pageId: "pageCertificate" },
-    "A2": { name: "🎵 Favorite Songs", pageId: "pageSong" },
-    "B1": { name: "💌 Secret Message", pageId: "pageMessage" },
-    "B2": { name: "📸 Photo's", pageId: "pagePhoto" }
+    "A2": { name: "🎵 Playlist Lagu", pageId: "pageMusic" },
+    "B1": { name: "💌 Surat Ulang Tahun", pageId: "pageLetter" },
+    "B2": { name: "📸 Photo Stack", pageId: "pagePhoto" }
 };
-let dispensedSlots = [];
-let visitedPages = new Set();
 
 function pressKey(char) {
     playSound('click');
+    if (!coinInserted) {
+        document.getElementById("marqueeText").innerText = "MASUKKAN KOIN DULU!";
+        return;
+    }
     if (currentCode.length < 2) {
         currentCode += char;
         document.getElementById("codeLed").innerText = currentCode;
@@ -284,331 +285,204 @@ function clearKeypad() {
 function submitCode() {
     if (!coinInserted) {
         playSound('error');
-        alert("🔒 Koin belum dimasukkan! Buka pin nya sek baru masukin ke lobang");
+        document.getElementById("marqueeText").innerText = "MASUKKAN KOIN DULU!";
         return;
     }
-    if (currentCode.length < 2) { playSound('error'); return; }
-
-    const led = document.getElementById("codeLed");
 
     if (validSlots[currentCode]) {
-        if (dispensedSlots.includes(currentCode)) {
-            playSound('error');
-            led.innerText = "USED";
-            setTimeout(clearKeypad, 800);
-            return;
-        }
-
         playSound('drop');
-        const lockedAnim = document.getElementById("dispenserLocked");
-        if (lockedAnim) lockedAnim.remove();
+        const item = validSlots[currentCode];
+        document.getElementById("marqueeText").innerText = `MEMBUKA: ${item.name}...`;
 
-        const slot = validSlots[currentCode];
-        dispensedSlots.push(currentCode);
-        
-        createDispenserItem(slot.name, slot.pageId, false);
+        setTimeout(() => {
+            openDetailPage(item.pageId);
+            clearKeypad();
+        }, 600);
+    } else if (currentCode === "99") {
+        playSound('success');
+        openDetailPage("pageSpecial");
         clearKeypad();
     } else {
         playSound('error');
-        led.innerText = "ERR";
+        document.getElementById("codeLed").innerText = "ERR";
         setTimeout(clearKeypad, 800);
     }
 }
 
-function createDispenserItem(text, targetPageId, isSpecial) {
-    const dispenser = document.getElementById("dispenser");
-    const itemDiv = document.createElement("div");
-    itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
-    itemDiv.innerHTML = `${text} <span style='font-size:0.7rem; float:right; color:#888;'>Buka 🚀</span>`;
-    itemDiv.onclick = () => openPage(targetPageId);
-    dispenser.appendChild(itemDiv);
-    dispenser.scrollTop = dispenser.scrollHeight;
-}
-
-function checkSpecialItemUnlock() {
-    const mainPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto"];
-    const allVisited = mainPages.every(page => visitedPages.has(page));
-
-    if (allVisited && !dispensedSlots.includes("SPECIAL")) {
-        dispensedSlots.push("SPECIAL");
-        setTimeout(() => {
-            playSound('success');
-            createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
-            document.getElementById("pesanRahasia").style.display = "block";
-            if (typeof confetti === "function") confetti({ particleCount: 110, spread: 85 });
-        }, 800);
-    }
-}
-
-// NAVIGASI HALAMAN DENGAN AUTO HEIGHT DYNAMIC
-function openPage(pageId) {
-    playSound('click');
-    visitedPages.add(pageId);
-
+function openDetailPage(pageId) {
     document.getElementById("vendingStep").classList.add("hidden");
-    document.getElementById(pageId).classList.remove("hidden");
-
-    const mainCard = document.getElementById("mainCard");
-
+    document.getElementById("hiddenCoin").classList.add("hidden");
+    
     if (pageId === "pageCertificate") {
-        mainCard.classList.add("card-cert");
-        triggerCertificateAnimation();
+        document.getElementById("mainCard").classList.add("card-cert");
     } else {
-        mainCard.classList.remove("card-cert");
+        document.getElementById("mainCard").classList.remove("card-cert");
     }
 
-    if (pageId === "pageSong") renderPlaylist();
+    if (pageId === "pagePhoto") {
+        initPhotoStack();
+    }
+
+    document.getElementById(pageId).classList.remove("hidden");
 }
 
 function backToVending() {
     playSound('click');
-    const mainCard = document.getElementById("mainCard");
-    mainCard.classList.remove("card-cert");
-
-    const detailPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
-    detailPages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add("hidden");
-    });
-
-    const certCont = document.getElementById("certContainer");
-    if (certCont) {
-        certCont.classList.remove("cert-active");
-        certCont.classList.remove("cert-revealed");
-    }
-
+    document.querySelectorAll(".detail-page").forEach(p => p.classList.add("hidden"));
+    document.getElementById("mainCard").classList.remove("card-cert");
     document.getElementById("vendingStep").classList.remove("hidden");
-    checkSpecialItemUnlock();
-}
-
-// ANIMASI ELEGAN SERTIFIKAT
-function triggerCertificateAnimation() {
-    const certContainer = document.getElementById("certContainer");
-    certContainer.classList.remove("cert-active", "cert-revealed");
-
-    setTimeout(() => {
-        certContainer.classList.add("cert-active");
-    }, 100);
-
-    setTimeout(() => {
-        certContainer.classList.add("cert-revealed");
-        playSound('success');
-    }, 700);
-}
-
-// SURAT & TYPING EFFECT REALISTIS
-let envelopeStage = 0;
-let isTypingActive = false;
-let typewriterTimeout = null;
-const fullMessageText = "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan! ✨✨\n\nWith best wishes, ❤️";
-
-function handleEnvelopeClick() {
-    if (isTypingActive) return;
-
-    const flap = document.getElementById("envelopeFlap");
-    const ribbon = document.getElementById("ribbonRed");
-    const paper = document.getElementById("letterPaper");
-    const hint = document.getElementById("envelopeHint");
-
-    if (envelopeStage === 0) {
-        playSound('paper');
-        ribbon.classList.add("ribbon-detached");
-        flap.classList.add("flap-open");
-        
-        setTimeout(() => {
-            paper.classList.add("paper-peek");
-        }, 300);
-
-        hint.innerText = "Pencet pisan maneh (2/2)";
-        envelopeStage = 1;
-    } else if (envelopeStage === 1) {
-        playSound('paper');
-        paper.classList.remove("paper-peek");
-        paper.classList.add("paper-full-front");
-
-        hint.innerText = "✨ Special Letter ✨";
-        document.getElementById("btnCloseLetter").classList.remove("hidden");
-        envelopeStage = 2;
-
-        setTimeout(startTypewriter, 700);
+    if (coinInserted) {
+        document.getElementById("marqueeText").innerText = "PILIH ITEM DENGAN KEYPAD!";
     }
 }
 
-function startTypewriter() {
-    const target = document.getElementById("typewriterTarget");
-    target.innerHTML = "";
-    let i = 0;
-    isTypingActive = true;
-    
-    function typeChar() {
-        if (i < fullMessageText.length) {
-            const char = fullMessageText.charAt(i);
-            target.innerHTML += (char === "\n") ? "<br>" : char;
-            i++;
-            typewriterTimeout = setTimeout(typeChar, 35);
-        } else {
-            isTypingActive = false;
-        }
-    }
-    typeChar();
-}
-
-function closeLetterToEnvelope() {
-    playSound('paper');
-    clearTimeout(typewriterTimeout);
-    isTypingActive = false;
-
-    const flap = document.getElementById("envelopeFlap");
-    const ribbon = document.getElementById("ribbonRed");
-    const paper = document.getElementById("letterPaper");
-    const hint = document.getElementById("envelopeHint");
-    const btnClose = document.getElementById("btnCloseLetter");
-
-    paper.classList.remove("paper-full-front");
-    paper.classList.remove("paper-peek");
-    document.getElementById("typewriterTarget").innerHTML = "";
-    btnClose.classList.add("hidden");
-
-    setTimeout(() => {
-        flap.classList.remove("flap-open");
-        ribbon.classList.remove("ribbon-detached");
-        hint.innerText = "Klik amplop untuk membuka (1/2)";
-        envelopeStage = 0;
-    }, 500);
-}
-
-// REALISTIS TURNTABLE MUSIC PLAYER LOGIC
-function renderPlaylist() {
-    const container = document.getElementById("playlistItems");
-    container.innerHTML = "";
-    playlist.forEach((song, idx) => {
-        const item = document.createElement("div");
-        item.className = idx === currentTrackIdx ? "playlist-item active" : "playlist-item";
-        item.innerHTML = `<span>${idx + 1}. ${song.title}</span> <small>${song.artist}</small>`;
-        item.onclick = () => selectTrack(idx);
-        container.appendChild(item);
-    });
-}
-
-function selectTrack(idx) {
-    playSound('click');
-    currentTrackIdx = idx;
-    loadTrack(currentTrackIdx);
-    playMusic();
-    renderPlaylist();
-}
-
+// MUSIC PLAYER LOGIC
 function loadTrack(idx) {
     const track = playlist[idx];
-    document.getElementById("currentSongTitle").innerText = track.title;
-    document.getElementById("currentSongArtist").innerText = track.artist;
-    document.getElementById("discLabelTitle").innerText = track.title;
+    document.getElementById("songTitle").innerText = track.title;
+    document.getElementById("songArtist").innerText = track.artist;
     favAudio.src = track.src;
 }
 
-function playMusic() {
-    stopBGM();
-    favAudio.play();
-    document.getElementById("playBtn").innerText = "⏸";
-    document.getElementById("musicDisc").classList.add("spinning");
-    document.getElementById("tonearmArm").classList.add("arm-on-record");
-}
-
-function togglePlayMusic() {
+function togglePlay() {
     playSound('click');
+    const vinyl = document.getElementById("vinyl");
     const playBtn = document.getElementById("playBtn");
-    const disc = document.getElementById("musicDisc");
-    const arm = document.getElementById("tonearmArm");
 
     if (favAudio.paused) {
-        playMusic();
+        stopBGM();
+        favAudio.play();
+        vinyl.classList.add("spinning");
+        playBtn.innerText = "⏸️";
     } else {
         favAudio.pause();
-        playBtn.innerText = "▶";
-        disc.classList.remove("spinning");
-        arm.classList.remove("arm-on-record");
+        vinyl.classList.remove("spinning");
+        playBtn.innerText = "▶️";
         startBGM();
     }
 }
 
-function nextTrack() {
+function nextSong() {
     playSound('click');
     currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-    selectTrack(currentTrackIdx);
+    loadTrack(currentTrackIdx);
+    if (!favAudio.paused) favAudio.play();
 }
 
-function prevTrack() {
+function prevSong() {
     playSound('click');
     currentTrackIdx = (currentTrackIdx - 1 + playlist.length) % playlist.length;
-    selectTrack(currentTrackIdx);
+    loadTrack(currentTrackIdx);
+    if (!favAudio.paused) favAudio.play();
 }
 
-function formatTime(sec) {
-    if (isNaN(sec)) return "0:00";
-    const minutes = Math.floor(sec / 60);
-    const seconds = Math.floor(sec % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-}
+favAudio.addEventListener("ended", nextSong);
 
-function seekAudio(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pos = (e.clientX - rect.left) / rect.width;
-    favAudio.currentTime = pos * favAudio.duration;
-}
-
-if (favAudio) {
-    favAudio.ontimeupdate = () => {
-        const progress = (favAudio.currentTime / favAudio.duration) * 100;
-        document.getElementById("progressBar").style.width = `${progress}%`;
-        document.getElementById("currentTime").innerText = formatTime(favAudio.currentTime);
-    };
-
-    favAudio.onloadedmetadata = () => {
-        document.getElementById("totalDuration").innerText = formatTime(favAudio.duration);
-    };
-
-    favAudio.onended = () => {
-        nextTrack();
-    };
-}
-
-// POLAROID GALLERY LOGIC
-const photos = [
-    { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
-    { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
-    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "Best Wishes For You 🎁" }
+// ----------------------------------------------------
+// LOGIC FITUR PHOTO STACK
+// ----------------------------------------------------
+const photoData = [
+    { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "where it all started" },
+    { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "somehow, things got more chaotic" },
+    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "one of those days worth remembering" },
+    { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "proof that we actually had fun" },
+    { src: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", caption: "and somehow, here we are" }
 ];
-let photoIdx = 0;
 
-function triggerCameraFlash() {
-    const flash = document.getElementById("flashOverlay");
-    flash.classList.add("flash-active");
-    setTimeout(() => flash.classList.remove("flash-active"), 300);
+// Presets rotasi & offset tumpukan fisik
+const stackTransforms = [
+    { rotate: -2, scale: 1, x: 0, y: 0 },
+    { rotate: 3, scale: 0.96, x: 4, y: 4 },
+    { rotate: -4, scale: 0.92, x: -5, y: 7 },
+    { rotate: 2, scale: 0.88, x: 5, y: 10 },
+    { rotate: -3, scale: 0.84, x: -3, y: 13 }
+];
+
+let photoOrder = [0, 1, 2, 3, 4];
+let isAnimatingStack = false;
+
+function initPhotoStack() {
+    renderStack();
 }
 
-function shakePolaroid() {
-    playSound('click');
-    const card = document.getElementById("polaroidCard");
-    card.classList.add("polaroid-shake");
-    setTimeout(() => card.classList.remove("polaroid-shake"), 600);
+function renderStack() {
+    const wrapper = document.getElementById("photoStack");
+    wrapper.innerHTML = "";
+
+    // Render dari belakang ke depan agar z-index sesuai
+    for (let i = photoOrder.length - 1; i >= 0; i--) {
+        const photoIndex = photoOrder[i];
+        const data = photoData[photoIndex];
+        const transform = stackTransforms[i];
+
+        const card = document.createElement("div");
+        card.className = "stack-card";
+        card.dataset.position = i; // 0 adalah foto paling depan
+        
+        // Z-Index: posisi 0 (depan) mendapat z-index paling tinggi
+        card.style.zIndex = photoOrder.length - i;
+        card.style.transform = `translate(${transform.x}px, ${transform.y}px) rotate(${transform.rotate}deg) scale(${transform.scale})`;
+
+        card.innerHTML = `
+            <div class="stack-img-wrapper">
+                <img src="${data.src}" alt="Memory Photo ${photoIndex + 1}">
+            </div>
+        `;
+
+        if (i === 0) {
+            card.onclick = handleFrontCardClick;
+        }
+
+        wrapper.appendChild(card);
+    }
+
+    updateCaptionAndIndicators();
 }
 
-function nextPhoto() {
+function handleFrontCardClick() {
+    if (isAnimatingStack) return;
+    isAnimatingStack = true;
+
     playSound('click');
-    triggerCameraFlash();
-    photoIdx = (photoIdx + 1) % photos.length;
+
+    const wrapper = document.getElementById("photoStack");
+    // Foto paling depan (posisi 0)
+    const frontCard = wrapper.querySelector('.stack-card[data-position="0"]');
+
+    if (!frontCard) return;
+
+    // Tambahkan kelas animasi swipe out & move to back
+    frontCard.classList.add("anim-out");
+
+    // Fade out caption
+    const captionEl = document.getElementById("stackCaption");
+    captionEl.classList.add("fade-out");
+
     setTimeout(() => {
-        document.getElementById("polaroidImg").src = photos[photoIdx].src;
-        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
-    }, 150);
+        // Pindahkan elemen depan ke paling belakang array (Looping: 1 -> 2 -> 3 -> 4 -> 5 -> 1)
+        const movedItem = photoOrder.shift();
+        photoOrder.push(movedItem);
+
+        // Render ulang susunan tumpukan
+        renderStack();
+
+        // Fade in caption baru
+        captionEl.classList.remove("fade-out");
+        isAnimatingStack = false;
+    }, 500);
 }
 
-function prevPhoto() {
-    playSound('click');
-    triggerCameraFlash();
-    photoIdx = (photoIdx - 1 + photos.length) % photos.length;
-    setTimeout(() => {
-        document.getElementById("polaroidImg").src = photos[photoIdx].src;
-        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
-    }, 150);
+function updateCaptionAndIndicators() {
+    const activePhotoIndex = photoOrder[0];
+    const captionEl = document.getElementById("stackCaption");
+    captionEl.innerText = `"${photoData[activePhotoIndex].caption}"`;
+
+    const dots = document.querySelectorAll("#stackIndicator .dot");
+    dots.forEach((dot, idx) => {
+        if (idx === activePhotoIndex) {
+            dot.classList.add("active");
+        } else {
+            dot.classList.remove("active");
+        }
+    });
 }
