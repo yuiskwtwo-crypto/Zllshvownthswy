@@ -6,13 +6,12 @@
     <title>Birthday Surprise & Interactive Vending Machine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- FLOATING HEARTS BACKGROUND -->
     <div class="hearts-container">
         <div class="heart-particle" style="left: 5%; animation-duration: 7s;">💗</div>
         <div class="heart-particle" style="left: 15%; animation-duration: 9s; animation-delay: 2s;">💖</div>
@@ -26,17 +25,14 @@
         <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
     </div>
 
-    <!-- AUDIO BGM AWAL (BLANK SPACE) -->
     <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <div class="card" id="mainCard">
-        <!-- KOIN TERSEMBUNYI -->
-        <div id="hiddenCoin" class="hidden-coin hidden" onclick="openPinModal()" title="Klik untuk ambil koin!">🪙</div>
+        <div id="hiddenCoin" class="hidden-coin hidden" title="Buka PIN dulu, lalu seret koin ini ke slot koin vending machine!">🪙</div>
 
-        <!-- MODAL PIN TANGGAL LAHIR -->
         <div id="pinModal" class="modal-overlay hidden">
             <div class="modal-box">
-                <h3>🔒 Unlock Coin Slot</h3>
+                <h3 class="arcade-font-sm">🔒 UNLOCK COIN</h3>
                 <p>Masukkan tanggal lahirmu (DDMM)</p>
                 <div class="pin-display" id="pinDisplay">----</div>
                 <div class="num-pad">
@@ -56,7 +52,6 @@
             </div>
         </div>
 
-        <!-- STEP 1: LOGIN -->
         <div id="loginBox" class="step-box">
             <h1 class="title-aesthetic">🔒 Access Gate</h1>
             <p class="sub-title">Who are you?</p>
@@ -67,7 +62,6 @@
             <p id="errorMsg" class="error-msg">❌ Upssiee! Penyusup kamu yaakk</p>
         </div>
 
-        <!-- STEP 2: TIUP LILIN -->
         <div id="candleStep" class="step-box hidden">
             <h1 class="title-aesthetic">🎂 Make a Wish!</h1>
             <p class="sub-title">Klik lilin di bawah untuk meniup apinya 💨✨</p>
@@ -103,9 +97,8 @@
             <button class="btn-primary hidden" id="nextToVendingBtn" onclick="goToVending()">Next!! 🎁</button>
         </div>
 
-        <!-- STEP 3: VENDING MACHINE -->
         <div id="vendingStep" class="step-box hidden">
-            <h1 class="title-aesthetic mini">🎰 Arcade Vending</h1>
+            <h1 class="title-arcade">RETRO ARCADE</h1>
             
             <div class="vending-machine">
                 <div class="lights">
@@ -114,7 +107,7 @@
 
                 <div class="screen-group">
                     <div class="screen" id="machineScreen">
-                        <div class="marquee-text" id="marqueeText">🔍 CARI KOIN TERSEMBUNYI & BUKA PIN DULU!</div>
+                        <div class="marquee-text" id="marqueeText">KLIK KOIN UNTUK UNLOCK PIN DULU!</div>
                     </div>
                     <div class="code-led" id="codeLed">--</div>
                 </div>
@@ -136,13 +129,13 @@
                         </div>
                         <div class="keypad-actions">
                             <button class="btn-action clear" onclick="clearKeypad()">CLR</button>
-                            <button class="btn-action enter" id="enterBtn" onclick="submitCode()">ENTER</button>
+                            <button class="btn-action enter" id="enterBtn" onclick="submitCode()">ENT</button>
                         </div>
                     </div>
                     
-                    <div class="coin-slot-housing" onclick="triggerCoinSlotAnimation()">
+                    <div class="coin-slot-housing" id="coinSlotHousing">
                         <div class="coin-slot-hole"></div>
-                        <p class="coin-slot-label">COIN</p>
+                        <p class="coin-slot-label">INSERT COIN</p>
                     </div>
                 </div>
 
@@ -159,10 +152,11 @@
             </div>
         </div>
 
-        <!-- HALAMAN MEMORI (3D TILT EFFECT) -->
         <div id="pageMemory" class="step-box detail-page hidden">
-            <button class="btn-back-corner" onclick="backToVending()">←</button>
-            <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
+            </div>
             <div class="content-box tall-content tilt-card" id="tiltMemoryCard">
                 <div class="memory-illustration">✨ 💭 ✨</div>
                 <p class="memory-text">Ingat gak waktu momen seru bareng? Banyak banget cerita kocak yang bikin ngakak kalau diling-eling lagi! 😆</p>
@@ -173,12 +167,12 @@
             </div>
         </div>
 
-        <!-- HALAMAN LAGU FAVORIT (TONEARM ANIMATION & VINYL) -->
         <div id="pageSong" class="step-box detail-page hidden">
-            <button class="btn-back-corner" onclick="backToVending()">←</button>
-            <h2 class="title-aesthetic mini">🎵 Favorite Songs</h2>
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">🎵 Favorite Songs</h2>
+            </div>
             <div class="content-box music-card tall-content">
-                
                 <div class="player-hd-container">
                     <div class="turntable-wrapper">
                         <div class="tonearm" id="tonearmArm"></div>
@@ -215,22 +209,20 @@
             </div>
         </div>
 
-        <!-- HALAMAN SURAT (AMPLOP PUTIH REALISTIS & PITA MERAH) -->
         <div id="pageMessage" class="step-box detail-page hidden">
-            <button class="btn-back-corner" onclick="backToVending()">←</button>
-            <h2 class="title-aesthetic mini">💌 Secret Message</h2>
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">💌 Secret Message</h2>
+            </div>
             
             <div class="envelope-scene">
-                <!-- AMPLOB PUTIH -->
                 <div class="envelope-white" id="envelopeObj" onclick="handleEnvelopeClick()">
                     <div class="env-flap-white" id="envelopeFlap"></div>
                     
-                    <!-- PITA MERAH -->
                     <div class="ribbon-red" id="ribbonRed">
                         <div class="ribbon-seal">❤️</div>
                     </div>
 
-                    <!-- KERTAS SURAT REALISTIS -->
                     <div class="letter-paper-hd" id="letterPaper">
                         <div class="stamp-hd">📮 BIRTHDAY</div>
                         <div class="typed-text-container">
@@ -246,10 +238,11 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <!-- HALAMAN GALERI FOTO (INTERAKTIF POLAROID) -->
         <div id="pagePhoto" class="step-box detail-page hidden">
-            <button class="btn-back-corner" onclick="backToVending()">←</button>
-            <h2 class="title-aesthetic mini">📸 Cute Photo</h2>
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">📸 Cute Photo</h2>
+            </div>
             <div class="flash-overlay" id="flashOverlay"></div>
             <div class="polaroid-frame tall-frame" id="polaroidCard" onclick="shakePolaroid()">
                 <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
@@ -262,10 +255,11 @@
             </div>
         </div>
 
-        <!-- HALAMAN SPECIAL -->
         <div id="pageSpecial" class="step-box detail-page hidden">
-            <button class="btn-back-corner" onclick="backToVending()">←</button>
-            <h2 class="title-aesthetic mini">🌟 SPECIAL ITEM 🌟</h2>
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">🌟 SPECIAL ITEM 🌟</h2>
+            </div>
             <div class="content-box special-box tall-content">
                 <div style="font-size:3.5rem; margin-bottom:10px;" class="bounce-idle">🎟️</div>
                 <h3>VOUCHER SPECIAL TREAT</h3>
