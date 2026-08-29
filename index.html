@@ -12,14 +12,23 @@
 </head>
 <body>
 
-    <!-- FLOATING HEARTS BACKGROUND -->
+    <!-- FLOATING HEARTS BACKGROUND (RAMAI & BERAGAM) -->
     <div class="hearts-container">
-        <div class="heart-particle" style="left: 10%; animation-duration: 8s; animation-delay: 0s;">💗</div>
-        <div class="heart-particle" style="left: 25%; animation-duration: 6s; animation-delay: 2s;">💖</div>
-        <div class="heart-particle" style="left: 45%; animation-duration: 9s; animation-delay: 1s;">💕</div>
-        <div class="heart-particle" style="left: 65%; animation-duration: 7s; animation-delay: 3s;">🌸</div>
-        <div class="heart-particle" style="left: 80%; animation-duration: 10s; animation-delay: 0.5s;">✨</div>
-        <div class="heart-particle" style="left: 90%; animation-duration: 6.5s; animation-delay: 2.5s;">💗</div>
+        <div class="heart-particle" style="left: 5%; animation-duration: 7s; animation-delay: 0s;">💗</div>
+        <div class="heart-particle" style="left: 15%; animation-duration: 9s; animation-delay: 2s;">💖</div>
+        <div class="heart-particle" style="left: 25%; animation-duration: 6s; animation-delay: 1s;">💕</div>
+        <div class="heart-particle" style="left: 35%; animation-duration: 8s; animation-delay: 3s;">🌸</div>
+        <div class="heart-particle" style="left: 45%; animation-duration: 10s; animation-delay: 0.5s;">✨</div>
+        <div class="heart-particle" style="left: 55%; animation-duration: 7.5s; animation-delay: 2.5s;">💗</div>
+        <div class="heart-particle" style="left: 65%; animation-duration: 9.5s; animation-delay: 1.5s;">💖</div>
+        <div class="heart-particle" style="left: 75%; animation-duration: 6.5s; animation-delay: 0.2s;">💕</div>
+        <div class="heart-particle" style="left: 85%; animation-duration: 8.5s; animation-delay: 3.2s;">🌸</div>
+        <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
+        <div class="heart-particle" style="left: 20%; animation-duration: 8s; animation-delay: 4s;">💖</div>
+        <div class="heart-particle" style="left: 40%; animation-duration: 10s; animation-delay: 5s;">💗</div>
+        <div class="heart-particle" style="left: 60%; animation-duration: 7s; animation-delay: 3.8s;">💕</div>
+        <div class="heart-particle" style="left: 80%; animation-duration: 9s; animation-delay: 4.5s;">✨</div>
+        <div class="heart-particle" style="left: 90%; animation-duration: 6s; animation-delay: 5.2s;">🌸</div>
     </div>
 
     <!-- AUDIO UTAMA (BGM) -->
@@ -63,20 +72,20 @@
             <p id="errorMsg" class="error-msg">❌ Upssiee! Penyusup kamu yaakk</p>
         </div>
 
-        <!-- STEP 2: TIUP LILIN HD REALISTIS -->
+        <!-- STEP 2: TIUP LILIN HD SLOW MOTION -->
         <div id="candleStep" class="step-box hidden">
             <h1 class="title-aesthetic">🎂 Make a Wish!</h1>
             <p class="sub-title">Klik lilin di bawah untuk meniup apinya 💨✨</p>
 
             <div class="cake-container">
                 <div class="candle-hd" id="birthdayCandle" onclick="blowCandle()">
-                    <!-- ASAP REALISTIS -->
+                    <!-- ASAP REALISTIS HALUS -->
                     <div class="smoke-group" id="smokeGroup">
                         <div class="smoke-particle s1"></div>
                         <div class="smoke-particle s2"></div>
                         <div class="smoke-particle s3"></div>
                     </div>
-                    <!-- API REALISTIS -->
+                    <!-- API REALISTIS SLOW FADE -->
                     <div class="flame-hd" id="flame">
                         <div class="flame-outer"></div>
                         <div class="flame-inner"></div>
@@ -138,7 +147,11 @@
                 </div>
 
                 <div class="dispenser-window" id="dispenser">
-                    <p class="dispenser-hint" id="dispenserHint">Item yang keluar akan muncul di sini</p>
+                    <!-- ANIMASI GEMBOK TERKUNCI (Pengganti teks biasa) -->
+                    <div class="dispenser-locked" id="dispenserLocked">
+                        <span class="lock-icon">🔒</span>
+                        <span class="lock-text">LOCKED</span>
+                    </div>
                 </div>
             </div>
 
@@ -147,7 +160,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN MEMORI (DESAIN PANJANG & PROPORTIONAL) -->
+        <!-- HALAMAN MEMORI -->
         <div id="pageMemory" class="step-box detail-page hidden">
             <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
             <div class="content-box tall-content">
@@ -161,18 +174,45 @@
             <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
 
-        <!-- HALAMAN LAGU FAVORIT -->
+        <!-- HALAMAN LAGU FAVORIT (REALISTIS HD MUSIC PLAYER) -->
         <div id="pageSong" class="step-box detail-page hidden">
             <h2 class="title-aesthetic mini">🎵 Favorite Song</h2>
             <div class="content-box music-card tall-content">
-                <div class="disc-animation" id="musicDisc">🎵</div>
-                <h3 class="song-title">Happy Birthday Track</h3>
-                <p class="song-artist">Special Song for You</p>
-                <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-                <div class="player-controls">
-                    <button class="btn-play" id="playBtn" onclick="togglePlayMusic()">▶️ Play Track</button>
+                
+                <div class="player-hd-container">
+                    <!-- DISK VINYL ANIMASI -->
+                    <div class="vinyl-wrapper">
+                        <div class="disc-animation-hd" id="musicDisc">
+                            <div class="disc-center">🎧</div>
+                        </div>
+                    </div>
+
+                    <h3 class="song-title">Favorite Vibes</h3>
+                    <p class="song-artist">Special Track For You</p>
+
+                    <!-- AUDIO ELEMENT -->
+                    <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+                    <!-- PROGRESS BAR HD -->
+                    <div class="progress-container" onclick="seekAudio(event)">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <!-- TIME DISPLAY -->
+                    <div class="time-container">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalDuration">0:00</span>
+                    </div>
+
+                    <!-- CONTROLS -->
+                    <div class="player-controls-hd">
+                        <button class="btn-ctrl" onclick="rewindAudio()">⏪</button>
+                        <button class="btn-play-hd" id="playBtn" onclick="togglePlayMusic()">▶️</button>
+                        <button class="btn-ctrl" onclick="forwardAudio()">⏩</button>
+                    </div>
                 </div>
-                <p class="music-note">*Lagu akan terus berputar meskipun kamu kembali ke Vending!</p>
+
+                <p class="music-note">*Lagu akan terus berputar meskipun kamu balik ke menu Vending!</p>
             </div>
             <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
