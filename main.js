@@ -1,7 +1,43 @@
 // NAMA RAHASIA UNTUK MASUK (Case-insensitive)
 const namaBenar = "zilless";
 
+// EFEK SUARA SINTETIS (WEB AUDIO API)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'click') {
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    } else if (type === 'coin') {
+        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    } else if (type === 'drop') {
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+    }
+}
+
 function cekNama() {
+    playSound('click');
     const input = document.getElementById("inputNama").value.trim().toLowerCase();
     const error = document.getElementById("errorMsg");
 
@@ -24,6 +60,7 @@ let candleBlown = false;
 function blowCandle() {
     if (candleBlown) return;
 
+    playSound('click');
     const flame = document.getElementById("flame");
     const smoke = document.getElementById("smoke");
     const blowHint = document.getElementById("blowHint");
@@ -36,11 +73,7 @@ function blowCandle() {
     candleBlown = true;
     blowHint.innerText = "✨ Widiihh happy birthday ✨";
     
-    confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-    });
+    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
 
     setTimeout(() => {
         nextBtn.classList.remove("hidden");
@@ -48,36 +81,14 @@ function blowCandle() {
 }
 
 function goToVending() {
+    playSound('click');
     document.getElementById("candleStep").classList.add("hidden");
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// DATABASE ISI KONTEN ITEM VENDING MACHINE
-const itemData = {
-    "🎁 Special Memory": {
-        title: "🎁 Special Memory",
-        content: "<p>Ingat gak waktu momen seru bareng? Banyak kenangan kocak yang bikin ngakak kalau diling-eling lagi! 😆</p>"
-    },
-    "🎵 Favorite Song": {
-        title: "🎵 Favorite Song",
-        content: "<p>Lagu spesial buat kamu hari ini:</p><strong>Happy Birthday - Stevie Wonder 🎶</strong><br><p style='margin-top:8px; font-size:0.85rem; color:#666;'>Dengerin biar harimu tambah ceria!</p>"
-    },
-    "💌 Secret Message": {
-        title: "💌 Secret Message",
-        content: "<p>'Semoga di usiamu yang baru ini makin sukses, sehat selalu, dan dikelilingi hal-hal baik!' ✨</p>"
-    },
-    "📸 Cute Photo": {
-        title: "📸 Surprise Snapshot",
-        content: "<div style='font-size:3rem; margin:10px 0;'>🎂🥳🎉</div><p>Ini kue virtual terbesar khusus dibuat buat kamu!</p>"
-    },
-    "🌟 SPECIAL ITEM UNLOCKED 🌟": {
-        title: "🌟 SPECIAL PRIZE!",
-        content: "<p style='color:#e67e22; font-weight:bold;'>SELAMAT! Kamu dapet voucher treat khusus! (Tinggal tagih aja ke pembuat web ini!) 😜🔥</p>"
-    }
-};
-
-// LOGIK VENDING MACHINE
+// LOGIK VENDING MACHINE DISPENSE
 function dispenseItems() {
+    playSound('coin');
     const btn = document.getElementById("coinBtn");
     const screen = document.getElementById("machineScreen");
     const dispenser = document.getElementById("dispenser");
@@ -90,25 +101,27 @@ function dispenseItems() {
     screen.innerHTML = "<div>VENDING IN PROGRESS...</div>";
 
     const items = [
-        "🎁 Special Memory",
-        "🎵 Favorite Song",
-        "💌 Secret Message",
-        "📸 Cute Photo"
+        { text: "🎁 Special Memory", pageId: "pageMemory" },
+        { text: "🎵 Favorite Song", pageId: "pageSong" },
+        { text: "💌 Secret Message", pageId: "pageMessage" },
+        { text: "📸 Cute Photo", pageId: "pagePhoto" }
     ];
 
     let delay = 0;
 
-    items.forEach((itemText) => {
+    items.forEach((itemObj) => {
         delay += 800;
         setTimeout(() => {
-            createDispenserItem(itemText, false);
+            playSound('drop');
+            createDispenserItem(itemObj.text, itemObj.pageId, false);
         }, delay);
     });
 
     delay += 1000;
     setTimeout(() => {
+        playSound('drop');
         screen.innerHTML = "<div>🌟 SPECIAL UNLOCKED! 🌟</div>";
-        createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", true);
+        createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
 
         document.getElementById("pesanRahasia").style.display = "block";
         
@@ -118,45 +131,95 @@ function dispenseItems() {
         (function frame() {
             confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
             confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
+            if (Date.now() < end) requestAnimationFrame(frame);
         }());
 
         btn.innerText = "VENDING COMPLETE!";
     }, delay);
 }
 
-function createDispenserItem(text, isSpecial) {
+function createDispenserItem(text, targetPageId, isSpecial) {
     const dispenser = document.getElementById("dispenser");
     const itemDiv = document.createElement("div");
     
     itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
-    itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>(Klik Buka 🔓)</span>`;
+    itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>(Buka 🚀)</span>`;
     
     itemDiv.addEventListener("click", () => {
-        openModal(text);
+        openPage(targetPageId);
     });
 
     dispenser.appendChild(itemDiv);
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// LOGIK POP-UP MODAL
-const modal = document.getElementById("itemModal");
-const closeModal = document.getElementById("closeModal");
-
-if (closeModal) {
-    closeModal.onclick = () => { modal.style.display = "none"; };
+// LOGIK NAVIGASI PINDAH HALAMAN (VENDING <-> ITEM)
+function openPage(pageId) {
+    playSound('click');
+    document.getElementById("vendingStep").classList.add("hidden");
+    document.getElementById(pageId).classList.remove("hidden");
 }
-window.onclick = (event) => {
-    if (event.target === modal) modal.style.display = "none";
-};
 
-function openModal(itemKey) {
-    const data = itemData[itemKey] || { title: "Item Info", content: "Tidak ada detail item." };
-    document.getElementById("modalTitle").innerText = data.title;
-    document.getElementById("modalBody").innerHTML = data.content;
-    modal.style.display = "flex";
+function backToVending() {
+    playSound('click');
+    // Matikan lagu jika sedang memutar musik saat klik kembali
+    const audio = document.getElementById("audioPlayer");
+    if (audio) {
+        audio.pause();
+        document.getElementById("playBtn").innerText = "▶️ Play";
+        document.getElementById("musicDisc").classList.remove("spinning");
+    }
+
+    // Sembunyikan semua halaman detail item
+    const detailPages = ["pageMemory", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
+    detailPages.forEach(id => document.getElementById(id).classList.add("hidden"));
+
+    // Tampilkan kembali Vending Machine
+    document.getElementById("vendingStep").classList.remove("hidden");
+}
+
+// LOGIK MUSIC PLAYER (PAGE 2)
+function togglePlayMusic() {
+    playSound('click');
+    const audio = document.getElementById("audioPlayer");
+    const playBtn = document.getElementById("playBtn");
+    const disc = document.getElementById("musicDisc");
+
+    if (audio.paused) {
+        audio.play();
+        playBtn.innerText = "⏸️ Pause";
+        disc.classList.add("spinning");
+    } else {
+        audio.pause();
+        playBtn.innerText = "▶️ Play";
+        disc.classList.remove("spinning");
+    }
+}
+
+// LOGIK POLAROID GALLERY (PAGE 4)
+// Kamu bisa ganti URL foto di bawah ini dengan foto kamu sendiri
+const photos = [
+    { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
+    { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
+    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "Best Wishes For You 🎁" }
+];
+let photoIdx = 0;
+
+function updatePolaroid() {
+    const img = document.getElementById("polaroidImg");
+    const cap = document.getElementById("polaroidCaption");
+    img.src = photos[photoIdx].src;
+    cap.innerText = photos[photoIdx].caption;
+}
+
+function nextPhoto() {
+    playSound('click');
+    photoIdx = (photoIdx + 1) % photos.length;
+    updatePolaroid();
+}
+
+function prevPhoto() {
+    playSound('click');
+    photoIdx = (photoIdx - 1 + photos.length) % photos.length;
+    updatePolaroid();
 }
