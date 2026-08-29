@@ -1,7 +1,7 @@
-// NAMA RAHASIA UNTUK MASUK (Case-insensitive)
 const namaBenar = "zilless";
+const tanggalLahirBenar = "0101"; // Format: DDMM (Contoh: 0101 = 1 Januari)
 
-// EFEK SUARA SINTETIS (WEB AUDIO API)
+// 1. WEB AUDIO API - SOUND EFFECTS AESTHETIC
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -13,31 +13,64 @@ function playSound(type) {
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
+    const now = audioCtx.currentTime;
+
     if (type === 'click') {
-        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-    } else if (type === 'coin') {
-        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.2);
-    } else if (type === 'drop') {
-        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.15);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now); // Tone C5
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.start(now); osc.stop(now + 0.08);
+    } 
+    else if (type === 'coin') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(987.77, now); // Tone B5
+        osc.frequency.setValueAtTime(1318.51, now + 0.08); // Tone E6
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+    } 
+    else if (type === 'drop') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(659.25, now);
+        osc.frequency.setValueAtTime(880.00, now + 0.1);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
+    } 
+    else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.08);
+        osc.frequency.setValueAtTime(783.99, now + 0.16);
+        osc.frequency.setValueAtTime(1046.50, now + 0.24);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
+    }
+    else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
     }
 }
 
+// 2. KONTROL BGM
+function startBGM() {
+    const bgm = document.getElementById("bgmAudio");
+    if (bgm) {
+        bgm.volume = 0.3;
+        bgm.play().catch(err => console.log("Autoplay ditahan browser, butuh interaksi:", err));
+    }
+}
+
+// 3. LOGIKA LOGIN
 function cekNama() {
     playSound('click');
+    startBGM();
+    
     const input = document.getElementById("inputNama").value.trim().toLowerCase();
     const error = document.getElementById("errorMsg");
 
@@ -46,6 +79,7 @@ function cekNama() {
         document.getElementById("candleStep").classList.remove("hidden");
         error.style.display = "none";
     } else {
+        playSound('error');
         error.style.display = "block";
     }
 }
@@ -54,29 +88,24 @@ function handleKeyPress(event) {
     if (event.key === "Enter") cekNama();
 }
 
-// LOGIK TIUP LILIN
+// 4. LOGIKA TIUP LILIN
 let candleBlown = false;
-
 function blowCandle() {
     if (candleBlown) return;
-
-    playSound('click');
-    const flame = document.getElementById("flame");
-    const smoke = document.getElementById("smoke");
-    const blowHint = document.getElementById("blowHint");
-    const nextBtn = document.getElementById("nextToVendingBtn");
-
-    flame.style.opacity = "0";
-    flame.style.transform = "translateX(-50%) scale(0)";
-    smoke.classList.add("active");
+    playSound('success');
+    
+    document.getElementById("flame").style.opacity = "0";
+    document.getElementById("smoke").classList.add("active");
     
     candleBlown = true;
-    blowHint.innerText = "✨ Widiihh happy birthday ✨";
+    document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
     
-    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+    if (typeof confetti === "function") {
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+    }
 
     setTimeout(() => {
-        nextBtn.classList.remove("hidden");
+        document.getElementById("nextToVendingBtn").classList.remove("hidden");
     }, 1000);
 }
 
@@ -84,58 +113,131 @@ function goToVending() {
     playSound('click');
     document.getElementById("candleStep").classList.add("hidden");
     document.getElementById("vendingStep").classList.remove("hidden");
+    document.getElementById("hiddenCoin").classList.remove("hidden");
 }
 
-// LOGIK VENDING MACHINE DISPENSE
-function dispenseItems() {
-    playSound('coin');
-    const btn = document.getElementById("coinBtn");
-    const screen = document.getElementById("machineScreen");
-    const dispenser = document.getElementById("dispenser");
-    
-    btn.disabled = true;
-    btn.classList.remove("pulse-anim");
-    btn.style.opacity = "0.6";
-    btn.innerText = "PROCESSING...";
-    dispenser.innerHTML = "";
-    screen.innerHTML = "<div>VENDING IN PROGRESS...</div>";
+// 5. MODAL KEYPAD PIN TANGGAL LAHIR
+let inputPin = "";
+let hasCoin = false;
 
-    const items = [
-        { text: "🎁 Special Memory", pageId: "pageMemory" },
-        { text: "🎵 Favorite Song", pageId: "pageSong" },
-        { text: "💌 Secret Message", pageId: "pageMessage" },
-        { text: "📸 Cute Photo", pageId: "pagePhoto" }
-    ];
+function openPinModal() {
+    playSound('click');
+    document.getElementById("pinModal").classList.remove("hidden");
+}
 
-    let delay = 0;
+function pressPin(num) {
+    playSound('click');
+    if (inputPin.length < 4) {
+        inputPin += num;
+        updatePinDisplay();
+    }
+}
 
-    items.forEach((itemObj) => {
-        delay += 800;
-        setTimeout(() => {
-            playSound('drop');
-            createDispenserItem(itemObj.text, itemObj.pageId, false);
-        }, delay);
-    });
+function clearPin() {
+    playSound('click');
+    inputPin = "";
+    updatePinDisplay();
+}
 
-    delay += 1000;
-    setTimeout(() => {
-        playSound('drop');
-        screen.innerHTML = "<div>🌟 SPECIAL UNLOCKED! 🌟</div>";
-        createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
+function updatePinDisplay() {
+    document.getElementById("pinDisplay").innerText = inputPin.padEnd(4, '-');
+}
 
-        document.getElementById("pesanRahasia").style.display = "block";
+function submitPin() {
+    if (inputPin === tanggalLahirBenar) {
+        playSound('coin');
+        hasCoin = true;
+        document.getElementById("pinModal").classList.add("hidden");
         
-        var duration = 3 * 1000;
-        var end = Date.now() + duration;
+        const coin = document.getElementById("hiddenCoin");
+        coin.style.transform = "scale(1.5) translate(-100px, 100px)";
+        coin.style.opacity = "0";
 
-        (function frame() {
-            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-            if (Date.now() < end) requestAnimationFrame(frame);
-        }());
+        setTimeout(() => {
+            coin.classList.add("hidden");
+            document.getElementById("marqueeText").innerText = "🪙 UNLOCKED! MASUKKAN KODE SLOT (A1, A2, B1, B2)";
+        }, 500);
 
-        btn.innerText = "VENDING COMPLETE!";
-    }, delay);
+    } else {
+        playSound('error');
+        document.getElementById("pinDisplay").innerText = "WRONG";
+        setTimeout(clearPin, 800);
+    }
+}
+
+// 6. LOGIKA KEYPAD VENDING MACHINE
+let currentCode = "";
+const validSlots = {
+    "A1": { name: "🎁 Special Memory", pageId: "pageMemory" },
+    "A2": { name: "🎵 Favorite Song", pageId: "pageSong" },
+    "B1": { name: "💌 Secret Message", pageId: "pageMessage" },
+    "B2": { name: "📸 Cute Photo", pageId: "pagePhoto" }
+};
+let dispensedSlots = [];
+
+function pressKey(char) {
+    playSound('click');
+    if (currentCode.length < 2) {
+        currentCode += char;
+        document.getElementById("codeLed").innerText = currentCode;
+    }
+}
+
+function clearKeypad() {
+    playSound('click');
+    currentCode = "";
+    document.getElementById("codeLed").innerText = "--";
+}
+
+function submitCode() {
+    if (!hasCoin) {
+        playSound('error');
+        alert("🔒 Koin belum aktif! Klik koin emas tersembunyi & masukkan PIN tanggal lahir dulu.");
+        return;
+    }
+
+    if (currentCode.length < 2) {
+        playSound('error');
+        return;
+    }
+
+    const led = document.getElementById("codeLed");
+    const hint = document.getElementById("dispenserHint");
+
+    if (validSlots[currentCode]) {
+        if (dispensedSlots.includes(currentCode)) {
+            playSound('error');
+            led.innerText = "USED";
+            setTimeout(clearKeypad, 800);
+            return;
+        }
+
+        playSound('drop');
+        if (hint) hint.remove();
+
+        const slot = validSlots[currentCode];
+        dispensedSlots.push(currentCode);
+        
+        createDispenserItem(slot.name, slot.pageId, false);
+        clearKeypad();
+
+        // Cek jika semua item sudah diambil
+        if (dispensedSlots.length === 4) {
+            setTimeout(() => {
+                playSound('success');
+                createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
+                document.getElementById("pesanRahasia").style.display = "block";
+                if (typeof confetti === "function") {
+                    confetti({ particleCount: 100, spread: 80 });
+                }
+            }, 800);
+        }
+
+    } else {
+        playSound('error');
+        led.innerText = "ERR";
+        setTimeout(clearKeypad, 800);
+    }
 }
 
 function createDispenserItem(text, targetPageId, isSpecial) {
@@ -145,15 +247,12 @@ function createDispenserItem(text, targetPageId, isSpecial) {
     itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
     itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>(Buka 🚀)</span>`;
     
-    itemDiv.addEventListener("click", () => {
-        openPage(targetPageId);
-    });
-
+    itemDiv.onclick = () => openPage(targetPageId);
     dispenser.appendChild(itemDiv);
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// LOGIK NAVIGASI PINDAH HALAMAN (VENDING <-> ITEM)
+// 7. NAVIGASI DETAIL PAGES
 function openPage(pageId) {
     playSound('click');
     document.getElementById("vendingStep").classList.add("hidden");
@@ -162,23 +261,24 @@ function openPage(pageId) {
 
 function backToVending() {
     playSound('click');
-    // Matikan lagu jika sedang memutar musik saat klik kembali
     const audio = document.getElementById("audioPlayer");
     if (audio) {
         audio.pause();
-        document.getElementById("playBtn").innerText = "▶️ Play";
-        document.getElementById("musicDisc").classList.remove("spinning");
+        const playBtn = document.getElementById("playBtn");
+        const disc = document.getElementById("musicDisc");
+        if (playBtn) playBtn.innerText = "▶️ Play";
+        if (disc) disc.classList.remove("spinning");
     }
 
-    // Sembunyikan semua halaman detail item
     const detailPages = ["pageMemory", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
-    detailPages.forEach(id => document.getElementById(id).classList.add("hidden"));
-
-    // Tampilkan kembali Vending Machine
+    detailPages.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+    });
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// LOGIK MUSIC PLAYER (PAGE 2)
+// 8. MUSIC PLAYER & GALERI POLAROID
 function togglePlayMusic() {
     playSound('click');
     const audio = document.getElementById("audioPlayer");
@@ -196,8 +296,6 @@ function togglePlayMusic() {
     }
 }
 
-// LOGIK POLAROID GALLERY (PAGE 4)
-// Kamu bisa ganti URL foto di bawah ini dengan foto kamu sendiri
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
@@ -205,21 +303,16 @@ const photos = [
 ];
 let photoIdx = 0;
 
-function updatePolaroid() {
-    const img = document.getElementById("polaroidImg");
-    const cap = document.getElementById("polaroidCaption");
-    img.src = photos[photoIdx].src;
-    cap.innerText = photos[photoIdx].caption;
-}
-
 function nextPhoto() {
     playSound('click');
     photoIdx = (photoIdx + 1) % photos.length;
-    updatePolaroid();
+    document.getElementById("polaroidImg").src = photos[photoIdx].src;
+    document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
 }
 
 function prevPhoto() {
     playSound('click');
     photoIdx = (photoIdx - 1 + photos.length) % photos.length;
-    updatePolaroid();
+    document.getElementById("polaroidImg").src = photos[photoIdx].src;
+    document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
 }
