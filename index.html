@@ -33,7 +33,6 @@
             <p class="sub-title">Klik lilin di bawah untuk meniup apinya 💨✨</p>
 
             <div class="cake-container">
-                <!-- Lilin Birthday HD & Realistic Flame -->
                 <div class="candle" id="birthdayCandle" onclick="blowCandle()">
                     <div class="smoke" id="smoke"></div>
                     <div class="flame" id="flame">
@@ -48,7 +47,6 @@
                     </div>
                 </div>
 
-                <!-- Kue Ulang Tahun Aesthetic -->
                 <div class="cake">
                     <div class="icing"></div>
                     <div class="frosting-layer"></div>
@@ -65,7 +63,6 @@
             <h1 class="title-aesthetic mini">🎰 Birthday Vending</h1>
             
             <div class="vending-machine">
-                <!-- Lampu Berkedip -->
                 <div class="lights">
                     <div class="light"></div>
                     <div class="light"></div>
@@ -73,12 +70,10 @@
                     <div class="light"></div>
                 </div>
 
-                <!-- Layar Digital dengan Running Text -->
                 <div class="screen" id="machineScreen">
                     <div class="marquee-text">✨ READY! INSERT COIN TO UNLOCK SURPRISES ✨</div>
                 </div>
 
-                <!-- Etalase Display Pajangan Item -->
                 <div class="vending-display">
                     <div class="shelf-item bounce-idle">🎁</div>
                     <div class="shelf-item bounce-idle delay-1">🎵</div>
@@ -86,31 +81,86 @@
                     <div class="shelf-item bounce-idle delay-3">📸</div>
                 </div>
 
-                <!-- Slot Item Keluar -->
                 <div class="dispenser-window" id="dispenser">
                     <p class="dispenser-hint">Item yang keluar akan muncul di sini (Bisa diklik!)</p>
                 </div>
 
-                <!-- Tombol Koin Berdenyut -->
                 <button class="btn-coin pulse-anim" id="coinBtn" onclick="dispenseItems()">
                     🪙 INSERT COIN
                 </button>
             </div>
 
-            <!-- Modal / Pop-up Detail Isi Item -->
-            <div id="itemModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-btn" id="closeModal">&times;</span>
-                    <h3 id="modalTitle">Detail Item</h3>
-                    <div id="modalBody"></div>
-                </div>
-            </div>
-
-            <!-- Pesan / Hadiah Utama -->
             <div id="pesanRahasia" class="hidden-message">
                 <p>🎁 <strong>HADIAH UTAMA:</strong><br>Happy belated birthday, zilless. Tetap jadi satu satunya orang yang aku kenal yaa!! 😆✨</p>
             </div>
         </div>
+
+        <!-- ==========================================
+             ITEM DETAIL PAGES (PINDAH HALAMAN KONTEN)
+             ========================================== -->
+
+        <!-- PAGE 1: SPECIAL MEMORY -->
+        <div id="pageMemory" class="step-box hidden">
+            <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
+            <div class="content-box">
+                <p class="memory-text">Ingat gak waktu momen seru bareng? Banyak kenangan kocak yang bikin ngakak kalau diling-eling lagi! 😆</p>
+                <div class="memory-badge">✨ Unforgettable Moment ✨</div>
+            </div>
+            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+        </div>
+
+        <!-- PAGE 2: FAVORITE SONG (MUSIC PLAYER) -->
+        <div id="pageSong" class="step-box hidden">
+            <h2 class="title-aesthetic mini">🎵 Favorite Song</h2>
+            <div class="content-box music-card">
+                <div class="disc-animation" id="musicDisc">🎵</div>
+                <h3 class="song-title">Happy Birthday Track</h3>
+                <p class="song-artist">Special Song for You</p>
+                
+                <!-- Audio Element (Ganti src dengan link MP3 kamu jika ada) -->
+                <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+                <div class="player-controls">
+                    <button class="btn-play" id="playBtn" onclick="togglePlayMusic()">▶️ Play</button>
+                </div>
+            </div>
+            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+        </div>
+
+        <!-- PAGE 3: SECRET MESSAGE -->
+        <div id="pageMessage" class="step-box hidden">
+            <h2 class="title-aesthetic mini">💌 Secret Message</h2>
+            <div class="content-box letter-box">
+                <p>"Semoga di usiamu yang baru ini makin sukses, sehat selalu, dan dikelilingi hal-hal baik yaaa!" ✨</p>
+            </div>
+            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+        </div>
+
+        <!-- PAGE 4: CUTE PHOTO (POLAROID GALLERY) -->
+        <div id="pagePhoto" class="step-box hidden">
+            <h2 class="title-aesthetic mini">📸 Cute Photo</h2>
+            <div class="polaroid-frame">
+                <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
+                <p id="polaroidCaption" class="polaroid-caption">Aesthetic Birthday Cake 🎂</p>
+            </div>
+            <div class="gallery-controls">
+                <button class="btn-small" onclick="prevPhoto()">⬅️ Prev</button>
+                <button class="btn-small" onclick="nextPhoto()">Next ➡️</button>
+            </div>
+            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+        </div>
+
+        <!-- PAGE 5: SPECIAL ITEM -->
+        <div id="pageSpecial" class="step-box hidden">
+            <h2 class="title-aesthetic mini">🌟 SPECIAL ITEM 🌟</h2>
+            <div class="content-box special-box">
+                <div style="font-size:3rem; margin-bottom:10px;">🎟️</div>
+                <h3>VOUCHER SPECIAL TREAT</h3>
+                <p style="margin-top:10px;">Bisa ditukarkan dengan traktiran makanan/minuman favoritmu. Tinggal tagih aja ke pembuat web ini! 😜🔥</p>
+            </div>
+            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+        </div>
+
     </div>
 
     <script src="main.js"></script>
