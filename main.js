@@ -1,44 +1,38 @@
 const namaBenar = "zilless";
-const tanggalLahirBenar = "0101"; // Format: DDMM (Contoh: 0101 = 1 Januari)
+const tanggalLahirBenar = "0101"; // Format DDMM
 
-// 1. WEB AUDIO API - SOUND EFFECTS AESTHETIC
+// WEB AUDIO API FOR SOUND EFFECTS
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-
     const now = audioCtx.currentTime;
 
     if (type === 'click') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now); // Tone C5
+        osc.frequency.setValueAtTime(523.25, now);
         gain.gain.setValueAtTime(0.08, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
-    } 
-    else if (type === 'coin') {
+    } else if (type === 'coin') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(987.77, now); // Tone B5
-        osc.frequency.setValueAtTime(1318.51, now + 0.08); // Tone E6
+        osc.frequency.setValueAtTime(987.77, now);
+        osc.frequency.setValueAtTime(1318.51, now + 0.08);
         gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
-    } 
-    else if (type === 'drop') {
+    } else if (type === 'drop') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(659.25, now);
         osc.frequency.setValueAtTime(880.00, now + 0.1);
         gain.gain.setValueAtTime(0.15, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
         osc.start(now); osc.stop(now + 0.25);
-    } 
-    else if (type === 'success') {
+    } else if (type === 'success') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.setValueAtTime(659.25, now + 0.08);
@@ -47,8 +41,7 @@ function playSound(type) {
         gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
         osc.start(now); osc.stop(now + 0.4);
-    }
-    else if (type === 'error') {
+    } else if (type === 'error') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(180, now);
         gain.gain.setValueAtTime(0.08, now);
@@ -57,16 +50,32 @@ function playSound(type) {
     }
 }
 
-// 2. KONTROL BGM
+// BGM & FAVORITE MUSIC MANAGEMENT
+const bgm = document.getElementById("bgmAudio");
+const favAudio = document.getElementById("audioPlayer");
+
 function startBGM() {
-    const bgm = document.getElementById("bgmAudio");
-    if (bgm) {
+    if (bgm && favAudio.paused) {
         bgm.volume = 0.3;
-        bgm.play().catch(err => console.log("Autoplay ditahan browser, butuh interaksi:", err));
+        bgm.play().catch(() => {});
     }
 }
 
-// 3. LOGIKA LOGIN
+function stopBGM() {
+    if (bgm) bgm.pause();
+}
+
+// Auto resume BGM jika lagu favorit selesai
+if (favAudio) {
+    favAudio.onended = () => {
+        const playBtn = document.getElementById("playBtn");
+        const disc = document.getElementById("musicDisc");
+        if (playBtn) playBtn.innerText = "▶️ Play Track";
+        if (disc) disc.classList.remove("spinning");
+        startBGM();
+    };
+}
+
 function cekNama() {
     playSound('click');
     startBGM();
@@ -88,25 +97,22 @@ function handleKeyPress(event) {
     if (event.key === "Enter") cekNama();
 }
 
-// 4. LOGIKA TIUP LILIN
+// LILIN HD & ASAP REALISTIS LOGIC
 let candleBlown = false;
 function blowCandle() {
     if (candleBlown) return;
     playSound('success');
     
-    document.getElementById("flame").style.opacity = "0";
-    document.getElementById("smoke").classList.add("active");
+    document.getElementById("flame").classList.add("extinguished");
+    document.getElementById("smokeGroup").classList.add("active");
     
     candleBlown = true;
     document.getElementById("blowHint").innerText = "✨ Widiihh happy birthday ✨";
-    
-    if (typeof confetti === "function") {
-        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-    }
+    if (typeof confetti === "function") confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
 
     setTimeout(() => {
         document.getElementById("nextToVendingBtn").classList.remove("hidden");
-    }, 1000);
+    }, 1200);
 }
 
 function goToVending() {
@@ -116,7 +122,7 @@ function goToVending() {
     document.getElementById("hiddenCoin").classList.remove("hidden");
 }
 
-// 5. MODAL KEYPAD PIN TANGGAL LAHIR
+// MODAL PIN KEYPAD
 let inputPin = "";
 let hasCoin = false;
 
@@ -129,18 +135,14 @@ function pressPin(num) {
     playSound('click');
     if (inputPin.length < 4) {
         inputPin += num;
-        updatePinDisplay();
+        document.getElementById("pinDisplay").innerText = inputPin.padEnd(4, '-');
     }
 }
 
 function clearPin() {
     playSound('click');
     inputPin = "";
-    updatePinDisplay();
-}
-
-function updatePinDisplay() {
-    document.getElementById("pinDisplay").innerText = inputPin.padEnd(4, '-');
+    document.getElementById("pinDisplay").innerText = "----";
 }
 
 function submitPin() {
@@ -157,7 +159,6 @@ function submitPin() {
             coin.classList.add("hidden");
             document.getElementById("marqueeText").innerText = "🪙 UNLOCKED! MASUKKAN KODE SLOT (A1, A2, B1, B2)";
         }, 500);
-
     } else {
         playSound('error');
         document.getElementById("pinDisplay").innerText = "WRONG";
@@ -165,7 +166,7 @@ function submitPin() {
     }
 }
 
-// 6. LOGIKA KEYPAD VENDING MACHINE
+// KEYPAD VENDING MACHINE LOGIC
 let currentCode = "";
 const validSlots = {
     "A1": { name: "🎁 Special Memory", pageId: "pageMemory" },
@@ -192,14 +193,10 @@ function clearKeypad() {
 function submitCode() {
     if (!hasCoin) {
         playSound('error');
-        alert("🔒 Koin belum aktif! Klik koin emas tersembunyi & masukkan PIN tanggal lahir dulu.");
+        alert("🔒 Koin belum aktif! Klik koin tersembunyi & masukkan PIN tanggal lahir dulu.");
         return;
     }
-
-    if (currentCode.length < 2) {
-        playSound('error');
-        return;
-    }
+    if (currentCode.length < 2) { playSound('error'); return; }
 
     const led = document.getElementById("codeLed");
     const hint = document.getElementById("dispenserHint");
@@ -221,18 +218,14 @@ function submitCode() {
         createDispenserItem(slot.name, slot.pageId, false);
         clearKeypad();
 
-        // Cek jika semua item sudah diambil
         if (dispensedSlots.length === 4) {
             setTimeout(() => {
                 playSound('success');
                 createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
                 document.getElementById("pesanRahasia").style.display = "block";
-                if (typeof confetti === "function") {
-                    confetti({ particleCount: 100, spread: 80 });
-                }
+                if (typeof confetti === "function") confetti({ particleCount: 110, spread: 85 });
             }, 800);
         }
-
     } else {
         playSound('error');
         led.innerText = "ERR";
@@ -243,32 +236,26 @@ function submitCode() {
 function createDispenserItem(text, targetPageId, isSpecial) {
     const dispenser = document.getElementById("dispenser");
     const itemDiv = document.createElement("div");
-    
     itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
     itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>(Buka 🚀)</span>`;
-    
     itemDiv.onclick = () => openPage(targetPageId);
     dispenser.appendChild(itemDiv);
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// 7. NAVIGASI DETAIL PAGES
+// NAVIGASI HALAMAN & LAYOUT MEMANJANG (TALL CARD)
 function openPage(pageId) {
     playSound('click');
     document.getElementById("vendingStep").classList.add("hidden");
     document.getElementById(pageId).classList.remove("hidden");
+    // Ubah wadah utama jadi lebih memanjang & elegan
+    document.getElementById("mainCard").classList.add("card-tall");
 }
 
 function backToVending() {
     playSound('click');
-    const audio = document.getElementById("audioPlayer");
-    if (audio) {
-        audio.pause();
-        const playBtn = document.getElementById("playBtn");
-        const disc = document.getElementById("musicDisc");
-        if (playBtn) playBtn.innerText = "▶️ Play";
-        if (disc) disc.classList.remove("spinning");
-    }
+    // Kembalikan ukuran wadah ke mode normal Vending
+    document.getElementById("mainCard").classList.remove("card-tall");
 
     const detailPages = ["pageMemory", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
     detailPages.forEach(id => {
@@ -278,24 +265,26 @@ function backToVending() {
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// 8. MUSIC PLAYER & GALERI POLAROID
+// TOGGLE FAVORITE MUSIC (MENIHILKAN KONTRA BGM)
 function togglePlayMusic() {
     playSound('click');
-    const audio = document.getElementById("audioPlayer");
     const playBtn = document.getElementById("playBtn");
     const disc = document.getElementById("musicDisc");
 
-    if (audio.paused) {
-        audio.play();
-        playBtn.innerText = "⏸️ Pause";
+    if (favAudio.paused) {
+        stopBGM(); // Hentikan BGM saat lagu favorit dimainkan
+        favAudio.play();
+        playBtn.innerText = "⏸️ Pause Track";
         disc.classList.add("spinning");
     } else {
-        audio.pause();
-        playBtn.innerText = "▶️ Play";
+        favAudio.pause();
+        playBtn.innerText = "▶️ Play Track";
         disc.classList.remove("spinning");
+        startBGM(); // Resume BGM setelah lagu dipause
     }
 }
 
+// POLAROID GALLERY LOGIC
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
