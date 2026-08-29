@@ -123,9 +123,7 @@ input[type="text"]:focus {
     font-weight: 600;
 }
 
-/* ==========================================
-   HD REALISTIC CANDLE & FLAME STYLES
-   ========================================== */
+/* HD REALISTIC CANDLE & FLAME STYLES */
 .cake-container {
     position: relative;
     margin: 40px 0 25px 0;
@@ -287,9 +285,7 @@ input[type="text"]:focus {
     to { transform: translateY(-5px); }
 }
 
-/* ==========================================
-   VENDING MACHINE STYLES
-   ========================================== */
+/* VENDING MACHINE STYLES */
 .vending-machine {
     background: linear-gradient(145deg, #ff477e, #ff5e92);
     border: 5px solid #ff2a6d;
@@ -326,20 +322,62 @@ input[type="text"]:focus {
 .screen {
     background: #1e1e24;
     color: #00ffaa;
-    padding: 14px;
+    padding: 12px;
     border-radius: 12px;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
     font-family: 'Fredoka', sans-serif;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     border: 3px solid #3a3d4a;
     box-shadow: inset 0 0 10px rgba(0,255,170,0.2);
     text-shadow: 0 0 8px #00ffaa;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
+.marquee-text {
+    display: inline-block;
+    animation: marquee 8s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* DISPLAY ETALASE ITEM PAJANGAN */
+.vending-display {
+    background: rgba(0, 0, 0, 0.15);
+    border: 2px dashed #ffb3c1;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 14px;
+}
+
+.shelf-item {
+    font-size: 1.8rem;
+}
+
+.bounce-idle {
+    animation: floating 2s ease-in-out infinite;
+}
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+.delay-3 { animation-delay: 0.9s; }
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0px); }
+}
+
+/* DISPENSER WINDOW */
 .dispenser-window {
     background: #2b2d42;
-    height: 200px;
+    min-height: 150px;
+    max-height: 200px;
     border-radius: 14px;
     border: 3px solid #3a3d4a;
     overflow-y: auto;
@@ -348,6 +386,12 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.dispenser-hint {
+    color: #a4b0be;
+    font-size: 0.8rem;
+    margin: auto;
 }
 
 .vending-item {
@@ -362,6 +406,12 @@ input[type="text"]:focus {
     animation: dropSlide 0.5s forwards ease-out;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     border-left: 6px solid #ff477e;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.vending-item:hover {
+    transform: scale(1.02);
 }
 
 @keyframes dropSlide {
@@ -379,6 +429,7 @@ input[type="text"]:focus {
     font-size: 1.1rem;
 }
 
+/* BUTTON COIN & PULSE */
 .btn-coin {
     background: linear-gradient(135deg, #f1c40f, #f39c12);
     color: #2c3e50;
@@ -392,6 +443,16 @@ input[type="text"]:focus {
     box-shadow: 0 5px 0 #d35400;
     transition: all 0.1s ease;
     width: 100%;
+}
+
+.pulse-anim {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7); }
+    70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
 }
 
 .btn-coin:active {
@@ -411,3 +472,39 @@ input[type="text"]:focus {
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     border: 2px dashed #ff70a6;
 }
+
+/* MODAL STYLES */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    color: #2b2d42;
+    padding: 20px;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 340px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: popUp 0.3s ease-out;
+}
+
+@keyframes popUp {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-btn {
+    position: absolute; right: 15px; top: 10px;
+    font-size: 24px; font-weight: bold; cursor: pointer; color: #aaa;
+}
+.close-btn:hover { color: #ff477e; }
