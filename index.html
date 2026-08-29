@@ -12,9 +12,9 @@
 </head>
 <body>
 
-    <!-- FLOATING HEARTS BACKGROUND (RAMAI & BERAGAM) -->
+    <!-- FLOATING HEARTS BACKGROUND -->
     <div class="hearts-container">
-        <div class="heart-particle" style="left: 5%; animation-duration: 7s; animation-delay: 0s;">💗</div>
+        <div class="heart-particle" style="left: 5%; animation-duration: 7s;">💗</div>
         <div class="heart-particle" style="left: 15%; animation-duration: 9s; animation-delay: 2s;">💖</div>
         <div class="heart-particle" style="left: 25%; animation-duration: 6s; animation-delay: 1s;">💕</div>
         <div class="heart-particle" style="left: 35%; animation-duration: 8s; animation-delay: 3s;">🌸</div>
@@ -31,8 +31,8 @@
         <div class="heart-particle" style="left: 90%; animation-duration: 6s; animation-delay: 5.2s;">🌸</div>
     </div>
 
-    <!-- AUDIO UTAMA (BGM) -->
-    <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
+    <!-- AUDIO BGM AWAL (BLANK SPACE) -->
+    <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <div class="card" id="mainCard">
         <!-- KOIN TERSEMBUNYI -->
@@ -72,20 +72,18 @@
             <p id="errorMsg" class="error-msg">❌ Upssiee! Penyusup kamu yaakk</p>
         </div>
 
-        <!-- STEP 2: TIUP LILIN HD SLOW MOTION -->
+        <!-- STEP 2: TIUP LILIN -->
         <div id="candleStep" class="step-box hidden">
             <h1 class="title-aesthetic">🎂 Make a Wish!</h1>
             <p class="sub-title">Klik lilin di bawah untuk meniup apinya 💨✨</p>
 
             <div class="cake-container">
                 <div class="candle-hd" id="birthdayCandle" onclick="blowCandle()">
-                    <!-- ASAP REALISTIS HALUS -->
                     <div class="smoke-group" id="smokeGroup">
                         <div class="smoke-particle s1"></div>
                         <div class="smoke-particle s2"></div>
                         <div class="smoke-particle s3"></div>
                     </div>
-                    <!-- API REALISTIS SLOW FADE -->
                     <div class="flame-hd" id="flame">
                         <div class="flame-outer"></div>
                         <div class="flame-inner"></div>
@@ -147,7 +145,6 @@
                 </div>
 
                 <div class="dispenser-window" id="dispenser">
-                    <!-- ANIMASI GEMBOK TERKUNCI (Pengganti teks biasa) -->
                     <div class="dispenser-locked" id="dispenserLocked">
                         <span class="lock-icon">🔒</span>
                         <span class="lock-text">LOCKED</span>
@@ -162,6 +159,7 @@
 
         <!-- HALAMAN MEMORI -->
         <div id="pageMemory" class="step-box detail-page hidden">
+            <button class="btn-back-corner" onclick="backToVending()">←</button>
             <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
             <div class="content-box tall-content">
                 <div class="memory-illustration">✨ 💭 ✨</div>
@@ -171,67 +169,73 @@
                 </div>
                 <div class="memory-badge">✨ Unforgettable Moment ✨</div>
             </div>
-            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
 
-        <!-- HALAMAN LAGU FAVORIT (REALISTIS HD MUSIC PLAYER) -->
+        <!-- HALAMAN LAGU FAVORIT (PLAYLIST LENGKAP) -->
         <div id="pageSong" class="step-box detail-page hidden">
-            <h2 class="title-aesthetic mini">🎵 Favorite Song</h2>
+            <button class="btn-back-corner" onclick="backToVending()">←</button>
+            <h2 class="title-aesthetic mini">🎵 Favorite Songs</h2>
             <div class="content-box music-card tall-content">
                 
                 <div class="player-hd-container">
-                    <!-- DISK VINYL ANIMASI -->
                     <div class="vinyl-wrapper">
                         <div class="disc-animation-hd" id="musicDisc">
                             <div class="disc-center">🎧</div>
                         </div>
                     </div>
 
-                    <h3 class="song-title">Favorite Vibes</h3>
-                    <p class="song-artist">Special Track For You</p>
+                    <h3 class="song-title" id="currentSongTitle">Blank Space</h3>
+                    <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
 
-                    <!-- AUDIO ELEMENT -->
                     <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-                    <!-- PROGRESS BAR HD -->
                     <div class="progress-container" onclick="seekAudio(event)">
                         <div class="progress-bar" id="progressBar"></div>
                     </div>
 
-                    <!-- TIME DISPLAY -->
                     <div class="time-container">
                         <span id="currentTime">0:00</span>
                         <span id="totalDuration">0:00</span>
                     </div>
 
-                    <!-- CONTROLS -->
                     <div class="player-controls-hd">
-                        <button class="btn-ctrl" onclick="rewindAudio()">⏪</button>
+                        <button class="btn-ctrl" onclick="prevTrack()">⏮️</button>
                         <button class="btn-play-hd" id="playBtn" onclick="togglePlayMusic()">▶️</button>
-                        <button class="btn-ctrl" onclick="forwardAudio()">⏩</button>
+                        <button class="btn-ctrl" onclick="nextTrack()">⏭️</button>
                     </div>
                 </div>
 
-                <p class="music-note">*Lagu akan terus berputar meskipun kamu balik ke menu Vending!</p>
+                <!-- PLAYLIST SELECTOR -->
+                <div class="playlist-container">
+                    <p class="playlist-title">Select Song:</p>
+                    <div class="playlist-scroll" id="playlistItems">
+                        <!-- Generates via JS -->
+                    </div>
+                </div>
             </div>
-            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
 
-        <!-- HALAMAN SURAT -->
+        <!-- HALAMAN SURAT (AMPLOP DENGAN TYPEWRITER EFFECT) -->
         <div id="pageMessage" class="step-box detail-page hidden">
+            <button class="btn-back-corner" onclick="backToVending()">←</button>
             <h2 class="title-aesthetic mini">💌 Secret Message</h2>
-            <div class="content-box letter-box tall-content">
-                <div class="stamp">📮 BIRTHDAY</div>
-                <p class="letter-body">
-                    "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan!" ✨✨
-                </p>
-                <p class="letter-footer">With best wishes, ❤️</p>
+            
+            <div class="envelope-wrapper" onclick="handleEnvelopeClick()">
+                <div class="envelope" id="envelopeObj">
+                    <div class="envelope-flap" id="envelopeFlap"></div>
+                    <div class="letter-paper" id="letterPaper">
+                        <div class="stamp">📮 BIRTHDAY</div>
+                        <p class="typed-text" id="typewriterTarget"></p>
+                    </div>
+                    <div class="envelope-front"></div>
+                </div>
             </div>
-            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
+            <p class="envelope-hint" id="envelopeHint">Klik amplop untuk membuka (1/2)</p>
         </div>
 
         <!-- HALAMAN GALERI FOTO -->
         <div id="pagePhoto" class="step-box detail-page hidden">
+            <button class="btn-back-corner" onclick="backToVending()">←</button>
             <h2 class="title-aesthetic mini">📸 Cute Photo</h2>
             <div class="polaroid-frame tall-frame">
                 <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
@@ -241,18 +245,17 @@
                 <button class="btn-small" onclick="prevPhoto()">⬅️ Prev</button>
                 <button class="btn-small" onclick="nextPhoto()">Next ➡️</button>
             </div>
-            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
 
         <!-- HALAMAN SPECIAL -->
         <div id="pageSpecial" class="step-box detail-page hidden">
+            <button class="btn-back-corner" onclick="backToVending()">←</button>
             <h2 class="title-aesthetic mini">🌟 SPECIAL ITEM 🌟</h2>
             <div class="content-box special-box tall-content">
                 <div style="font-size:3.5rem; margin-bottom:10px;">🎟️</div>
                 <h3>VOUCHER SPECIAL TREAT</h3>
                 <p style="margin-top:15px; line-height: 1.6;">Voucher ini berlaku untuk traktiran makanan/minuman favoritmu kapan saja! Bebas klaim, tinggal kasih tahu pembuat web ini 😜🔥</p>
             </div>
-            <button class="btn-back" onclick="backToVending()">⬅️ Kembali ke Vending</button>
         </div>
 
     </div>
