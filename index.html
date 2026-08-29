@@ -6,12 +6,14 @@
     <title>Adadehh jangan kepoo!!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts HD: Calligraphy, Retro Arcade, & Hand-written Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Sacramento&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- FLOATING HEARTS BACKGROUND -->
     <div class="hearts-container">
         <div class="heart-particle" style="left: 5%; animation-duration: 7s;">💗</div>
         <div class="heart-particle" style="left: 15%; animation-duration: 9s; animation-delay: 2s;">💖</div>
@@ -25,11 +27,14 @@
         <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
     </div>
 
+    <!-- AUDIO BGM AWAL -->
     <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <div class="card" id="mainCard">
+        <!-- KOIN INTERAKTIF DRAGGABLE -->
         <div id="hiddenCoin" class="hidden-coin hidden" title="Buka pin nya dulu zilless, bis itu masukin koinnya!">🪙</div>
 
+        <!-- MODAL PIN TANGGAL LAHIR -->
         <div id="pinModal" class="modal-overlay hidden">
             <div class="modal-box">
                 <h3 class="arcade-font-sm">🔒 UNLOCK COIN</h3>
@@ -52,6 +57,7 @@
             </div>
         </div>
 
+        <!-- STEP 1: LOGIN -->
         <div id="loginBox" class="step-box">
             <h1 class="title-aesthetic">🔒 Access Gate</h1>
             <p class="sub-title">Who are you?</p>
@@ -62,6 +68,7 @@
             <p id="errorMsg" class="error-msg">❌ Upssiee! Penyusup kamu yaakk</p>
         </div>
 
+        <!-- STEP 2: TIUP LILIN -->
         <div id="candleStep" class="step-box hidden">
             <h1 class="title-aesthetic">🎂 Make a Wish!</h1>
             <p class="sub-title">Klik lilin untuk meniup apinya 💨✨</p>
@@ -97,6 +104,7 @@
             <button class="btn-primary hidden" id="nextToVendingBtn" onclick="goToVending()">Next!! 🎁</button>
         </div>
 
+        <!-- STEP 3: VENDING MACHINE -->
         <div id="vendingStep" class="step-box hidden">
             <h1 class="title-arcade">HILLZ ARCADE</h1>
             
@@ -129,109 +137,192 @@
                         </div>
                         <div class="keypad-actions">
                             <button class="btn-action clear" onclick="clearKeypad()">CLR</button>
-                            <button class="btn-action enter" onclick="submitCode()">ENT</button>
+                            <button class="btn-action enter" id="enterBtn" onclick="submitCode()">ENT</button>
                         </div>
                     </div>
-
+                    
                     <div class="coin-slot-housing" id="coinSlotHousing">
                         <div class="coin-slot-hole"></div>
-                        <span class="coin-slot-label">INSERT COIN</span>
+                        <p class="coin-slot-label">INSERT COIN</p>
+                    </div>
+                </div>
+
+                <div class="dispenser-window" id="dispenser">
+                    <div class="dispenser-locked" id="dispenserLocked">
+                        <span class="lock-icon">🔒</span>
+                        <span class="lock-text">LOCKED</span>
                     </div>
                 </div>
             </div>
+
+            <div id="pesanRahasia" class="hidden-message">
+                <p>🎁 <strong>HADIAH UTAMA:</strong><br>Happy belated birthday, zilless. Tetap jadi satu satunya orang yang aku kenal yaa!! 😆✨</p>
+            </div>
         </div>
 
+        <!-- HALAMAN A1: TITLE CARD (SERTIFIKAT PENGHARGAAN ELEGAN) -->
         <div id="pageCertificate" class="step-box detail-page hidden">
-            <div class="detail-header">
-                <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini" style="color:#d4af37;">📜 CERTIFICATE</h2>
-            </div>
-            
-            <div class="cert-viewport">
-                <div class="certificate-box">
-                    <div class="cert-border-gold">
-                        <div class="cert-inner">
-                            <div class="cert-header">CERTIFICATE OF ACHIEVEMENT</div>
-                            <div class="cert-sub">PROUDLY PRESENTED TO</div>
-                            <div class="cert-name" id="certName">ZILLESS</div>
-                            <div class="cert-desc">Untuk keberhasilan bertahan dan menjadi manusia hebat sepanjang tahun ini. Tetap bersinar dan berbahagia selalu!</div>
-                            <div class="cert-footer">
-                                <div class="cert-sig">
-                                    <div class="sig-line"></div>
-                                    <p>Official Birthday Wish</p>
-                                </div>
-                                <div class="cert-badge">🥇</div>
-                                <div class="cert-sig">
-                                    <div class="sig-line"></div>
-                                    <p>Creator</p>
+            <div class="certificate-wrapper" id="certificateWrapper">
+                <div class="certificate-container" id="certContainer">
+                    <div class="cert-border-outer">
+                        <div class="cert-border-inner">
+                            <div class="cert-corner corner-tl"></div>
+                            <div class="cert-corner corner-tr"></div>
+                            <div class="cert-corner corner-bl"></div>
+                            <div class="cert-corner corner-br"></div>
+
+                            <div class="cert-logo logo-left">👑</div>
+                            <div class="cert-logo logo-right">✨</div>
+
+                            <div class="cert-content">
+                                <h2 class="cert-title cert-anim-1">SERTIFIKAT PENGHARGAAN</h2>
+                                <div class="cert-divider cert-anim-1"></div>
+                                
+                                <p class="cert-subtitle cert-anim-2">Dengan bangga diberikan kepada:</p>
+                                <h1 class="cert-recipient cert-anim-recipient">Syakira Zilfa Munawwaroh</h1>
+                                <p class="cert-as cert-anim-3">Sebagai:</p>
+                                <h3 class="cert-award-title cert-anim-4">The Best Serendipity of Panacea's</h3>
+
+                                <p class="cert-description cert-anim-5">
+                                    Atas dedikasinya dalam menciptakan keistimewaan menjadi teman sekaligus obat buat aku.
+                                </p>
+
+                                <div class="cert-footer cert-anim-6">
+                                    <div class="cert-footer-col">
+                                        <p class="cert-footer-label">Tanggal</p>
+                                        <p class="cert-footer-value">27 Agustus 2026</p>
+                                    </div>
+
+                                    <div class="cert-seal-box">
+                                        <div class="cert-laurel">🌿</div>
+                                        <div class="cert-seal">
+                                            <span>OFFICIAL</span>
+                                            <span>SEAL</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cert-footer-col">
+                                        <p class="cert-footer-label">Pemberi Penghargaan</p>
+                                        <p class="cert-footer-value cert-signature">Hylda Adha</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button class="btn-cert-close" id="btnCertClose" onclick="backToVending()">CLOSE</button>
         </div>
 
-        <div id="pageMusic" class="step-box detail-page hidden">
+        <!-- HALAMAN A2: FAVORITE SONGS (REALISTIS TURNTABLE VINYL PLAYER) -->
+        <div id="pageSong" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">🎵 FAVORITE PLAYLIST</h2>
+                <h2 class="title-aesthetic mini">🎵 Hilzztipy</h2>
+            </div>
+            <div class="real-turntable-deck">
+                <div class="wood-deck-body">
+                    <!-- Metal Plate -->
+                    <div class="metal-platter-plate">
+                        <div class="turntable-wrapper">
+                            <div class="tonearm-hd" id="tonearmArm">
+                                <div class="tonearm-headshell"></div>
+                            </div>
+                            <div class="vinyl-disc-hd" id="musicDisc">
+                                <div class="vinyl-grooves"></div>
+                                <div class="disc-label">
+                                    <span id="discLabelTitle">Blank Space</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Display Info & Control Panel -->
+                    <div class="deck-controls">
+                        <div class="song-info-badge">
+                            <h3 class="song-title" id="currentSongTitle">Blank Space</h3>
+                            <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
+                        </div>
+
+                        <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+                        <div class="progress-container" onclick="seekAudio(event)">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+
+                        <div class="time-container">
+                            <span id="currentTime">0:00</span>
+                            <span id="totalDuration">0:00</span>
+                        </div>
+
+                        <div class="player-buttons-real">
+                            <button class="btn-knob" onclick="prevTrack()" title="Previous">⏮</button>
+                            <button class="btn-play-real" id="playBtn" onclick="togglePlayMusic()">▶</button>
+                            <button class="btn-knob" onclick="nextTrack()" title="Next">⏭</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-deck-container">
+                    <p class="playlist-title">💿 YOUR COLLECTION:</p>
+                    <div class="playlist-scroll" id="playlistItems"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN B1: SECRET MESSAGE (SURAT REALISTIS SERAT KERTAS HD) -->
+        <div id="pageMessage" class="step-box detail-page hidden">
+            <div class="detail-header">
+                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <h2 class="title-aesthetic mini">💌 Secret Letter</h2>
             </div>
             
-            <div class="music-card">
-                <div class="vinyl-record" id="vinyl">
-                    <div class="vinyl-center"></div>
-                </div>
-                <div class="song-info">
-                    <h3 id="songTitle">Blank Space</h3>
-                    <p id="songArtist">Taylor Swift</p>
-                </div>
-                <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-                
-                <div class="music-controls">
-                    <button class="btn-music" onclick="prevSong()">⏮️</button>
-                    <button class="btn-music play-btn" onclick="togglePlay()" id="playBtn">▶️</button>
-                    <button class="btn-music" onclick="nextSong()">⏭️</button>
+            <div class="envelope-scene">
+                <div class="envelope-white" id="envelopeObj" onclick="handleEnvelopeClick()">
+                    <div class="env-flap-white" id="envelopeFlap"></div>
+                    
+                    <div class="ribbon-red" id="ribbonRed">
+                        <div class="ribbon-seal">❤️</div>
+                    </div>
+
+                    <div class="letter-paper-hd parchment-texture" id="letterPaper">
+                        <div class="paper-inner-border">
+                            <div class="stamp-hd">📮 !!!</div>
+                            <div class="typed-text-container">
+                                <p class="typed-text handwritten-font" id="typewriterTarget"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="env-pocket-white"></div>
                 </div>
             </div>
+
+            <p class="envelope-hint" id="envelopeHint">Klik amplop untuk membuka (1/2)</p>
+            <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <div id="pageLetter" class="step-box detail-page hidden">
-            <div class="detail-header">
-                <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">💌 SPECIAL LETTER</h2>
-            </div>
-            <div class="letter-box">
-                <div class="letter-stamp">🎂</div>
-                <h3 class="letter-title">Selamat Ulang Tahun! ✨</h3>
-                <div class="letter-body">
-                    <p>Halo zilless! 👋</p>
-                    <p>Selamat bertambah usia yaa! Semoga di umur yang baru ini kamu senantiasa diberikan kebahagiaan, kesehatan, serta kelancaran dalam meraih segala hal yang kamu impikan.</p>
-                    <p>Terima kasih sudah bertahan dan berjuang sampai sejauh ini. Kamu hebat banget! Semoga hari-harimu selalu dipenuhi tawa dan kehangatan. Tetap jadi diri sendiri yang ceria yaa! Happy Birthday! 🎉💖</p>
-                </div>
-            </div>
-        </div>
-
+        <!-- HALAMAN B2: GALERI FOTO -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">📸 PHOTO MEMORIES</h2>
+                <h2 class="title-aesthetic mini">📸 Photo's</h2>
             </div>
-            
-            <div class="photo-stack-container">
-                <div class="photo-stack-wrapper" id="photoStack">
-                    </div>
-                <p id="stackCaption" class="photo-stack-caption">where it all started</p>
-                <div id="stackIndicator" class="photo-stack-indicator">
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
+            <div class="flash-overlay" id="flashOverlay"></div>
+            <div class="polaroid-frame" id="polaroidCard" onclick="shakePolaroid()">
+                <div class="polaroid-img-wrapper">
+                    <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
                 </div>
+                <p id="polaroidCaption" class="polaroid-caption">Aesthetic Birthday Cake 🎂</p>
+                <div class="photo-hint">Klik foto buat bergoyang! ✨</div>
+            </div>
+            <div class="gallery-controls">
+                <button class="btn-small" onclick="prevPhoto()">⬅️ Prev</button>
+                <button class="btn-small" onclick="nextPhoto()">Next ➡️</button>
             </div>
         </div>
 
+        <!-- HALAMAN SPECIAL ITEM -->
         <div id="pageSpecial" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
