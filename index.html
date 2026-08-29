@@ -6,12 +6,14 @@
     <title>Birthday Surprise & Interactive Vending Machine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Arcade, Elegant Serif, dan Luxurious Calligraphy -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@500;700;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- FLOATING HEARTS BACKGROUND -->
     <div class="hearts-container">
         <div class="heart-particle" style="left: 5%; animation-duration: 7s;">💗</div>
         <div class="heart-particle" style="left: 15%; animation-duration: 9s; animation-delay: 2s;">💖</div>
@@ -25,11 +27,14 @@
         <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
     </div>
 
+    <!-- AUDIO BGM AWAL -->
     <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <div class="card" id="mainCard">
+        <!-- KOIN INTERAKTIF DRAGGABLE -->
         <div id="hiddenCoin" class="hidden-coin hidden" title="Buka PIN dulu, lalu seret koin ini ke slot koin vending machine!">🪙</div>
 
+        <!-- MODAL PIN TANGGAL LAHIR -->
         <div id="pinModal" class="modal-overlay hidden">
             <div class="modal-box">
                 <h3 class="arcade-font-sm">🔒 UNLOCK COIN</h3>
@@ -52,6 +57,7 @@
             </div>
         </div>
 
+        <!-- STEP 1: LOGIN -->
         <div id="loginBox" class="step-box">
             <h1 class="title-aesthetic">🔒 Access Gate</h1>
             <p class="sub-title">Who are you?</p>
@@ -62,6 +68,7 @@
             <p id="errorMsg" class="error-msg">❌ Upssiee! Penyusup kamu yaakk</p>
         </div>
 
+        <!-- STEP 2: TIUP LILIN -->
         <div id="candleStep" class="step-box hidden">
             <h1 class="title-aesthetic">🎂 Make a Wish!</h1>
             <p class="sub-title">Klik lilin di bawah untuk meniup apinya 💨✨</p>
@@ -97,6 +104,7 @@
             <button class="btn-primary hidden" id="nextToVendingBtn" onclick="goToVending()">Next!! 🎁</button>
         </div>
 
+        <!-- STEP 3: VENDING MACHINE -->
         <div id="vendingStep" class="step-box hidden">
             <h1 class="title-arcade">RETRO ARCADE</h1>
             
@@ -113,7 +121,7 @@
                 </div>
 
                 <div class="vending-display">
-                    <div class="slot-box"><span class="slot-code">A1</span><div class="shelf-item bounce-idle">🎁</div></div>
+                    <div class="slot-box"><span class="slot-code">A1</span><div class="shelf-item bounce-idle">📜</div></div>
                     <div class="slot-box"><span class="slot-code">A2</span><div class="shelf-item bounce-idle delay-1">🎵</div></div>
                     <div class="slot-box"><span class="slot-code">B1</span><div class="shelf-item bounce-idle delay-2">💌</div></div>
                     <div class="slot-box"><span class="slot-code">B2</span><div class="shelf-item bounce-idle delay-3">📸</div></div>
@@ -152,21 +160,71 @@
             </div>
         </div>
 
-        <div id="pageMemory" class="step-box detail-page hidden">
-            <div class="detail-header">
-                <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">🎁 Special Memory</h2>
-            </div>
-            <div class="content-box tall-content tilt-card" id="tiltMemoryCard">
-                <div class="memory-illustration">✨ 💭 ✨</div>
-                <p class="memory-text">Ingat gak waktu momen seru bareng? Banyak banget cerita kocak yang bikin ngakak kalau diling-eling lagi! 😆</p>
-                <div class="memory-card-sub">
-                    <p><i>"Every moment spent together turned into a story worth keeping."</i></p>
+        <!-- HALAMAN A1: TITLE CARD (SERTIFIKAT PENGHARGAAN ELEGAN) -->
+        <div id="pageCertificate" class="step-box detail-page hidden">
+            <div class="certificate-wrapper" id="certificateWrapper">
+                <div class="certificate-container" id="certContainer">
+                    <!-- Frame Border Berlapis -->
+                    <div class="cert-border-outer">
+                        <div class="cert-border-inner">
+                            
+                            <!-- Ornamen Sudut Geometris -->
+                            <div class="cert-corner corner-tl"></div>
+                            <div class="cert-corner corner-tr"></div>
+                            <div class="cert-corner corner-bl"></div>
+                            <div class="cert-corner corner-br"></div>
+
+                            <!-- Logo Kecil Kiri & Kanan atas -->
+                            <div class="cert-logo logo-left">👑</div>
+                            <div class="cert-logo logo-right">✨</div>
+
+                            <!-- Konten Utama Sertifikat -->
+                            <div class="cert-content">
+                                <h2 class="cert-title cert-anim-1">SERTIFIKAT PENGHARGAAN</h2>
+                                <div class="cert-divider cert-anim-1"></div>
+                                
+                                <p class="cert-subtitle cert-anim-2">Dengan bangga diberikan kepada:</p>
+
+                                <h1 class="cert-recipient cert-anim-recipient">Syakira Zilfa Munawwaroh</h1>
+
+                                <p class="cert-as cert-anim-3">Sebagai:</p>
+
+                                <h3 class="cert-award-title cert-anim-4">The Best Serendipity of Panacea's</h3>
+
+                                <p class="cert-description cert-anim-5">
+                                    Atas dedikasinya dalam menciptakan keistimewaan menjadi teman sekaligus obat bagiku.
+                                </p>
+
+                                <!-- Bagian Bawah: Tanggal, Stempel Gold, & Pemberi -->
+                                <div class="cert-footer cert-anim-6">
+                                    <div class="cert-footer-col">
+                                        <p class="cert-footer-label">Tanggal</p>
+                                        <p class="cert-footer-value">27 Agustus 2026</p>
+                                    </div>
+
+                                    <div class="cert-seal-box">
+                                        <div class="cert-laurel">🌿</div>
+                                        <div class="cert-seal">
+                                            <span>OFFICIAL</span>
+                                            <span>SEAL</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cert-footer-col">
+                                        <p class="cert-footer-label">Pemberi Penghargaan</p>
+                                        <p class="cert-footer-value cert-signature">Hylda Adha</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="memory-badge">✨ Unforgettable Moment ✨</div>
             </div>
+            <button class="btn-cert-close" id="btnCertClose" onclick="backToVending()">CLOSE</button>
         </div>
 
+        <!-- HALAMAN LAGU FAVORIT -->
         <div id="pageSong" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -209,6 +267,7 @@
             </div>
         </div>
 
+        <!-- HALAMAN SURAT -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -238,6 +297,7 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
+        <!-- HALAMAN GALERI FOTO -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -255,6 +315,7 @@
             </div>
         </div>
 
+        <!-- HALAMAN SPECIAL -->
         <div id="pageSpecial" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
