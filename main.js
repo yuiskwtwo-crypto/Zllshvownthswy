@@ -165,7 +165,7 @@ function submitPin() {
     }
 }
 
-// PERBAIKAN TOTAL: DRAG & DROP KOIN TANPA TELEPORT & TDK BISA HILANG TIDAK SENGAJA
+// DRAG & DROP KOIN REALISTIS (BEBAS TELEPORT & TIDAK ACCIDENTAL DISAPPEAR)
 function initCoinDraggable() {
     const coin = document.getElementById("hiddenCoin");
     const slotHousing = document.getElementById("coinSlotHousing");
@@ -189,7 +189,6 @@ function initCoinDraggable() {
 
         const rect = coin.getBoundingClientRect();
         
-        // Simpan selisih/offset klik dengan koordinat koin aktual agar tidak teleport
         offsetX = clientX - rect.left;
         offsetY = clientY - rect.top;
 
@@ -198,7 +197,7 @@ function initCoinDraggable() {
         coin.style.top = `${rect.top}px`;
         coin.style.right = 'auto';
         coin.style.margin = '0';
-        coin.style.transition = 'none'; // Matikan animasi delay pas digeser
+        coin.style.transition = 'none';
         
         slotHousing.classList.add("slot-highlight");
     }
@@ -210,7 +209,6 @@ function initCoinDraggable() {
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        // Gerakkan tepat di koordinat kursor dikurangi offset awal
         coin.style.left = `${clientX - offsetX}px`;
         coin.style.top = `${clientY - offsetY}px`;
     }
@@ -223,7 +221,6 @@ function initCoinDraggable() {
         const coinRect = coin.getBoundingClientRect();
         const slotRect = slotHousing.getBoundingClientRect();
 
-        // Cek overlap koin dengan lubang slot
         const isOverlapping = !(
             coinRect.right < slotRect.left ||
             coinRect.left > slotRect.right ||
@@ -232,7 +229,6 @@ function initCoinDraggable() {
         );
 
         if (isOverlapping) {
-            // Berhasil dimasukkan ke slot
             coinInserted = true;
             playSound('coin');
 
@@ -247,7 +243,6 @@ function initCoinDraggable() {
                 document.getElementById("marqueeText").innerText = "🪙 KOIN AKTIF! KETIK KODE (A1, A2, B1, B2)";
             }, 400);
         } else {
-            // Jika dilepas BUKAN di atas slot, biarkan tetap berada di posisi terakhir dilepas (TIDAK HILANG)
             coin.style.transition = "transform 0.1s ease";
         }
     }
@@ -270,7 +265,7 @@ const validSlots = {
     "B2": { name: "📸 Cute Photo", pageId: "pagePhoto" }
 };
 let dispensedSlots = [];
-let visitedPages = new Set(); // Melacak halaman yang SUDAH DIBUKA & DILIHAT satu per satu
+let visitedPages = new Set();
 
 function pressKey(char) {
     playSound('click');
@@ -324,13 +319,12 @@ function createDispenserItem(text, targetPageId, isSpecial) {
     const dispenser = document.getElementById("dispenser");
     const itemDiv = document.createElement("div");
     itemDiv.className = isSpecial ? "vending-item special-item" : "vending-item";
-    itemDiv.innerHTML = `${text} <span style='font-size:0.75rem; float:right; color:#888;'>Buka 🚀</span>`;
+    itemDiv.innerHTML = `${text} <span style='font-size:0.7rem; float:right; color:#888;'>Buka 🚀</span>`;
     itemDiv.onclick = () => openPage(targetPageId);
     dispenser.appendChild(itemDiv);
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
-// CHECK UNLOCK HADIAH UTAMA JIKA 4 MODAL UTAMA SUDAH DILIHAT SEMUA
 function checkSpecialItemUnlock() {
     const mainPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto"];
     const allVisited = mainPages.every(page => visitedPages.has(page));
@@ -346,10 +340,10 @@ function checkSpecialItemUnlock() {
     }
 }
 
-// NAVIGASI HALAMAN
+// NAVIGASI HALAMAN DENGAN AUTO HEIGHT DYNAMIC
 function openPage(pageId) {
     playSound('click');
-    visitedPages.add(pageId); // Catat bahwa halaman ini sudah dibuka/dilihat oleh user
+    visitedPages.add(pageId);
 
     document.getElementById("vendingStep").classList.add("hidden");
     document.getElementById(pageId).classList.remove("hidden");
@@ -360,7 +354,7 @@ function openPage(pageId) {
         mainCard.classList.add("card-cert");
         triggerCertificateAnimation();
     } else {
-        mainCard.classList.add("card-tall");
+        mainCard.classList.remove("card-cert");
     }
 
     if (pageId === "pageSong") renderPlaylist();
@@ -369,7 +363,6 @@ function openPage(pageId) {
 function backToVending() {
     playSound('click');
     const mainCard = document.getElementById("mainCard");
-    mainCard.classList.remove("card-tall");
     mainCard.classList.remove("card-cert");
 
     const detailPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
@@ -378,7 +371,6 @@ function backToVending() {
         if (el) el.classList.add("hidden");
     });
 
-    // Reset Sertifikat State
     const certCont = document.getElementById("certContainer");
     if (certCont) {
         certCont.classList.remove("cert-active");
@@ -386,29 +378,25 @@ function backToVending() {
     }
 
     document.getElementById("vendingStep").classList.remove("hidden");
-
-    // Cek apakah keempat item sudah dibuka semua setelah kembali ke vending machine
     checkSpecialItemUnlock();
 }
 
-// ANIMASI ELEGAN SERTIFIKAT PENGHARGAAN
+// ANIMASI ELEGAN SERTIFIKAT
 function triggerCertificateAnimation() {
     const certContainer = document.getElementById("certContainer");
     certContainer.classList.remove("cert-active", "cert-revealed");
 
-    // Phase 1: Zoom in slowly with blur reduction
     setTimeout(() => {
         certContainer.classList.add("cert-active");
     }, 100);
 
-    // Phase 2: Sequential reveal of elements & recipient name last
     setTimeout(() => {
         certContainer.classList.add("cert-revealed");
         playSound('success');
     }, 700);
 }
 
-// SURAT & TYPING EFFECT
+// SURAT & TYPING EFFECT REALISTIS
 let envelopeStage = 0;
 let isTypingActive = false;
 let typewriterTimeout = null;
@@ -489,7 +477,7 @@ function closeLetterToEnvelope() {
     }, 500);
 }
 
-// MUSIC PLAYER
+// REALISTIS TURNTABLE MUSIC PLAYER LOGIC
 function renderPlaylist() {
     const container = document.getElementById("playlistItems");
     container.innerHTML = "";
@@ -514,13 +502,14 @@ function loadTrack(idx) {
     const track = playlist[idx];
     document.getElementById("currentSongTitle").innerText = track.title;
     document.getElementById("currentSongArtist").innerText = track.artist;
+    document.getElementById("discLabelTitle").innerText = track.title;
     favAudio.src = track.src;
 }
 
 function playMusic() {
     stopBGM();
     favAudio.play();
-    document.getElementById("playBtn").innerText = "⏸️";
+    document.getElementById("playBtn").innerText = "⏸";
     document.getElementById("musicDisc").classList.add("spinning");
     document.getElementById("tonearmArm").classList.add("arm-on-record");
 }
@@ -535,7 +524,7 @@ function togglePlayMusic() {
         playMusic();
     } else {
         favAudio.pause();
-        playBtn.innerText = "▶️";
+        playBtn.innerText = "▶";
         disc.classList.remove("spinning");
         arm.classList.remove("arm-on-record");
         startBGM();
@@ -583,7 +572,7 @@ if (favAudio) {
     };
 }
 
-// POLAROID GALLERY
+// POLAROID GALLERY LOGIC
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
