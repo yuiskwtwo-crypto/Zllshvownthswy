@@ -1,5 +1,5 @@
 const namaBenar = "zilless";
-const tanggalLahirBenar = "0101"; 
+const tanggalLahirBenar = "2708"; 
 
 // PLAYLIST LAGU FAVORIT
 const playlist = [
@@ -157,7 +157,7 @@ function submitPin() {
         document.getElementById("pinModal").classList.add("hidden");
         
         const marquee = document.getElementById("marqueeText");
-        marquee.innerText = "SERET KOIN KE SLOT KOIN!";
+        marquee.innerText = "SERET KOIN KE LUBANG KOIN!";
     } else {
         playSound('error');
         document.getElementById("pinDisplay").innerText = "WRONG";
@@ -259,10 +259,10 @@ function initCoinDraggable() {
 // KEYPAD & VENDING LOGIC
 let currentCode = "";
 const validSlots = {
-    "A1": { name: "📜 Sertifikat Penghargaan", pageId: "pageCertificate" },
+    "A1": { name: "📜 Achivements", pageId: "pageCertificate" },
     "A2": { name: "🎵 Favorite Songs", pageId: "pageSong" },
     "B1": { name: "💌 Secret Message", pageId: "pageMessage" },
-    "B2": { name: "📸 Cute Photo", pageId: "pagePhoto" }
+    "B2": { name: "📸 Photo's", pageId: "pagePhoto" }
 };
 let dispensedSlots = [];
 let visitedPages = new Set();
@@ -284,7 +284,7 @@ function clearKeypad() {
 function submitCode() {
     if (!coinInserted) {
         playSound('error');
-        alert("🔒 Koin belum dimasukkan! Buka PIN lalu seret koin ke dalam slot koin.");
+        alert("🔒 Koin belum dimasukkan! Buka pin nya sek baru masukin ke lobang");
         return;
     }
     if (currentCode.length < 2) { playSound('error'); return; }
@@ -419,7 +419,7 @@ function handleEnvelopeClick() {
             paper.classList.add("paper-peek");
         }, 300);
 
-        hint.innerText = "Klik sekali lagi untuk membuka kertas penuh (2/2)";
+        hint.innerText = "Pencet pisan maneh (2/2)";
         envelopeStage = 1;
     } else if (envelopeStage === 1) {
         playSound('paper');
