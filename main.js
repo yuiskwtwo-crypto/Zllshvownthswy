@@ -15,7 +15,7 @@ const playlist = [
 
 let currentTrackIdx = 0;
 
-// AUDIO SYNTHESIS UNTUK SFX REALISTIS
+// AUDIO SYNTHESIS UNTUK SFX
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -157,8 +157,7 @@ function submitPin() {
         document.getElementById("pinModal").classList.add("hidden");
         
         const marquee = document.getElementById("marqueeText");
-        marquee.innerText = "SERET KOIN KE SLOTS KOIN!";
-        alert("🔓 PIN Benar! Sekarang seret koin di pojok kanan ke lubang INSERT COIN mesin!");
+        marquee.innerText = "SERET KOIN KE SLOT KOIN!";
     } else {
         playSound('error');
         document.getElementById("pinDisplay").innerText = "WRONG";
@@ -166,15 +165,15 @@ function submitPin() {
     }
 }
 
-// INTERAKSI DRAG & DROP KOIN KE HOUSING SLOT
+// PERBAIKAN TOTAL: DRAG & DROP KOIN TANPA TELEPORT & TDK BISA HILANG TIDAK SENGAJA
 function initCoinDraggable() {
     const coin = document.getElementById("hiddenCoin");
     const slotHousing = document.getElementById("coinSlotHousing");
     
     let isDragging = false;
-    let startX, startY, initialLeft, initialTop;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    // Klik/Sentuh Koin Awal
     function onStart(e) {
         if (coinInserted) return;
         
@@ -184,26 +183,26 @@ function initCoinDraggable() {
         }
 
         isDragging = true;
+        
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        startX = clientX;
-        startY = clientY;
-
         const rect = coin.getBoundingClientRect();
-        initialLeft = rect.left;
-        initialTop = rect.top;
+        
+        // Simpan selisih/offset klik dengan koordinat koin aktual agar tidak teleport
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
 
         coin.style.position = 'fixed';
-        coin.style.left = `${initialLeft}px`;
-        coin.style.top = `${initialTop}px`;
+        coin.style.left = `${rect.left}px`;
+        coin.style.top = `${rect.top}px`;
         coin.style.right = 'auto';
         coin.style.margin = '0';
+        coin.style.transition = 'none'; // Matikan animasi delay pas digeser
         
         slotHousing.classList.add("slot-highlight");
     }
 
-    // Geser Koin (Move)
     function onMove(e) {
         if (!isDragging) return;
         e.preventDefault();
@@ -211,14 +210,11 @@ function initCoinDraggable() {
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        const deltaX = clientX - startX;
-        const deltaY = clientY - startY;
-
-        coin.style.left = `${initialLeft + deltaX}px`;
-        coin.style.top = `${initialTop + deltaY}px`;
+        // Gerakkan tepat di koordinat kursor dikurangi offset awal
+        coin.style.left = `${clientX - offsetX}px`;
+        coin.style.top = `${clientY - offsetY}px`;
     }
 
-    // Lepas Koin (End)
     function onEnd() {
         if (!isDragging) return;
         isDragging = false;
@@ -227,7 +223,7 @@ function initCoinDraggable() {
         const coinRect = coin.getBoundingClientRect();
         const slotRect = slotHousing.getBoundingClientRect();
 
-        // Cek overlap koin dengan slot
+        // Cek overlap koin dengan lubang slot
         const isOverlapping = !(
             coinRect.right < slotRect.left ||
             coinRect.left > slotRect.right ||
@@ -236,7 +232,7 @@ function initCoinDraggable() {
         );
 
         if (isOverlapping) {
-            // Animasi Masuk Slot
+            // Berhasil dimasukkan ke slot
             coinInserted = true;
             playSound('coin');
 
@@ -250,6 +246,9 @@ function initCoinDraggable() {
                 coin.classList.add("hidden");
                 document.getElementById("marqueeText").innerText = "🪙 KOIN AKTIF! KETIK KODE (A1, A2, B1, B2)";
             }, 400);
+        } else {
+            // Jika dilepas BUKAN di atas slot, biarkan tetap berada di posisi terakhir dilepas (TIDAK HILANG)
+            coin.style.transition = "transform 0.1s ease";
         }
     }
 
@@ -265,12 +264,13 @@ function initCoinDraggable() {
 // KEYPAD & VENDING LOGIC
 let currentCode = "";
 const validSlots = {
-    "A1": { name: "🎁 Special Memory", pageId: "pageMemory" },
+    "A1": { name: "📜 Sertifikat Penghargaan", pageId: "pageCertificate" },
     "A2": { name: "🎵 Favorite Songs", pageId: "pageSong" },
     "B1": { name: "💌 Secret Message", pageId: "pageMessage" },
     "B2": { name: "📸 Cute Photo", pageId: "pagePhoto" }
 };
 let dispensedSlots = [];
+let visitedPages = new Set(); // Melacak halaman yang SUDAH DIBUKA & DILIHAT satu per satu
 
 function pressKey(char) {
     playSound('click');
@@ -313,15 +313,6 @@ function submitCode() {
         
         createDispenserItem(slot.name, slot.pageId, false);
         clearKeypad();
-
-        if (dispensedSlots.length === 4) {
-            setTimeout(() => {
-                playSound('success');
-                createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
-                document.getElementById("pesanRahasia").style.display = "block";
-                if (typeof confetti === "function") confetti({ particleCount: 110, spread: 85 });
-            }, 800);
-        }
     } else {
         playSound('error');
         led.innerText = "ERR";
@@ -339,25 +330,82 @@ function createDispenserItem(text, targetPageId, isSpecial) {
     dispenser.scrollTop = dispenser.scrollHeight;
 }
 
+// CHECK UNLOCK HADIAH UTAMA JIKA 4 MODAL UTAMA SUDAH DILIHAT SEMUA
+function checkSpecialItemUnlock() {
+    const mainPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto"];
+    const allVisited = mainPages.every(page => visitedPages.has(page));
+
+    if (allVisited && !dispensedSlots.includes("SPECIAL")) {
+        dispensedSlots.push("SPECIAL");
+        setTimeout(() => {
+            playSound('success');
+            createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
+            document.getElementById("pesanRahasia").style.display = "block";
+            if (typeof confetti === "function") confetti({ particleCount: 110, spread: 85 });
+        }, 800);
+    }
+}
+
 // NAVIGASI HALAMAN
 function openPage(pageId) {
     playSound('click');
+    visitedPages.add(pageId); // Catat bahwa halaman ini sudah dibuka/dilihat oleh user
+
     document.getElementById("vendingStep").classList.add("hidden");
     document.getElementById(pageId).classList.remove("hidden");
-    document.getElementById("mainCard").classList.add("card-tall");
+
+    const mainCard = document.getElementById("mainCard");
+
+    if (pageId === "pageCertificate") {
+        mainCard.classList.add("card-cert");
+        triggerCertificateAnimation();
+    } else {
+        mainCard.classList.add("card-tall");
+    }
 
     if (pageId === "pageSong") renderPlaylist();
 }
 
 function backToVending() {
     playSound('click');
-    document.getElementById("mainCard").classList.remove("card-tall");
-    const detailPages = ["pageMemory", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
+    const mainCard = document.getElementById("mainCard");
+    mainCard.classList.remove("card-tall");
+    mainCard.classList.remove("card-cert");
+
+    const detailPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
     detailPages.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add("hidden");
     });
+
+    // Reset Sertifikat State
+    const certCont = document.getElementById("certContainer");
+    if (certCont) {
+        certCont.classList.remove("cert-active");
+        certCont.classList.remove("cert-revealed");
+    }
+
     document.getElementById("vendingStep").classList.remove("hidden");
+
+    // Cek apakah keempat item sudah dibuka semua setelah kembali ke vending machine
+    checkSpecialItemUnlock();
+}
+
+// ANIMASI ELEGAN SERTIFIKAT PENGHARGAAN
+function triggerCertificateAnimation() {
+    const certContainer = document.getElementById("certContainer");
+    certContainer.classList.remove("cert-active", "cert-revealed");
+
+    // Phase 1: Zoom in slowly with blur reduction
+    setTimeout(() => {
+        certContainer.classList.add("cert-active");
+    }, 100);
+
+    // Phase 2: Sequential reveal of elements & recipient name last
+    setTimeout(() => {
+        certContainer.classList.add("cert-revealed");
+        playSound('success');
+    }, 700);
 }
 
 // SURAT & TYPING EFFECT
@@ -574,19 +622,4 @@ function prevPhoto() {
         document.getElementById("polaroidImg").src = photos[photoIdx].src;
         document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
     }, 150);
-}
-
-// 3D TILT EFFECT ON MEMORY CARD
-const tiltCard = document.getElementById("tiltMemoryCard");
-if (tiltCard) {
-    tiltCard.addEventListener("mousemove", (e) => {
-        const rect = tiltCard.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        tiltCard.style.transform = `rotateY(${x / 15}deg) rotateX(${-y / 15}deg)`;
-    });
-
-    tiltCard.addEventListener("mouseleave", () => {
-        tiltCard.style.transform = "rotateY(0deg) rotateX(0deg)";
-    });
 }
