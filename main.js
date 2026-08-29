@@ -123,11 +123,13 @@ function goToVending() {
     document.getElementById("candleStep").classList.add("hidden");
     document.getElementById("vendingStep").classList.remove("hidden");
     document.getElementById("hiddenCoin").classList.remove("hidden");
+    initCoinDraggable();
 }
 
 // PIN MODAL
 let inputPin = "";
-let hasCoin = false;
+let pinUnlocked = false;
+let coinInserted = false;
 
 function openPinModal() {
     playSound('click');
@@ -150,18 +152,13 @@ function clearPin() {
 
 function submitPin() {
     if (inputPin === tanggalLahirBenar) {
-        playSound('coin');
-        hasCoin = true;
+        playSound('success');
+        pinUnlocked = true;
         document.getElementById("pinModal").classList.add("hidden");
         
-        const coin = document.getElementById("hiddenCoin");
-        coin.style.transform = "scale(1.5) translate(-100px, 100px)";
-        coin.style.opacity = "0";
-
-        setTimeout(() => {
-            coin.classList.add("hidden");
-            document.getElementById("marqueeText").innerText = "🪙 KOIN AKTIF! MASUKKAN KODE SLOT (A1, A2, B1, B2)";
-        }, 500);
+        const marquee = document.getElementById("marqueeText");
+        marquee.innerText = "SERET KOIN KE SLOTS KOIN!";
+        alert("🔓 PIN Benar! Sekarang seret koin di pojok kanan ke lubang INSERT COIN mesin!");
     } else {
         playSound('error');
         document.getElementById("pinDisplay").innerText = "WRONG";
@@ -169,13 +166,100 @@ function submitPin() {
     }
 }
 
-function triggerCoinSlotAnimation() {
-    if(!hasCoin) {
-        playSound('error');
-        openPinModal();
-    } else {
-        playSound('coin');
+// INTERAKSI DRAG & DROP KOIN KE HOUSING SLOT
+function initCoinDraggable() {
+    const coin = document.getElementById("hiddenCoin");
+    const slotHousing = document.getElementById("coinSlotHousing");
+    
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+
+    // Klik/Sentuh Koin Awal
+    function onStart(e) {
+        if (coinInserted) return;
+        
+        if (!pinUnlocked) {
+            openPinModal();
+            return;
+        }
+
+        isDragging = true;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        startX = clientX;
+        startY = clientY;
+
+        const rect = coin.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        coin.style.position = 'fixed';
+        coin.style.left = `${initialLeft}px`;
+        coin.style.top = `${initialTop}px`;
+        coin.style.right = 'auto';
+        coin.style.margin = '0';
+        
+        slotHousing.classList.add("slot-highlight");
     }
+
+    // Geser Koin (Move)
+    function onMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
+
+        coin.style.left = `${initialLeft + deltaX}px`;
+        coin.style.top = `${initialTop + deltaY}px`;
+    }
+
+    // Lepas Koin (End)
+    function onEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        slotHousing.classList.remove("slot-highlight");
+
+        const coinRect = coin.getBoundingClientRect();
+        const slotRect = slotHousing.getBoundingClientRect();
+
+        // Cek overlap koin dengan slot
+        const isOverlapping = !(
+            coinRect.right < slotRect.left ||
+            coinRect.left > slotRect.right ||
+            coinRect.bottom < slotRect.top ||
+            coinRect.top > slotRect.bottom
+        );
+
+        if (isOverlapping) {
+            // Animasi Masuk Slot
+            coinInserted = true;
+            playSound('coin');
+
+            coin.style.transition = "all 0.4s ease-in";
+            coin.style.left = `${slotRect.left + slotRect.width / 2 - coinRect.width / 2}px`;
+            coin.style.top = `${slotRect.top + slotRect.height / 2 - coinRect.height / 2}px`;
+            coin.style.transform = "scale(0.2)";
+            coin.style.opacity = "0";
+
+            setTimeout(() => {
+                coin.classList.add("hidden");
+                document.getElementById("marqueeText").innerText = "🪙 KOIN AKTIF! KETIK KODE (A1, A2, B1, B2)";
+            }, 400);
+        }
+    }
+
+    coin.addEventListener("mousedown", onStart);
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onEnd);
+
+    coin.addEventListener("touchstart", onStart, { passive: false });
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
 }
 
 // KEYPAD & VENDING LOGIC
@@ -203,9 +287,9 @@ function clearKeypad() {
 }
 
 function submitCode() {
-    if (!hasCoin) {
+    if (!coinInserted) {
         playSound('error');
-        alert("🔒 Koin belum dimasukkan! Klik koin tersembunyi & buka PIN tanggal lahir dulu.");
+        alert("🔒 Koin belum dimasukkan! Buka PIN lalu seret koin ke dalam slot koin.");
         return;
     }
     if (currentCode.length < 2) { playSound('error'); return; }
@@ -276,8 +360,8 @@ function backToVending() {
     document.getElementById("vendingStep").classList.remove("hidden");
 }
 
-// REVISI AMPLOP REALISTIS, PITA MERAH & EFEK TYPING INTERAKTIF
-let envelopeStage = 0; // 0: Terkunci/Tertutup, 1: Terbuka Setengah & Kertas Keluar Sedikit, 2: Kertas Penuh di Depan
+// SURAT & TYPING EFFECT
+let envelopeStage = 0;
 let isTypingActive = false;
 let typewriterTimeout = null;
 const fullMessageText = "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan! ✨✨\n\nWith best wishes, ❤️";
@@ -291,7 +375,6 @@ function handleEnvelopeClick() {
     const hint = document.getElementById("envelopeHint");
 
     if (envelopeStage === 0) {
-        // KLIK 1: Lepas pita, buka flap, kertas keluar sedikit secara halus
         playSound('paper');
         ribbon.classList.add("ribbon-detached");
         flap.classList.add("flap-open");
@@ -303,7 +386,6 @@ function handleEnvelopeClick() {
         hint.innerText = "Klik sekali lagi untuk membuka kertas penuh (2/2)";
         envelopeStage = 1;
     } else if (envelopeStage === 1) {
-        // KLIK 2: Kertas maju ke depan amplop & penuh
         playSound('paper');
         paper.classList.remove("paper-peek");
         paper.classList.add("paper-full-front");
@@ -346,7 +428,6 @@ function closeLetterToEnvelope() {
     const hint = document.getElementById("envelopeHint");
     const btnClose = document.getElementById("btnCloseLetter");
 
-    // Kembalikan kertas ke dalam amplop
     paper.classList.remove("paper-full-front");
     paper.classList.remove("paper-peek");
     document.getElementById("typewriterTarget").innerHTML = "";
@@ -360,7 +441,7 @@ function closeLetterToEnvelope() {
     }, 500);
 }
 
-// MUSIC PLAYER & PLAYLIST LOGIC WITH TONEARM ANIMATION
+// MUSIC PLAYER
 function renderPlaylist() {
     const container = document.getElementById("playlistItems");
     container.innerHTML = "";
@@ -454,7 +535,7 @@ if (favAudio) {
     };
 }
 
-// POLAROID GALLERY WITH SHAKE & FLASH EFEK
+// POLAROID GALLERY
 const photos = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
