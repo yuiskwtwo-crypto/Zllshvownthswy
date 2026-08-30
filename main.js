@@ -108,7 +108,7 @@ function blowCandle() {
         document.getElementById("smokeGroup").classList.add("active");
     }, 300);
 
-    document.getElementById("blowHint").innerText = "✨ Happy Birthday, zilless! ✨";
+    document.getElementById("blowHint").innerText = "✨ Serta mulia zilless! ✨";
 
     setTimeout(() => {
         if (typeof confetti === "function") {
@@ -675,8 +675,8 @@ function answerQuiz1(isYes) {
         document.getElementById("quizStep2").classList.remove("hidden");
     } else {
         playSound('error');
-        feedback.innerText = "Yaaahh harusnya ini duluan diklik! Tapi disuruh pilih YES aja yaa 😜";
-        noBtn.innerText = "YES DUA-DUANYA! 😁";
+        feedback.innerText = "Yaaahh harusnyaa jangan dibaca dulu..Yaudah pencet dah ini..";
+        noBtn.innerText = "YES SETUJU JUGA 😁";
         noBtn.onclick = () => answerQuiz1(true);
     }
 }
