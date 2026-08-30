@@ -405,7 +405,7 @@ function triggerCertificateAnimation() {
     }, 700);
 }
 
-// SURAT & TYPING EFFECT REALISTIS (MENGETIK PELAN SANTAI 75ms)
+// SURAT & TYPING EFFECT REALISTIS (MENGETIK LEBIH PELAN & SANTAI)
 let envelopeStage = 0;
 let isTypingActive = false;
 let typewriterTimeout = null;
@@ -454,6 +454,7 @@ function startTypewriter() {
             const char = fullMessageText.charAt(i);
             target.innerHTML += (char === "\n") ? "<br>" : char;
             i++;
+            // DIUBAH MENJADI 75ms SUPAYA MENGETIK PELAN DAN NIKMAT DIBACA
             typewriterTimeout = setTimeout(typeChar, 75);
         } else {
             isTypingActive = false;
@@ -486,7 +487,7 @@ function closeLetterToEnvelope() {
     }, 500);
 }
 
-// TURNTABLE PLAYER LOGIC
+// REALISTIS TURNTABLE MUSIC PLAYER LOGIC
 function renderPlaylist() {
     const container = document.getElementById("playlistItems");
     container.innerHTML = "";
