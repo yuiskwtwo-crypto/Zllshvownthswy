@@ -97,7 +97,7 @@ body {
 .blow-hint { font-size: 1rem; color: #ff477e; font-weight: 600; margin-top: 10px; }
 #nextToVendingBtn { margin-top: 20px; }
 
-/* MODAL PIN & KOIN DRAGGABLE FIX */
+/* MODAL PIN & KOIN DRAGGABLE */
 .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(5px); border-radius: 26px; display: flex; justify-content: center; align-items: center; z-index: 100; }
 .modal-box { background: #fff; padding: 20px; border-radius: 22px; width: 88%; box-shadow: 0 10px 25px rgba(0,0,0,0.25); text-align: center; }
 .modal-box h3 { color: #ff477e; margin-bottom: 8px; }
@@ -339,9 +339,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 .envelope-hint { font-size: 0.8rem; color: #ff477e; margin-top: 12px; font-weight: bold; }
 .btn-close-letter { margin-top: 8px; background: #2b2d42; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
 
-/* ==========================================
-   FIX REVISED PHOTO STACK REALISTIS
-   ========================================== */
+/* PHOTO STACK REALISTIS FIX */
 .photo-stack-wrapper {
     width: 100%;
     display: flex;
@@ -371,10 +369,9 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     user-select: none;
     transform-origin: center bottom;
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
-    pointer-events: none; /* Default nonaktif agar hanya foto terdepan yang bisa diklik */
+    pointer-events: none;
 }
 
-/* Hanya foto depan yang aktif kliknya */
 .stack-card.active-front {
     pointer-events: auto !important;
 }
@@ -394,7 +391,6 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     pointer-events: none;
 }
 
-/* SWIPE ANIMATION SAAT DIKLIK */
 .stack-card.swiping-out {
     transform: translate(160px, -20px) rotate(25deg) scale(0.95) !important;
     opacity: 0.6;
@@ -433,9 +429,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     transform: scale(1.25);
 }
 
-/* ==========================================
-   INTERAKTIF KUIS STYLES (SPECIAL ITEM)
-   ========================================== */
+/* KUIS INTERAKTIF STYLES */
 .quiz-card-box {
     background: #fff;
     border: 3px solid #ff70a6;
