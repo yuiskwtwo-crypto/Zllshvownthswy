@@ -27,7 +27,7 @@
         <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
     </div>
 
-    <!-- AUDIO BGM UTAMA (Memutar Lagu Fearless Saat Masuk Web) -->
+    <!-- AUDIO BGM UTAMA -->
     <audio id="bgmAudio" loop src="Taylor Swift - Fearless _ Lirik Terjemahan.mp3"></audio>
 
     <div class="card" id="mainCard">
@@ -156,7 +156,7 @@
             </div>
 
             <div id="pesanRahasia" class="hidden-message">
-                <p>🎁 <strong>HADIAH UTAMA:</strong><br>Happy belated birthday, zilless. Tetap jadi satu satunya orang yang aku kenal yaa!! 😆✨</p>
+                <p>🎁 <strong>HADIAH UTAMA UNLOCKED:</strong><br>Semua slot berkesan udah kamu buka! Jangan lupa cek Special Item di atas yaa 😜✨</p>
             </div>
         </div>
 
@@ -244,7 +244,7 @@
                             <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
                         </div>
 
-                        <!-- Tag Pemutar Lagu di Halaman Musik -->
+                        <!-- Tag Pemutar Lagu -->
                         <audio id="audioPlayer" src="Taylor Swift - Fearless _ Lirik Terjemahan.mp3"></audio>
 
                         <div class="progress-container" onclick="seekAudio(event)">
@@ -303,48 +303,45 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <!-- HALAMAN B2: PHOTO STACK FEATURE -->
+        <!-- HALAMAN B2: REVISED PHOTO STACK FEATURE -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
                 <h2 class="title-aesthetic mini">📸 Photo's</h2>
             </div>
 
-            <!-- CONTAINER PHOTO STACK -->
             <div class="photo-stack-wrapper">
                 <div class="photo-stack" id="photoStack">
-                    <!-- 5 Foto Polaroid Ditumpuk -->
-                    <div class="stack-card" onclick="nextPhotoStack(0)">
+                    <!-- 5 Foto Ditumpuk secara Realistis -->
+                    <div class="stack-card" onclick="handleCardClick(0)" id="card-0">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Photo 1">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="nextPhotoStack(1)">
+                    <div class="stack-card" onclick="handleCardClick(1)" id="card-1">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80" alt="Photo 2">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="nextPhotoStack(2)">
+                    <div class="stack-card" onclick="handleCardClick(2)" id="card-2">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Photo 3">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="nextPhotoStack(3)">
+                    <div class="stack-card" onclick="handleCardClick(3)" id="card-3">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&q=80" alt="Photo 4">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="nextPhotoStack(4)">
+                    <div class="stack-card" onclick="handleCardClick(4)" id="card-4">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80" alt="Photo 5">
                         </div>
                     </div>
                 </div>
 
-                <!-- CAPTION DENGAN TRANSISI FADE HALUS -->
                 <p id="stackCaption" class="stack-caption">Aesthetic Birthday Cake 🎂</p>
 
-                <!-- 5 INDIKATOR TITIK -->
                 <div class="stack-dots" id="stackDots">
                     <span class="dot active"></span>
                     <span class="dot"></span>
@@ -355,16 +352,47 @@
             </div>
         </div>
 
-        <!-- HALAMAN SPECIAL ITEM -->
+        <!-- HALAMAN SPECIAL ITEM: INTERAKTIF KUIS -->
         <div id="pageSpecial" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">🌟 SPECIAL UNLOCKED</h2>
+                <h2 class="title-aesthetic mini">🎮 SPECIAL QUIZ</h2>
             </div>
-            <div class="special-card-box">
-                <div class="special-icon-glow">🎟️</div>
-                <h3>VOUCHER SPECIAL TREAT</h3>
-                <p>Voucher ini berlaku untuk traktiran makanan/minuman favoritmu kapan saja! Bebas diklaim, tinggal tunjukkan ke pembuat web ini 😜🔥</p>
+            
+            <div class="quiz-card-box">
+                <!-- QUIZ STEP 1 -->
+                <div id="quizStep1" class="quiz-step">
+                    <div class="quiz-icon">🧐</div>
+                    <h3 class="quiz-question">Pertanyaan Kejujuran!</h3>
+                    <p class="quiz-subtext">Apakah kamu beneran baru buka link GitHub ini dulu sebelum membaca isi suratnya?</p>
+                    <div class="quiz-actions">
+                        <button class="btn-quiz btn-yes" onclick="answerQuiz1(true)">YES! 😁</button>
+                        <button class="btn-quiz btn-no" id="btnQuiz1No" onclick="answerQuiz1(false)">NO.. 🙈</button>
+                    </div>
+                    <p id="quiz1Feedback" class="quiz-feedback"></p>
+                </div>
+
+                <!-- QUIZ STEP 2 -->
+                <div id="quizStep2" class="quiz-step hidden">
+                    <div class="quiz-icon">✨</div>
+                    <h3 class="quiz-question">Satu Pertanyaan Lagi!</h3>
+                    <p class="quiz-subtext">Udah siap buat lanjut membaca isi suratnya?</p>
+                    <div class="quiz-actions-runaway">
+                        <button class="btn-quiz btn-yes" onclick="answerQuiz2Yes()">YES! ✉️</button>
+                        <button class="btn-quiz btn-no btn-runaway" id="btnRunaway" onmouseover="runawayNoBtn()" onclick="runawayNoBtn()">NO 😜</button>
+                    </div>
+                </div>
+
+                <!-- QUIZ FINISH -->
+                <div id="quizFinish" class="quiz-step hidden">
+                    <div class="quiz-icon">🎉</div>
+                    <h3 class="quiz-question">Yeayy Tamat! ✨</h3>
+                    <p class="quiz-subtext">Makasih udah ngikutin instruksi kuis kecil ini yaa! Sekarang kamu dipersilakan buat balik dan membaca isi surat rahasianya.</p>
+                    <div class="quiz-finish-actions">
+                        <button class="btn-primary" onclick="openPage('pageMessage')">✉️ Buka Surat Sekarang</button>
+                        <button class="btn-cert-close" style="margin-top: 10px; width: 100%;" onclick="backToVending()">🏠 Kembali ke Vending Machine</button>
+                    </div>
+                </div>
             </div>
         </div>
 
