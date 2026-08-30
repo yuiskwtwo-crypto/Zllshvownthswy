@@ -27,8 +27,8 @@
         <div class="heart-particle" style="left: 95%; animation-duration: 11s; animation-delay: 0.8s;">✨</div>
     </div>
 
-    <!-- AUDIO BGM AWAL -->
-    <audio id="bgmAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    <!-- AUDIO BGM UTAMA (Memutar Lagu Pertama Saat Masuk Web) -->
+    <audio id="bgmAudio" loop src="Taylor Swift – Blank Space Lyrics.mp3"></audio>
 
     <div class="card" id="mainCard">
         <!-- KOIN INTERAKTIF DRAGGABLE -->
@@ -214,7 +214,7 @@
             <button class="btn-cert-close" id="btnCertClose" onclick="backToVending()">CLOSE</button>
         </div>
 
-        <!-- HALAMAN A2: FAVORITE SONGS (REALISTIS TURNTABLE VINYL PLAYER) -->
+        <!-- HALAMAN A2: FAVORITE SONGS (TURNTABLE VINYL PLAYER) -->
         <div id="pageSong" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -244,11 +244,8 @@
                             <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
                         </div>
 
-                        <!-- Tag pemutar lagu favorit -->
-<audio id="audioPlayer" src="Taylor Swift – Blank Space Lyrics.mp3"></audio>
-
-<!-- Tag BGM utama saat baru masuk (pakai lagu Blank Space juga) -->
-<audio id="bgmAudio" loop src="Taylor Swift – Blank Space Lyrics.mp3"></audio>
+                        <!-- Tag Pemutar Lagu di Halaman Halaman Musik -->
+                        <audio id="audioPlayer" src="Taylor Swift – Blank Space Lyrics.mp3"></audio>
 
                         <div class="progress-container" onclick="seekAudio(event)">
                             <div class="progress-bar" id="progressBar"></div>
@@ -274,7 +271,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN B1: SECRET MESSAGE (SURAT REALISTIS SERAT KERTAS HD) -->
+        <!-- HALAMAN B1: SECRET MESSAGE -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
