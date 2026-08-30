@@ -697,7 +697,7 @@ function answerQuiz1(isYes) {
     } else {
         playSound('error');
         feedback.innerText = "Yaaahh harusnyaa jangan dibaca dulu..Yaudah pencet dah ini..";
-        noBtn.innerText = "YES SETUJU JUGA 😁";
+        noBtn.innerText = "YAUDAHLAH..";
         noBtn.onclick = () => answerQuiz1(true);
     }
 }
