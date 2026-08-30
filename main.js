@@ -594,11 +594,11 @@ if (favAudio) {
 
 // PHOTO STACK LOGIC
 const photoData = [
-    { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
-    { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
-    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "Best Wishes For You 🎁" },
-    { src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&q=80", caption: "Sweet Memories 💕" },
-    { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "Cheers To Another Year 🎉" }
+    { src: "https://i.imgur.com/Ph4lKg2.jpeg", caption: "First foto di hp gue nihyee 🤭" },
+    { src: "https://i.imgur.com/WPfxycT.jpeg", caption: "WOPPP UDAHH BAIKANN 🥳" },
+    { src: "https://i.imgur.com/tRNd2io.jpeg", caption: "Alhamdulillah fans sama aidol fotbar bareng 😎🤍" },
+    { src: "https://i.imgur.com/nYvYAAf.jpeg", caption: "Makasih, iya sama sama. #imissmabar 🫠" },
+    { src: "https://i.imgur.com/A6EeN6h.jpeg", caption: "MAHADASYATT SYAKIRA ZILFA 🛐🛐" }
 ];
 
 const stackLayouts = [
