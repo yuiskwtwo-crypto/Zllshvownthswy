@@ -298,49 +298,244 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 .playlist-item { padding: 5px 8px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; color: #bbb; margin-bottom: 2px; }
 .playlist-item.active { background: #ff477e; color: #fff; font-weight: bold; }
 
-/* =========================================================
-   SECRET MESSAGE - ESTETIK & KERTAS LEBIH PANJANG TANPA SCROLL
-   ========================================================= */
-.envelope-scene { position: relative; width: 100%; height: 320px; display: flex; justify-content: center; align-items: flex-end; perspective: 1000px; margin-top: 10px; }
-.envelope-white { position: relative; width: 280px; height: 170px; background: #ffffff; border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,0.18); cursor: pointer; border: 1px solid #eaeaea; }
+/* ==========================================
+   SECRET MESSAGE ENVELOPE & LETTER STYLES
+   ========================================== */
 
-.env-pocket-white { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 140px solid #f9f9f9; border-right: 140px solid #f9f9f9; border-bottom: 105px solid #f2f2f2; border-top: 70px solid transparent; border-radius: 0 0 6px 6px; z-index: 3; }
-.env-flap-white { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 98px solid #ebebeb; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
-.env-flap-white.flap-open { transform: rotateX(180deg); z-index: 1; }
-
-.ribbon-red { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; transition: opacity 0.5s ease, transform 0.5s ease; }
-.ribbon-red::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 100%; background: #e74c3c; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.ribbon-red::after { content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 100%; height: 30px; background: #e74c3c; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.ribbon-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: #c0392b; border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 2px solid #ff7675; box-shadow: 0 4px 10px rgba(0,0,0,0.25); z-index: 7; }
-.ribbon-detached { opacity: 0; transform: scale(1.2); }
-
-.parchment-texture {
-    background: #fdfaf3;
-    background-image: radial-gradient(#e6dbc4 1.2px, transparent 0);
-    background-size: 14px 14px;
-    border: 1px solid #dfd2b7;
-}
-.paper-inner-border { border: 1px dashed #c9b998; height: 100%; padding: 12px; border-radius: 6px; position: relative; }
-
-/* UKURAN KERTAS LEBIH PANJANG & TIDAK PERLU SCROLL */
-.letter-paper-hd { position: absolute; bottom: 8px; left: 12px; width: 256px; height: 155px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.7s cubic-bezier(0.34, 1.4, 0.64, 1); z-index: 2; text-align: left; overflow: visible; }
-.letter-paper-hd.paper-peek { transform: translateY(-70px); height: 210px; }
-.letter-paper-hd.paper-full-front { transform: translateY(-130px) scale(1.04); height: 280px; z-index: 20; box-shadow: 0 15px 35px rgba(0,0,0,0.25); }
-
-.stamp-hd { position: absolute; top: 10px; right: 10px; background: #c0392b; color: white; padding: 3px 6px; border-radius: 3px; font-size: 0.55rem; font-weight: bold; letter-spacing: 1px; }
-.typed-text-container { margin-top: 18px; width: 100%; overflow: visible; }
-
-.handwritten-font {
-    font-family: 'Caveat', cursive;
-    font-size: 1.3rem;
-    color: #2c1a0e;
-    line-height: 1.45;
-    white-space: pre-wrap;
-    text-shadow: 0 0 1px rgba(0,0,0,0.08);
+.secret-envelope-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 380px;
+    position: relative;
+    padding: 20px 10px;
 }
 
-.envelope-hint { font-size: 0.8rem; color: #ff477e; margin-top: 16px; font-weight: bold; }
-.btn-close-letter { margin-top: 10px; background: #2b2d42; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+/* ENVELOPE BOX CONTAINER */
+.envelope-box {
+    position: relative;
+    width: 290px;
+    height: 190px;
+    background: transparent;
+    cursor: pointer;
+    perspective: 1000px;
+    margin: 20px auto;
+}
+
+/* 1. BACK FLAP / BG */
+.env-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f4efea;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+}
+
+/* 2. LETTER PAPER */
+.env-letter {
+    position: absolute;
+    bottom: 8px;
+    left: 5%;
+    width: 90%;
+    height: 175px;
+    background: #fffdf9;
+    background-image: radial-gradient(#f1e6d8 0.5px, transparent 0.5px);
+    background-size: 10px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    z-index: 2;
+    padding: 16px 14px;
+    overflow-y: auto;
+    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.45s, height 0.8s ease, box-shadow 0.4s ease;
+    border: 1px solid #ebdcd0;
+    text-align: left;
+}
+
+.letter-text {
+    font-family: 'Caveat', 'Sacramento', cursive;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: #4a3b32;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+/* 3. FRONT POCKET OF ENVELOPE */
+.env-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 145px solid #fcfaf7;
+    border-right: 145px solid #fcfaf7;
+    border-top: 95px solid transparent;
+    border-bottom: 95px solid #eae3db;
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.03));
+}
+
+/* 4. TOP FLAP */
+.env-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 145px solid transparent;
+    border-right: 145px solid transparent;
+    border-top: 105px solid #e3dad0;
+    transform-origin: top center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.4s;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* 5. PINK RIBBON & BOW */
+.env-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.env-ribbon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 100%;
+    background: linear-gradient(90deg, #ff8fa3, #ffb3c1, #ff8fa3);
+    box-shadow: 0 0 6px rgba(255, 143, 163, 0.4);
+    border-radius: 2px;
+}
+
+.ribbon-bow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 24px;
+    background: #ff758f;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.ribbon-bow::before, .ribbon-bow::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    width: 20px;
+    height: 24px;
+    border: 3px solid #ff758f;
+    border-radius: 50%;
+}
+.ribbon-bow::before { left: -14px; }
+.ribbon-bow::after { right: -14px; }
+
+/* INTERACTION STATES */
+
+/* State 1: Envelope Opened Slightly */
+.envelope-box.step-1 .env-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope-box.step-1 .env-ribbon {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.envelope-box.step-1 .env-letter {
+    transform: translateY(-45px);
+}
+
+/* State 2: Letter Fully Pulled Out & Front */
+.envelope-box.step-2 .env-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope-box.step-2 .env-ribbon {
+    opacity: 0;
+}
+
+.envelope-box.step-2 .env-letter {
+    transform: translateY(-110px) scale(1.05);
+    height: 280px;
+    z-index: 10;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+    cursor: default;
+}
+
+/* BUTTON TUTUP SURAT */
+.close-letter-wrapper {
+    margin-top: 15px;
+    transition: opacity 0.5s ease;
+}
+
+.btn-close-letter {
+    background: linear-gradient(135deg, #ff758f, #ff477e);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 20px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 71, 126, 0.35);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-close-letter:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ff477e, #ff2a6d);
+}
+
+.btn-close-letter:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .envelope-box {
+        width: 260px;
+        height: 175px;
+    }
+    .env-front {
+        border-left-width: 130px;
+        border-right-width: 130px;
+        border-top-width: 85px;
+        border-bottom-width: 85px;
+    }
+    .env-flap {
+        border-left-width: 130px;
+        border-right-width: 130px;
+        border-top-width: 95px;
+    }
+    .envelope-box.step-2 .env-letter {
+        transform: translateY(-90px) scale(1.03);
+        height: 260px;
+    }
+    .letter-text {
+        font-size: 1.05rem;
+    }
+}
 
 /* ==========================================
    PHOTO STACK REALISTIS FIX & CAPTION VISIBLE
@@ -357,7 +552,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     position: relative;
     width: 215px;
     height: 260px;
-    margin-bottom: 24px; /* Space cukup buat caption dibawah */
+    margin-bottom: 24px;
 }
 
 .stack-card {
@@ -402,7 +597,6 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     z-index: 99 !important;
 }
 
-/* CAPTION DIPERJELAS DI BAWAH TUMPUKAN */
 .stack-caption {
     font-family: 'Caveat', cursive;
     font-size: 1.45rem;
