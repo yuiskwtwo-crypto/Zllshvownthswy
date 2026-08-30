@@ -406,7 +406,7 @@ function triggerCertificateAnimation() {
 }
 
 // ==========================================
-// SECRET MESSAGE LOGIC & INTERACTION FIX
+// SECRET MESSAGE LOGIC FIX (SPASI & POSISI)
 // ==========================================
 
 const secretLetterFullText = `Haii, i just want you to know that i'm so fuckng proud of you.
@@ -424,13 +424,11 @@ let typingTimeout = null;
 
 function handleEnvelopeClick() {
     if (letterState === 0) {
-        // Klik 1: Amplop terbuka & kertas naik sedikit
         playSound('paper');
         const envBox = document.getElementById("envelopeBox");
         envBox.classList.add("step-1");
         letterState = 1;
     } else if (letterState === 1) {
-        // Klik 2: Kertas terangkat penuh ke depan & mulai ngetik
         triggerLetterStep2();
     }
 }
@@ -444,7 +442,7 @@ function triggerLetterStep2() {
 
     setTimeout(() => {
         startLetterTyping();
-    }, 900);
+    }, 800);
 }
 
 function startLetterTyping() {
@@ -452,14 +450,14 @@ function startLetterTyping() {
     isTyping = true;
 
     const typedContainer = document.getElementById("typedLetterContent");
-    typedContainer.innerText = "";
+    typedContainer.textContent = ""; // Menggunakan textContent agar spasi terjaga utuh
     
     let charIndex = 0;
-    const speed = 50; // Kecepatan mengetik ~50ms/karakter
+    const speed = 50; 
 
     function typeNextChar() {
         if (charIndex < secretLetterFullText.length) {
-            typedContainer.innerText += secretLetterFullText.charAt(charIndex);
+            typedContainer.textContent += secretLetterFullText.charAt(charIndex);
             charIndex++;
             
             const envLetter = document.getElementById("envLetter");
@@ -468,7 +466,6 @@ function startLetterTyping() {
             typingTimeout = setTimeout(typeNextChar, speed);
         } else {
             isTyping = false;
-            // Pengetikan selesai: Tampilkan tombol Tutup Surat
             document.getElementById("closeLetterContainer").classList.remove("hidden");
         }
     }
@@ -479,7 +476,6 @@ function startLetterTyping() {
 function closeSecretLetter() {
     playSound('paper');
     
-    // Sembunyikan tombol Tutup Surat
     document.getElementById("closeLetterContainer").classList.add("hidden");
 
     if (typingTimeout) clearTimeout(typingTimeout);
@@ -488,19 +484,17 @@ function closeSecretLetter() {
     const envBox = document.getElementById("envelopeBox");
     const typedContainer = document.getElementById("typedLetterContent");
 
-    // Masukkan surat kembali ke amplop
     envBox.classList.remove("step-2");
     envBox.classList.add("step-1");
 
     setTimeout(() => {
-        // Tutup amplop penuh
         envBox.classList.remove("step-1");
         
         setTimeout(() => {
-            typedContainer.innerText = "";
+            typedContainer.textContent = "";
             letterState = 0;
-        }, 800);
-    }, 800);
+        }, 700);
+    }, 700);
 }
 
 // TURNTABLE MUSIC PLAYER LOGIC
