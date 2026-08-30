@@ -268,7 +268,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN B1: SECRET MESSAGE (REVISED ESTHETIC ENVELOPE) -->
+        <!-- HALAMAN B1: SECRET MESSAGE -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">🏠</button>
@@ -276,13 +276,13 @@
             </div>
             
             <div class="secret-envelope-wrapper" id="envelopeWrapper">
-                <!-- ENVELOPE BASE STRUCTURE -->
+                <!-- ENVELOPE BASE CONTAINER -->
                 <div class="envelope-box" id="envelopeBox" onclick="handleEnvelopeClick()">
-                    <!-- BACK FLAP -->
+                    <!-- BACK OF ENVELOPE -->
                     <div class="env-back"></div>
 
                     <!-- LETTER PAPER INSIDE -->
-                    <div class="env-letter" id="envLetter" onclick="handleLetterClick(event)">
+                    <div class="env-letter" id="envLetter">
                         <div class="letter-inner">
                             <p id="typedLetterContent" class="letter-text"></p>
                         </div>
@@ -294,13 +294,13 @@
                     <!-- TOP FLAP -->
                     <div class="env-flap" id="envFlap"></div>
 
-                    <!-- PINK RIBBON & BOW -->
+                    <!-- ELEGANT PINK RIBBON -->
                     <div class="env-ribbon" id="envRibbon">
                         <div class="ribbon-bow"></div>
                     </div>
                 </div>
 
-                <!-- BUTTON TUTUP SURAT (Hidden until typing finish) -->
+                <!-- BUTTON TUTUP SURAT (Muncul setelah selesai mengetik) -->
                 <div id="closeLetterContainer" class="close-letter-wrapper hidden">
                     <button class="btn-close-letter" onclick="closeSecretLetter()">✉️ Tutup Surat</button>
                 </div>
@@ -378,7 +378,7 @@
                 <div id="quizStep2" class="quiz-step hidden">
                     <div class="quiz-icon">✨</div>
                     <h3 class="quiz-question">Satu lagiii!</h3>
-                    <p class="quiz-subtext">Sudah siapkah mentalmu membaca surat dengan tulisan indah dariku?</p>
+                    <p class="quiz-subtext">Sudah siapkah mentalmu membaca surat indah dariku?</p>
                     <div class="quiz-actions-runaway">
                         <button class="btn-quiz btn-yes" onclick="answerQuiz2Yes()">YES! ✉️</button>
                         <button class="btn-quiz btn-no btn-runaway" id="btnRunaway" onmouseover="runawayNoBtn()" onclick="runawayNoBtn()">NO 😜</button>
