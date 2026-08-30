@@ -298,48 +298,53 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 .playlist-item { padding: 5px 8px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; color: #bbb; margin-bottom: 2px; }
 .playlist-item.active { background: #ff477e; color: #fff; font-weight: bold; }
 
-/* SURAT & ENVELOPE */
-.envelope-scene { position: relative; width: 100%; height: 280px; display: flex; justify-content: center; align-items: flex-end; perspective: 1000px; }
-.envelope-white { position: relative; width: 270px; height: 170px; background: #fdfdfd; border-radius: 4px; box-shadow: 0 12px 25px rgba(0,0,0,0.15); cursor: pointer; border: 1px solid #eaeaea; }
+/* =========================================================
+   SECRET MESSAGE - ESTETIK & KERTAS LEBIH PANJANG TANPA SCROLL
+   ========================================================= */
+.envelope-scene { position: relative; width: 100%; height: 320px; display: flex; justify-content: center; align-items: flex-end; perspective: 1000px; margin-top: 10px; }
+.envelope-white { position: relative; width: 280px; height: 170px; background: #ffffff; border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,0.18); cursor: pointer; border: 1px solid #eaeaea; }
 
-.env-pocket-white { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 135px solid #f8f8f8; border-right: 135px solid #f8f8f8; border-bottom: 100px solid #f1f1f1; border-top: 70px solid transparent; border-radius: 0 0 4px 4px; z-index: 3; }
-.env-flap-white { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 135px solid transparent; border-right: 135px solid transparent; border-top: 95px solid #ececec; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
+.env-pocket-white { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 140px solid #f9f9f9; border-right: 140px solid #f9f9f9; border-bottom: 105px solid #f2f2f2; border-top: 70px solid transparent; border-radius: 0 0 6px 6px; z-index: 3; }
+.env-flap-white { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 98px solid #ebebeb; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
 .env-flap-white.flap-open { transform: rotateX(180deg); z-index: 1; }
 
 .ribbon-red { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; transition: opacity 0.5s ease, transform 0.5s ease; }
 .ribbon-red::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 100%; background: #e74c3c; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
 .ribbon-red::after { content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 100%; height: 30px; background: #e74c3c; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.ribbon-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #c0392b; border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; border: 2px solid #ff7675; box-shadow: 0 4px 10px rgba(0,0,0,0.25); z-index: 7; }
+.ribbon-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: #c0392b; border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; border: 2px solid #ff7675; box-shadow: 0 4px 10px rgba(0,0,0,0.25); z-index: 7; }
 .ribbon-detached { opacity: 0; transform: scale(1.2); }
 
 .parchment-texture {
-    background: #fcf8ee;
-    background-image: radial-gradient(#e8dfc8 1px, transparent 0);
-    background-size: 12px 12px;
-    border: 1px solid #e2d7be;
+    background: #fdfaf3;
+    background-image: radial-gradient(#e6dbc4 1.2px, transparent 0);
+    background-size: 14px 14px;
+    border: 1px solid #dfd2b7;
 }
-.paper-inner-border { border: 1px dashed #d4c5a9; height: 100%; padding: 10px; border-radius: 4px; position: relative; }
+.paper-inner-border { border: 1px dashed #c9b998; height: 100%; padding: 12px; border-radius: 6px; position: relative; }
 
-.letter-paper-hd { position: absolute; bottom: 8px; left: 12px; width: 246px; height: 155px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 2; text-align: left; overflow: hidden; }
-.letter-paper-hd.paper-peek { transform: translateY(-60px); height: 200px; }
-.letter-paper-hd.paper-full-front { transform: translateY(-90px) scale(1.08); height: 250px; z-index: 20; box-shadow: 0 15px 35px rgba(0,0,0,0.25); }
+/* UKURAN KERTAS LEBIH PANJANG & TIDAK PERLU SCROLL */
+.letter-paper-hd { position: absolute; bottom: 8px; left: 12px; width: 256px; height: 155px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.7s cubic-bezier(0.34, 1.4, 0.64, 1); z-index: 2; text-align: left; overflow: visible; }
+.letter-paper-hd.paper-peek { transform: translateY(-70px); height: 210px; }
+.letter-paper-hd.paper-full-front { transform: translateY(-130px) scale(1.04); height: 280px; z-index: 20; box-shadow: 0 15px 35px rgba(0,0,0,0.25); }
 
-.stamp-hd { position: absolute; top: 8px; right: 8px; background: #c0392b; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.55rem; font-weight: bold; letter-spacing: 1px; }
-.typed-text-container { margin-top: 14px; height: 180px; overflow-y: auto; }
+.stamp-hd { position: absolute; top: 10px; right: 10px; background: #c0392b; color: white; padding: 3px 6px; border-radius: 3px; font-size: 0.55rem; font-weight: bold; letter-spacing: 1px; }
+.typed-text-container { margin-top: 18px; width: 100%; overflow: visible; }
 
 .handwritten-font {
     font-family: 'Caveat', cursive;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     color: #2c1a0e;
-    line-height: 1.4;
+    line-height: 1.45;
     white-space: pre-wrap;
-    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+    text-shadow: 0 0 1px rgba(0,0,0,0.08);
 }
 
-.envelope-hint { font-size: 0.8rem; color: #ff477e; margin-top: 12px; font-weight: bold; }
-.btn-close-letter { margin-top: 8px; background: #2b2d42; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+.envelope-hint { font-size: 0.8rem; color: #ff477e; margin-top: 16px; font-weight: bold; }
+.btn-close-letter { margin-top: 10px; background: #2b2d42; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
 
-/* PHOTO STACK REALISTIS FIX */
+/* ==========================================
+   PHOTO STACK REALISTIS FIX & CAPTION VISIBLE
+   ========================================== */
 .photo-stack-wrapper {
     width: 100%;
     display: flex;
@@ -350,9 +355,9 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 
 .photo-stack {
     position: relative;
-    width: 220px;
-    height: 275px;
-    margin-bottom: 14px;
+    width: 215px;
+    height: 260px;
+    margin-bottom: 24px; /* Space cukup buat caption dibawah */
 }
 
 .stack-card {
@@ -362,7 +367,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     width: 100%;
     height: 100%;
     background: #ffffff;
-    padding: 12px 12px 16px 12px;
+    padding: 10px 10px 14px 10px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     cursor: pointer;
@@ -378,7 +383,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 
 .stack-img-wrapper {
     width: 100%;
-    height: 200px;
+    height: 195px;
     border-radius: 8px;
     overflow: hidden;
     background: #eee;
@@ -397,13 +402,15 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     z-index: 99 !important;
 }
 
+/* CAPTION DIPERJELAS DI BAWAH TUMPUKAN */
 .stack-caption {
     font-family: 'Caveat', cursive;
-    font-size: 1.4rem;
-    color: #333;
-    min-height: 36px;
+    font-size: 1.45rem;
+    color: #222;
+    min-height: 40px;
     text-align: center;
     transition: opacity 0.25s ease;
+    font-weight: 700;
 }
 
 .stack-caption.fade-out {
@@ -413,7 +420,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 .stack-dots {
     display: flex;
     gap: 8px;
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .stack-dots .dot {
@@ -434,7 +441,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     background: #fff;
     border: 3px solid #ff70a6;
     border-radius: 20px;
-    padding: 20px 16px;
+    padding: 22px 16px;
     width: 100%;
     position: relative;
     box-shadow: 0 10px 25px rgba(255, 71, 126, 0.15);
