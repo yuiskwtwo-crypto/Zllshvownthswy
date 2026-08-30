@@ -64,7 +64,7 @@ const bgm = document.getElementById("bgmAudio");
 const favAudio = document.getElementById("audioPlayer");
 
 function startBGM() {
-    if (bgm && favAudio.paused) {
+    if (bgm && favAudio && favAudio.paused) {
         bgm.volume = 0.3;
         bgm.play().catch(() => {});
     }
@@ -340,21 +340,21 @@ function checkSpecialItemUnlock() {
     }
 }
 
-// NAVIGASI HALAMAN
+// NAVIGASI HALAMAN DENGAN AUTO HEIGHT DYNAMIC FIX
 function openPage(pageId) {
     playSound('click');
     visitedPages.add(pageId);
 
     document.getElementById("vendingStep").classList.add("hidden");
     
-    // Hide all pages first
     const detailPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
     detailPages.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add("hidden");
     });
 
-    document.getElementById(pageId).classList.remove("hidden");
+    const targetEl = document.getElementById(pageId);
+    if (targetEl) targetEl.classList.remove("hidden");
 
     const mainCard = document.getElementById("mainCard");
 
@@ -512,12 +512,12 @@ function loadTrack(idx) {
     document.getElementById("currentSongTitle").innerText = track.title;
     document.getElementById("currentSongArtist").innerText = track.artist;
     document.getElementById("discLabelTitle").innerText = track.title;
-    favAudio.src = track.src;
+    if (favAudio) favAudio.src = track.src;
 }
 
 function playMusic() {
     stopBGM();
-    favAudio.play();
+    if (favAudio) favAudio.play();
     document.getElementById("playBtn").innerText = "⏸";
     document.getElementById("musicDisc").classList.add("spinning");
     document.getElementById("tonearmArm").classList.add("arm-on-record");
@@ -529,9 +529,9 @@ function togglePlayMusic() {
     const disc = document.getElementById("musicDisc");
     const arm = document.getElementById("tonearmArm");
 
-    if (favAudio.paused) {
+    if (favAudio && favAudio.paused) {
         playMusic();
-    } else {
+    } else if (favAudio) {
         favAudio.pause();
         playBtn.innerText = "▶";
         disc.classList.remove("spinning");
@@ -562,7 +562,7 @@ function formatTime(sec) {
 function seekAudio(e) {
     const rect = e.currentTarget.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / rect.width;
-    favAudio.currentTime = pos * favAudio.duration;
+    if (favAudio) favAudio.currentTime = pos * favAudio.duration;
 }
 
 if (favAudio) {
@@ -582,7 +582,7 @@ if (favAudio) {
 }
 
 // ==========================================
-// PHOTO STACK LOGIC (FIX 5 POLAROID REALISTIS)
+// PHOTO STACK LOGIC (100% WORKING CLICK & SWIPE)
 // ==========================================
 const photoData = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
@@ -592,7 +592,6 @@ const photoData = [
     { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "Cheers To Another Year 🎉" }
 ];
 
-// Layout posisi tertumpuk realistis (Posisi 0 adalah Paling Depan)
 const stackLayouts = [
     { transform: "translate(0px, 0px) rotate(0deg) scale(1)", zIndex: 5 },
     { transform: "translate(-14px, 8px) rotate(-7deg) scale(0.96)", zIndex: 4 },
@@ -605,16 +604,14 @@ let activeStackIdx = 0;
 let isSwiping = false;
 
 function renderPhotoStack() {
-    const cards = document.querySelectorAll('.stack-card');
+    const cards = document.querySelectorAll('#photoStack .stack-card');
     cards.forEach((card, index) => {
-        // Hitung selisih urutan relatif dari foto yang sedang di depan
         const relativePos = (index - activeStackIdx + 5) % 5;
         const layout = stackLayouts[relativePos];
         
         card.style.transform = layout.transform;
         card.style.zIndex = layout.zIndex;
         
-        // Aktifkan handler klik hanya untuk kartu paling depan
         if (relativePos === 0) {
             card.classList.add("active-front");
         } else {
@@ -653,7 +650,7 @@ function handleCardClick(cardIdx) {
     isSwiping = true;
     playSound('paper');
 
-    const cards = document.querySelectorAll('.stack-card');
+    const cards = document.querySelectorAll('#photoStack .stack-card');
     const activeCard = cards[activeStackIdx];
 
     activeCard.classList.add("swiping-out");
@@ -667,7 +664,7 @@ function handleCardClick(cardIdx) {
 }
 
 // ==========================================
-// SPECIAL ITEM KUIS INTERAKTIF LOGIC
+// KUIS INTERAKTIF SPECIAL LOGIC
 // ==========================================
 function answerQuiz1(isYes) {
     const feedback = document.getElementById("quiz1Feedback");
@@ -677,7 +674,6 @@ function answerQuiz1(isYes) {
         playSound('success');
         if (typeof confetti === "function") confetti({ particleCount: 100, spread: 70 });
         
-        // Lanjut ke Quiz Step 2
         document.getElementById("quizStep1").classList.add("hidden");
         document.getElementById("quizStep2").classList.remove("hidden");
     } else {
@@ -692,7 +688,6 @@ function runawayNoBtn() {
     playSound('error');
     const btnNo = document.getElementById("btnRunaway");
     
-    // Acak posisi koordinat kabur di dalam container
     const randomX = Math.floor(Math.random() * 200) - 100;
     const randomY = Math.floor(Math.random() * 70) - 35;
 
