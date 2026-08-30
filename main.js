@@ -406,7 +406,7 @@ function triggerCertificateAnimation() {
 }
 
 // ==========================================
-// SECRET MESSAGE REVISED LOGIC & INTERACTION
+// SECRET MESSAGE LOGIC & INTERACTION FIX
 // ==========================================
 
 const secretLetterFullText = `Haii, i just want you to know that i'm so fuckng proud of you.
@@ -424,28 +424,32 @@ let typingTimeout = null;
 
 function handleEnvelopeClick() {
     if (letterState === 0) {
-        // First click: Open flap slightly & reveal top of letter
         playSound('paper');
         const envBox = document.getElementById("envelopeBox");
         envBox.classList.add("step-1");
         letterState = 1;
+    } else if (letterState === 1) {
+        triggerLetterStep2();
     }
 }
 
 function handleLetterClick(event) {
+    if (event) event.stopPropagation();
     if (letterState === 1) {
-        event.stopPropagation();
-        playSound('paper');
-        const envBox = document.getElementById("envelopeBox");
-        envBox.classList.remove("step-1");
-        envBox.classList.add("step-2");
-        letterState = 2;
-
-        // Start typing animation after letter sliding finishes (~900ms)
-        setTimeout(() => {
-            startLetterTyping();
-        }, 900);
+        triggerLetterStep2();
     }
+}
+
+function triggerLetterStep2() {
+    playSound('paper');
+    const envBox = document.getElementById("envelopeBox");
+    envBox.classList.remove("step-1");
+    envBox.classList.add("step-2");
+    letterState = 2;
+
+    setTimeout(() => {
+        startLetterTyping();
+    }, 900);
 }
 
 function startLetterTyping() {
@@ -456,7 +460,7 @@ function startLetterTyping() {
     typedContainer.innerText = "";
     
     let charIndex = 0;
-    const speed = 50; // ~50ms per character
+    const speed = 50; 
 
     function typeNextChar() {
         if (charIndex < secretLetterFullText.length) {
@@ -464,12 +468,11 @@ function startLetterTyping() {
             charIndex++;
             
             const envLetter = document.getElementById("envLetter");
-            envLetter.scrollTop = envLetter.scrollHeight;
+            if (envLetter) envLetter.scrollTop = envLetter.scrollHeight;
 
             typingTimeout = setTimeout(typeNextChar, speed);
         } else {
             isTyping = false;
-            // Typing complete: Show "Tutup Surat" button
             document.getElementById("closeLetterContainer").classList.remove("hidden");
         }
     }
