@@ -268,36 +268,43 @@
             </div>
         </div>
 
-        <!-- HALAMAN B1: SECRET MESSAGE (ESTETIK & TULISAN MENGETIK PELAN) -->
+        <!-- HALAMAN B1: SECRET MESSAGE (REVISED ESTHETIC ENVELOPE) -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
-                <button class="btn-back-header" onclick="backToVending()">←</button>
-                <h2 class="title-aesthetic mini">💌 Secret Letter</h2>
+                <button class="btn-back-header" onclick="backToVending()">🏠</button>
+                <h2 class="title-aesthetic mini" style="margin: 0 auto;">💌 Secret Message</h2>
             </div>
             
-            <div class="envelope-scene">
-                <div class="envelope-white" id="envelopeObj" onclick="handleEnvelopeClick()">
-                    <div class="env-flap-white" id="envelopeFlap"></div>
-                    
-                    <div class="ribbon-red" id="ribbonRed">
-                        <div class="ribbon-seal">❤️</div>
-                    </div>
+            <div class="secret-envelope-wrapper" id="envelopeWrapper">
+                <!-- ENVELOPE BASE STRUCTURE -->
+                <div class="envelope-box" id="envelopeBox" onclick="handleEnvelopeClick()">
+                    <!-- BACK FLAP -->
+                    <div class="env-back"></div>
 
-                    <div class="letter-paper-hd parchment-texture" id="letterPaper">
-                        <div class="paper-inner-border">
-                            <div class="stamp-hd">📮 SPECIAL</div>
-                            <div class="typed-text-container">
-                                <p class="typed-text handwritten-font" id="typewriterTarget"></p>
-                            </div>
+                    <!-- LETTER PAPER INSIDE -->
+                    <div class="env-letter" id="envLetter" onclick="handleLetterClick(event)">
+                        <div class="letter-inner">
+                            <p id="typedLetterContent" class="letter-text"></p>
                         </div>
                     </div>
 
-                    <div class="env-pocket-white"></div>
+                    <!-- FRONT POCKET -->
+                    <div class="env-front"></div>
+
+                    <!-- TOP FLAP -->
+                    <div class="env-flap" id="envFlap"></div>
+
+                    <!-- PINK RIBBON & BOW -->
+                    <div class="env-ribbon" id="envRibbon">
+                        <div class="ribbon-bow"></div>
+                    </div>
+                </div>
+
+                <!-- BUTTON TUTUP SURAT (Hidden until typing finish) -->
+                <div id="closeLetterContainer" class="close-letter-wrapper hidden">
+                    <button class="btn-close-letter" onclick="closeSecretLetter()">✉️ Tutup Surat</button>
                 </div>
             </div>
-
-            <p class="envelope-hint" id="envelopeHint">Klik amplop untuk membuka (1/2)</p>
-            <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
         <!-- HALAMAN B2: PHOTO STACK FEATURE -->
