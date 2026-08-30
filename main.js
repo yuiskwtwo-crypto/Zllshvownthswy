@@ -409,7 +409,7 @@ function triggerCertificateAnimation() {
 let envelopeStage = 0;
 let isTypingActive = false;
 let typewriterTimeout = null;
-const fullMessageText = "Semoga di usiamu yang baru ini kamu selalu dikelilingi oleh hal-hal baik, diberi kesehatan, kemudahan dalam setiap langkah, dan makin sukses dalam apapun yang sedang diperjuangkan! ✨✨\n\nWith best wishes, ❤️";
+const fullMessageText = "Always be happy yaa, kalo kamu nanya aku bangga ngga ah gausah ditanya jelas iyaa, jaga diri baik baik, aku salah satu orang yang ngga mau ditinggalin kamu..✨\n\nHillzz, ❤️";
 
 function handleEnvelopeClick() {
     if (isTypingActive) return;
