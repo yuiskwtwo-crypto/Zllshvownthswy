@@ -424,18 +424,13 @@ let typingTimeout = null;
 
 function handleEnvelopeClick() {
     if (letterState === 0) {
+        // Klik 1: Amplop terbuka & kertas naik sedikit
         playSound('paper');
         const envBox = document.getElementById("envelopeBox");
         envBox.classList.add("step-1");
         letterState = 1;
     } else if (letterState === 1) {
-        triggerLetterStep2();
-    }
-}
-
-function handleLetterClick(event) {
-    if (event) event.stopPropagation();
-    if (letterState === 1) {
+        // Klik 2: Kertas terangkat penuh ke depan & mulai ngetik
         triggerLetterStep2();
     }
 }
@@ -460,7 +455,7 @@ function startLetterTyping() {
     typedContainer.innerText = "";
     
     let charIndex = 0;
-    const speed = 50; 
+    const speed = 50; // Kecepatan mengetik ~50ms/karakter
 
     function typeNextChar() {
         if (charIndex < secretLetterFullText.length) {
@@ -473,6 +468,7 @@ function startLetterTyping() {
             typingTimeout = setTimeout(typeNextChar, speed);
         } else {
             isTyping = false;
+            // Pengetikan selesai: Tampilkan tombol Tutup Surat
             document.getElementById("closeLetterContainer").classList.remove("hidden");
         }
     }
@@ -483,6 +479,7 @@ function startLetterTyping() {
 function closeSecretLetter() {
     playSound('paper');
     
+    // Sembunyikan tombol Tutup Surat
     document.getElementById("closeLetterContainer").classList.add("hidden");
 
     if (typingTimeout) clearTimeout(typingTimeout);
@@ -491,10 +488,12 @@ function closeSecretLetter() {
     const envBox = document.getElementById("envelopeBox");
     const typedContainer = document.getElementById("typedLetterContent");
 
+    // Masukkan surat kembali ke amplop
     envBox.classList.remove("step-2");
     envBox.classList.add("step-1");
 
     setTimeout(() => {
+        // Tutup amplop penuh
         envBox.classList.remove("step-1");
         
         setTimeout(() => {
@@ -504,7 +503,7 @@ function closeSecretLetter() {
     }, 800);
 }
 
-// REALISTIS TURNTABLE MUSIC PLAYER LOGIC
+// TURNTABLE MUSIC PLAYER LOGIC
 function renderPlaylist() {
     const container = document.getElementById("playlistItems");
     container.innerHTML = "";
