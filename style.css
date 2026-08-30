@@ -308,20 +308,19 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 380px;
     position: relative;
-    padding: 20px 10px;
+    padding: 10px 0;
 }
 
 /* ENVELOPE BOX CONTAINER */
 .envelope-box {
     position: relative;
-    width: 290px;
-    height: 190px;
+    width: 280px;
+    height: 180px;
     background: transparent;
     cursor: pointer;
     perspective: 1000px;
-    margin: 20px auto;
+    margin: 45px auto 10px auto; /* Ruang di atas agar surat tidak mentok */
 }
 
 /* 1. BACK FLAP / BG */
@@ -333,7 +332,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     height: 100%;
     background: #f4efea;
     border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     z-index: 1;
     pointer-events: none;
 }
@@ -344,27 +343,29 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     bottom: 8px;
     left: 5%;
     width: 90%;
-    height: 175px;
+    height: 165px;
     background: #fffdf9;
     background-image: radial-gradient(#f1e6d8 0.5px, transparent 0.5px);
     background-size: 10px 10px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     z-index: 2;
-    padding: 16px 14px;
+    padding: 14px 12px;
     overflow-y: auto;
-    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.45s, height 0.8s ease, box-shadow 0.4s ease;
+    transition: transform 0.8s cubic-bezier(0.34, 1.2, 0.64, 1), z-index 0.1s linear 0.4s, height 0.6s ease, box-shadow 0.4s ease;
     border: 1px solid #ebdcd0;
     text-align: left;
     pointer-events: auto;
 }
 
+/* TEKS SURAT PRESISI DENGAN SPASI AMAN */
 .letter-text {
     font-family: 'Caveat', 'Sacramento', cursive;
     font-size: 1.15rem;
-    line-height: 1.5;
+    line-height: 1.6;
     color: #4a3b32;
-    white-space: pre-line;
+    white-space: pre-wrap; /* Mempertahankan spasi dan baris baru */
+    word-spacing: 2px;
     word-break: break-word;
 }
 
@@ -375,10 +376,10 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     left: 0;
     width: 0;
     height: 0;
-    border-left: 145px solid #fcfaf7;
-    border-right: 145px solid #fcfaf7;
-    border-top: 95px solid transparent;
-    border-bottom: 95px solid #eae3db;
+    border-left: 140px solid #fcfaf7;
+    border-right: 140px solid #fcfaf7;
+    border-top: 90px solid transparent;
+    border-bottom: 90px solid #eae3db;
     border-radius: 0 0 12px 12px;
     z-index: 3;
     pointer-events: none;
@@ -392,16 +393,16 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     left: 0;
     width: 0;
     height: 0;
-    border-left: 145px solid transparent;
-    border-right: 145px solid transparent;
-    border-top: 105px solid #e3dad0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 100px solid #e3dad0;
     transform-origin: top center;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.4s;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
     pointer-events: none;
 }
 
-/* 5. PINK RIBBON & BOW (HARUS POINTER-EVENTS NONE AGAR TIDAK MENGHALANGI KLIK) */
+/* 5. PINK RIBBON & BOW */
 .env-ribbon {
     position: absolute;
     top: 0;
@@ -464,10 +465,10 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 }
 
 .envelope-box.step-1 .env-letter {
-    transform: translateY(-45px);
+    transform: translateY(-30px);
 }
 
-/* State 2: Letter Fully Pulled Out & Front */
+/* State 2: Letter Fully Pulled Out & Positioned Elegantly in Front */
 .envelope-box.step-2 .env-flap {
     transform: rotateX(180deg);
     z-index: 1;
@@ -478,16 +479,16 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 }
 
 .envelope-box.step-2 .env-letter {
-    transform: translateY(-110px) scale(1.05);
-    height: 280px;
+    transform: translateY(-35px) scale(1.02);
+    height: 205px;
     z-index: 10;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
     cursor: default;
 }
 
 /* BUTTON TUTUP SURAT */
 .close-letter-wrapper {
-    margin-top: 15px;
+    margin-top: 12px;
     transition: opacity 0.5s ease;
 }
 
@@ -495,7 +496,7 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
     background: linear-gradient(135deg, #ff758f, #ff477e);
     color: white;
     border: none;
-    padding: 10px 22px;
+    padding: 10px 24px;
     border-radius: 20px;
     font-family: 'Fredoka', sans-serif;
     font-size: 0.95rem;
@@ -516,23 +517,24 @@ input[type="text"] { width: 100%; padding: 12px; border: 3px solid #ffb3c1; bord
 
 @media (max-width: 480px) {
     .envelope-box {
-        width: 260px;
-        height: 175px;
+        width: 250px;
+        height: 165px;
+        margin-top: 40px;
     }
     .env-front {
-        border-left-width: 130px;
-        border-right-width: 130px;
-        border-top-width: 85px;
-        border-bottom-width: 85px;
+        border-left-width: 125px;
+        border-right-width: 125px;
+        border-top-width: 80px;
+        border-bottom-width: 80px;
     }
     .env-flap {
-        border-left-width: 130px;
-        border-right-width: 130px;
-        border-top-width: 95px;
+        border-left-width: 125px;
+        border-right-width: 125px;
+        border-top-width: 90px;
     }
     .envelope-box.step-2 .env-letter {
-        transform: translateY(-90px) scale(1.03);
-        height: 260px;
+        transform: translateY(-30px) scale(1.02);
+        height: 195px;
     }
     .letter-text {
         font-size: 1.05rem;
