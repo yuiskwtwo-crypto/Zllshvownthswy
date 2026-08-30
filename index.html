@@ -6,7 +6,6 @@
     <title>Adadehh jangan kepoo!!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Fonts HD: Calligraphy, Retro Arcade, & Hand-written Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Sacramento&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -222,7 +221,6 @@
             </div>
             <div class="real-turntable-deck">
                 <div class="wood-deck-body">
-                    <!-- Metal Plate -->
                     <div class="metal-platter-plate">
                         <div class="turntable-wrapper">
                             <div class="tonearm-hd" id="tonearmArm">
@@ -237,14 +235,12 @@
                         </div>
                     </div>
 
-                    <!-- Display Info & Control Panel -->
                     <div class="deck-controls">
                         <div class="song-info-badge">
                             <h3 class="song-title" id="currentSongTitle">Fearless</h3>
                             <p class="song-artist" id="currentSongArtist">Taylor Swift</p>
                         </div>
 
-                        <!-- Tag Pemutar Lagu -->
                         <audio id="audioPlayer" src="Taylor Swift - Fearless _ Lirik Terjemahan.mp3"></audio>
 
                         <div class="progress-container" onclick="seekAudio(event)">
@@ -303,7 +299,7 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <!-- HALAMAN B2: REVISED PHOTO STACK FEATURE -->
+        <!-- HALAMAN B2: PHOTO STACK FEATURE -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -312,28 +308,27 @@
 
             <div class="photo-stack-wrapper">
                 <div class="photo-stack" id="photoStack">
-                    <!-- 5 Foto Ditumpuk secara Realistis -->
-                    <div class="stack-card" onclick="handleCardClick(0)" id="card-0">
+                    <div class="stack-card" onclick="handleCardClick(0)">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Photo 1">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="handleCardClick(1)" id="card-1">
+                    <div class="stack-card" onclick="handleCardClick(1)">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80" alt="Photo 2">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="handleCardClick(2)" id="card-2">
+                    <div class="stack-card" onclick="handleCardClick(2)">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Photo 3">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="handleCardClick(3)" id="card-3">
+                    <div class="stack-card" onclick="handleCardClick(3)">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&q=80" alt="Photo 4">
                         </div>
                     </div>
-                    <div class="stack-card" onclick="handleCardClick(4)" id="card-4">
+                    <div class="stack-card" onclick="handleCardClick(4)">
                         <div class="stack-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80" alt="Photo 5">
                         </div>
@@ -388,7 +383,7 @@
                     <div class="quiz-icon">🎉</div>
                     <h3 class="quiz-question">Yeayy Tamat! ✨</h3>
                     <p class="quiz-subtext">Makasih udah ngikutin instruksi kuis kecil ini yaa! Sekarang kamu dipersilakan buat balik dan membaca isi surat rahasianya.</p>
-                    <div class="quiz-finish-actions">
+                    <div class="quiz-finish-actions" style="width:100%;">
                         <button class="btn-primary" onclick="openPage('pageMessage')">✉️ Buka Surat Sekarang</button>
                         <button class="btn-cert-close" style="margin-top: 10px; width: 100%;" onclick="backToVending()">🏠 Kembali ke Vending Machine</button>
                     </div>
