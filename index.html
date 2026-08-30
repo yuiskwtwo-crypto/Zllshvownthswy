@@ -6,6 +6,7 @@
     <title>Adadehh jangan kepoo!!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts HD: Calligraphy, Retro Arcade, & Hand-written Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Sacramento&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -267,7 +268,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN B1: SECRET MESSAGE -->
+        <!-- HALAMAN B1: SECRET MESSAGE (ESTETIK & TULISAN MENGETIK PELAN) -->
         <div id="pageMessage" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
@@ -284,7 +285,7 @@
 
                     <div class="letter-paper-hd parchment-texture" id="letterPaper">
                         <div class="paper-inner-border">
-                            <div class="stamp-hd">📮 !!!</div>
+                            <div class="stamp-hd">📮 SPECIAL</div>
                             <div class="typed-text-container">
                                 <p class="typed-text handwritten-font" id="typewriterTarget"></p>
                             </div>
@@ -335,6 +336,7 @@
                     </div>
                 </div>
 
+                <!-- CAPTION CAPTION CAPTION TERLIHAT JELAS -->
                 <p id="stackCaption" class="stack-caption">Aesthetic Birthday Cake 🎂</p>
 
                 <div class="stack-dots" id="stackDots">
@@ -347,10 +349,10 @@
             </div>
         </div>
 
-        <!-- HALAMAN SPECIAL ITEM: INTERAKTIF KUIS -->
+        <!-- HALAMAN SPECIAL ITEM: INTERAKTIF KUIS (TANPA TOMBOL KEMBALI DI HEADER) -->
         <div id="pageSpecial" class="step-box detail-page hidden">
             <div class="detail-header">
-                <button class="btn-back-header" onclick="backToVending()">←</button>
+                <!-- KHUSUS HALAMAN INI TOMBOL BACK HEADER DIHILANGKAN -->
                 <h2 class="title-aesthetic mini">🎮 SPECIAL QUIZ</h2>
             </div>
             
@@ -378,14 +380,16 @@
                     </div>
                 </div>
 
-                <!-- QUIZ FINISH -->
+                <!-- QUIZ FINISH (TANPA TOMBOL INTERAKSI INTERAKSI LAGI, LANGSUNG UCAPAN SANTAI) -->
                 <div id="quizFinish" class="quiz-step hidden">
                     <div class="quiz-icon">🎉</div>
                     <h3 class="quiz-question">Yeayy Tamat! ✨</h3>
-                    <p class="quiz-subtext">Makasih udah ngikutin instruksi kuis kecil ini yaa! Sekarang kamu dipersilakan buat balik dan membaca isi surat rahasianya.</p>
+                    <p class="quiz-subtext" style="font-size: 0.95rem; font-weight: 600; color: #ff477e; margin-bottom: 20px;">
+                        Makasih udah nurut ngikutin kuis kecil ini yaa!<br><br>
+                        📝 <i>Selamat membaca isi surat tulis tangannya!</i> 💌
+                    </p>
                     <div class="quiz-finish-actions" style="width:100%;">
-                        <button class="btn-primary" onclick="openPage('pageMessage')">✉️ Buka Surat Sekarang</button>
-                        <button class="btn-cert-close" style="margin-top: 10px; width: 100%;" onclick="backToVending()">🏠 Kembali ke Vending Machine</button>
+                        <button class="btn-primary" onclick="backToVending()">🏠 Kembali ke Vending Machine</button>
                     </div>
                 </div>
             </div>
