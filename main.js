@@ -340,7 +340,7 @@ function checkSpecialItemUnlock() {
     }
 }
 
-// NAVIGASI HALAMAN DENGAN AUTO HEIGHT DYNAMIC FIX
+// NAVIGASI HALAMAN
 function openPage(pageId) {
     playSound('click');
     visitedPages.add(pageId);
@@ -405,7 +405,7 @@ function triggerCertificateAnimation() {
     }, 700);
 }
 
-// SURAT & TYPING EFFECT REALISTIS
+// SURAT & TYPING EFFECT REALISTIS (MENGETIK LEBIH PELAN & SANTAI)
 let envelopeStage = 0;
 let isTypingActive = false;
 let typewriterTimeout = null;
@@ -454,7 +454,8 @@ function startTypewriter() {
             const char = fullMessageText.charAt(i);
             target.innerHTML += (char === "\n") ? "<br>" : char;
             i++;
-            typewriterTimeout = setTimeout(typeChar, 35);
+            // DIUBAH MENJADI 75ms SUPAYA MENGETIK PELAN DAN NIKMAT DIBACA
+            typewriterTimeout = setTimeout(typeChar, 75);
         } else {
             isTypingActive = false;
         }
@@ -581,9 +582,7 @@ if (favAudio) {
     };
 }
 
-// ==========================================
-// PHOTO STACK LOGIC (100% WORKING CLICK & SWIPE)
-// ==========================================
+// PHOTO STACK LOGIC
 const photoData = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
@@ -663,9 +662,7 @@ function handleCardClick(cardIdx) {
     }, 350);
 }
 
-// ==========================================
 // KUIS INTERAKTIF SPECIAL LOGIC
-// ==========================================
 function answerQuiz1(isYes) {
     const feedback = document.getElementById("quiz1Feedback");
     const noBtn = document.getElementById("btnQuiz1No");
