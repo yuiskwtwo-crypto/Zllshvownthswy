@@ -7,10 +7,10 @@ const playlist = [
     { title: "K.", artist: "Cigarettes After Sex", src: "K. - Cigarettes After Sex.mp3" },
     { title: "Watch", artist: "Billie Eilish", src: "Billie Eilish - watch Lyrics.mp3" },
     { title: "Rocketeer", artist: "Far East Movement", src: "Far East Movement, Ryan Tedder - Rocketeer Lyrics.mp3" },
-    { title: "Wildflower", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
-    { title: "Cry", artist: "Cigarettes After Sex", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
-    { title: "Guilty as Sin?", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
-    { title: "All Too Well", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" }
+    { title: "Wildflower", artist: "Billie Eilish", src: "Billie Eilish - WILDFLOWER Official Lyric Video.mp3" },
+    { title: "Cry", artist: "Cigarettes After Sex", src: "Cry - Cigarettes After Sex.mp3" },
+    { title: "Guilty as Sin?", artist: "Taylor Swift", src: "Guilty as Sin_ - Taylor Swift _ Lirik Terjemahan.mp3" },
+    { title: "All Too Well", artist: "Taylor Swift", src: "Taylor Swift - All Too Well Taylor's Version Lyric Video.mp3" }
 ];
 
 let currentTrackIdx = 0;
