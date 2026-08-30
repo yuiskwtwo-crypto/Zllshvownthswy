@@ -165,7 +165,7 @@ function submitPin() {
     }
 }
 
-// DRAG & DROP KOIN REALISTIS (BEBAS TELEPORT & TIDAK ACCIDENTAL DISAPPEAR)
+// DRAG & DROP KOIN REALISTIS
 function initCoinDraggable() {
     const coin = document.getElementById("hiddenCoin");
     const slotHousing = document.getElementById("coinSlotHousing");
@@ -333,19 +333,27 @@ function checkSpecialItemUnlock() {
         dispensedSlots.push("SPECIAL");
         setTimeout(() => {
             playSound('success');
-            createDispenserItem("🌟 SPECIAL ITEM UNLOCKED 🌟", "pageSpecial", true);
+            createDispenserItem("🌟 SPECIAL QUIZ UNLOCKED 🌟", "pageSpecial", true);
             document.getElementById("pesanRahasia").style.display = "block";
             if (typeof confetti === "function") confetti({ particleCount: 110, spread: 85 });
         }, 800);
     }
 }
 
-// NAVIGASI HALAMAN DENGAN AUTO HEIGHT DYNAMIC
+// NAVIGASI HALAMAN
 function openPage(pageId) {
     playSound('click');
     visitedPages.add(pageId);
 
     document.getElementById("vendingStep").classList.add("hidden");
+    
+    // Hide all pages first
+    const detailPages = ["pageCertificate", "pageSong", "pageMessage", "pagePhoto", "pageSpecial"];
+    detailPages.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+    });
+
     document.getElementById(pageId).classList.remove("hidden");
 
     const mainCard = document.getElementById("mainCard");
@@ -574,7 +582,7 @@ if (favAudio) {
 }
 
 // ==========================================
-// PHOTO STACK LOGIC (5 POLAROID STACK)
+// PHOTO STACK LOGIC (FIX 5 POLAROID REALISTIS)
 // ==========================================
 const photoData = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
@@ -584,41 +592,45 @@ const photoData = [
     { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "Cheers To Another Year 🎉" }
 ];
 
-// POSISI TERTUMPUK 5 FOTO (Transform & Rotasi Fisik)
+// Layout posisi tertumpuk realistis (Posisi 0 adalah Paling Depan)
 const stackLayouts = [
-    { transform: "translate(0px, 0px) rotate(0deg) scale(1)", zIndex: 5 },       // Paling depan (Foto 1)
-    { transform: "translate(-12px, 6px) rotate(-6deg) scale(0.96)", zIndex: 4 },  // Belakang 1
-    { transform: "translate(14px, 12px) rotate(5deg) scale(0.92)", zIndex: 3 },   // Belakang 2
-    { transform: "translate(-18px, 18px) rotate(-3deg) scale(0.88)", zIndex: 2 }, // Belakang 3
-    { transform: "translate(10px, 24px) rotate(7deg) scale(0.84)", zIndex: 1 }    // Paling belakang
+    { transform: "translate(0px, 0px) rotate(0deg) scale(1)", zIndex: 5 },
+    { transform: "translate(-14px, 8px) rotate(-7deg) scale(0.96)", zIndex: 4 },
+    { transform: "translate(16px, 14px) rotate(6deg) scale(0.92)", zIndex: 3 },
+    { transform: "translate(-20px, 20px) rotate(-4deg) scale(0.88)", zIndex: 2 },
+    { transform: "translate(12px, 26px) rotate(8deg) scale(0.84)", zIndex: 1 }
 ];
 
-let activeStackIdx = 0; // Foto yang berada di paling depan
+let activeStackIdx = 0;
 let isSwiping = false;
 
-// INVENTARISASI ELEMENT & INISIALISASI
 function renderPhotoStack() {
     const cards = document.querySelectorAll('.stack-card');
     cards.forEach((card, index) => {
-        // Hitung offset relatif dari foto aktif saat ini
-        const layoutIdx = (index - activeStackIdx + 5) % 5;
-        const style = stackLayouts[layoutIdx];
+        // Hitung selisih urutan relatif dari foto yang sedang di depan
+        const relativePos = (index - activeStackIdx + 5) % 5;
+        const layout = stackLayouts[relativePos];
         
-        card.style.transform = style.transform;
-        card.style.zIndex = style.zIndex;
+        card.style.transform = layout.transform;
+        card.style.zIndex = layout.zIndex;
+        
+        // Aktifkan handler klik hanya untuk kartu paling depan
+        if (relativePos === 0) {
+            card.classList.add("active-front");
+        } else {
+            card.classList.remove("active-front");
+        }
     });
 
     updateStackCaptionAndDots();
 }
 
-// GANTI CAPTION DENGAN TRANSISI FADE HALUS & INDIKATOR TITIK
 function updateStackCaptionAndDots() {
     const captionEl = document.getElementById("stackCaption");
     const dots = document.querySelectorAll("#stackDots .dot");
 
     if (!captionEl) return;
 
-    // Fade Out Caption
     captionEl.classList.add("fade-out");
 
     setTimeout(() => {
@@ -626,7 +638,6 @@ function updateStackCaptionAndDots() {
         captionEl.classList.remove("fade-out");
     }, 150);
 
-    // Update Dots
     dots.forEach((dot, idx) => {
         if (idx === activeStackIdx) {
             dot.classList.add("active");
@@ -636,34 +647,68 @@ function updateStackCaptionAndDots() {
     });
 }
 
-// INTERAKSI KLIK SWIPE OUT & DIPINDAH KE BELAKANG
-function nextPhotoStack(cardIdx) {
-    // Hanya respon jika foto paling depan yang diklik
+function handleCardClick(cardIdx) {
     if (cardIdx !== activeStackIdx || isSwiping) return;
-    
+
     isSwiping = true;
-    playSound('paper'); // Memutar SFX Suara Kertas
+    playSound('paper');
 
     const cards = document.querySelectorAll('.stack-card');
     const activeCard = cards[activeStackIdx];
 
-    // 1. Animasi keluar ke samping kanan dengan rotasi
     activeCard.classList.add("swiping-out");
 
     setTimeout(() => {
-        // 2. Majukan index foto berikutnya
         activeStackIdx = (activeStackIdx + 1) % 5;
-
-        // 3. Update susunan tumpukan (posisi, scale, z-index)
         renderPhotoStack();
-
-        // 4. Bawa kembali foto lama ke posisi paling belakang
         activeCard.classList.remove("swiping-out");
         isSwiping = false;
     }, 350);
 }
 
-// Inisialisasi awal saat DOM siap
+// ==========================================
+// SPECIAL ITEM KUIS INTERAKTIF LOGIC
+// ==========================================
+function answerQuiz1(isYes) {
+    const feedback = document.getElementById("quiz1Feedback");
+    const noBtn = document.getElementById("btnQuiz1No");
+
+    if (isYes) {
+        playSound('success');
+        if (typeof confetti === "function") confetti({ particleCount: 100, spread: 70 });
+        
+        // Lanjut ke Quiz Step 2
+        document.getElementById("quizStep1").classList.add("hidden");
+        document.getElementById("quizStep2").classList.remove("hidden");
+    } else {
+        playSound('error');
+        feedback.innerText = "Yaaahh harusnya ini duluan diklik! Tapi disuruh pilih YES aja yaa 😜";
+        noBtn.innerText = "YES DUA-DUANYA! 😁";
+        noBtn.onclick = () => answerQuiz1(true);
+    }
+}
+
+function runawayNoBtn() {
+    playSound('error');
+    const btnNo = document.getElementById("btnRunaway");
+    
+    // Acak posisi koordinat kabur di dalam container
+    const randomX = Math.floor(Math.random() * 200) - 100;
+    const randomY = Math.floor(Math.random() * 70) - 35;
+
+    btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+}
+
+function answerQuiz2Yes() {
+    playSound('success');
+    if (typeof confetti === "function") {
+        confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
+    }
+
+    document.getElementById("quizStep2").classList.add("hidden");
+    document.getElementById("quizFinish").classList.remove("hidden");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     renderPhotoStack();
 });
