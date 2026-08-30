@@ -405,86 +405,100 @@ function triggerCertificateAnimation() {
     }, 700);
 }
 
-// SURAT & TYPING EFFECT REALISTIS (MENGETIK LEBIH PELAN & SANTAI)
-let envelopeStage = 0;
-let isTypingActive = false;
-let typewriterTimeout = null;
-const fullMessageText = "Always be happy yaa, kalo kamu nanya aku bangga ngga ah gausah ditanya jelas iyaa, jaga diri baik baik, aku salah satu orang yang ngga mau ditinggalin kamu..✨\n\nHillzz, ❤️";
+// ==========================================
+// SECRET MESSAGE REVISED LOGIC & INTERACTION
+// ==========================================
+
+const secretLetterFullText = `Haii, i just want you to know that i'm so fuckng proud of you.
+
+Saking bangga nya kayaknya kata hebat juga udah lebih buat kamu. Akumah nggatau ya apa yang udah kamu alami dari dulu, tapi yang pastinya itu bukan suatu hal yang bisa dianggap mudah, kan?
+
+Terimakasih yaa sudah mau bertahan sampai sekarang, ketemu aku dan bertahan juga dari aku. Thanks a lot, zilless.
+
+-With heart,
+Hillzz`;
+
+let letterState = 0; // 0: Closed, 1: Slightly Opened, 2: Fully Out
+let isTyping = false;
+let typingTimeout = null;
 
 function handleEnvelopeClick() {
-    if (isTypingActive) return;
-
-    const flap = document.getElementById("envelopeFlap");
-    const ribbon = document.getElementById("ribbonRed");
-    const paper = document.getElementById("letterPaper");
-    const hint = document.getElementById("envelopeHint");
-
-    if (envelopeStage === 0) {
+    if (letterState === 0) {
+        // First click: Open flap slightly & reveal top of letter
         playSound('paper');
-        ribbon.classList.add("ribbon-detached");
-        flap.classList.add("flap-open");
-        
-        setTimeout(() => {
-            paper.classList.add("paper-peek");
-        }, 300);
-
-        hint.innerText = "Pencet pisan maneh (2/2)";
-        envelopeStage = 1;
-    } else if (envelopeStage === 1) {
-        playSound('paper');
-        paper.classList.remove("paper-peek");
-        paper.classList.add("paper-full-front");
-
-        hint.innerText = "✨ Special Letter ✨";
-        document.getElementById("btnCloseLetter").classList.remove("hidden");
-        envelopeStage = 2;
-
-        setTimeout(startTypewriter, 700);
+        const envBox = document.getElementById("envelopeBox");
+        envBox.classList.add("step-1");
+        letterState = 1;
     }
 }
 
-function startTypewriter() {
-    const target = document.getElementById("typewriterTarget");
-    target.innerHTML = "";
-    let i = 0;
-    isTypingActive = true;
+function handleLetterClick(event) {
+    if (letterState === 1) {
+        event.stopPropagation();
+        playSound('paper');
+        const envBox = document.getElementById("envelopeBox");
+        envBox.classList.remove("step-1");
+        envBox.classList.add("step-2");
+        letterState = 2;
+
+        // Start typing animation after letter sliding finishes (~900ms)
+        setTimeout(() => {
+            startLetterTyping();
+        }, 900);
+    }
+}
+
+function startLetterTyping() {
+    if (isTyping) return;
+    isTyping = true;
+
+    const typedContainer = document.getElementById("typedLetterContent");
+    typedContainer.innerText = "";
     
-    function typeChar() {
-        if (i < fullMessageText.length) {
-            const char = fullMessageText.charAt(i);
-            target.innerHTML += (char === "\n") ? "<br>" : char;
-            i++;
-            // DIUBAH MENJADI 75ms SUPAYA MENGETIK PELAN DAN NIKMAT DIBACA
-            typewriterTimeout = setTimeout(typeChar, 75);
+    let charIndex = 0;
+    const speed = 50; // ~50ms per character
+
+    function typeNextChar() {
+        if (charIndex < secretLetterFullText.length) {
+            typedContainer.innerText += secretLetterFullText.charAt(charIndex);
+            charIndex++;
+            
+            const envLetter = document.getElementById("envLetter");
+            envLetter.scrollTop = envLetter.scrollHeight;
+
+            typingTimeout = setTimeout(typeNextChar, speed);
         } else {
-            isTypingActive = false;
+            isTyping = false;
+            // Typing complete: Show "Tutup Surat" button
+            document.getElementById("closeLetterContainer").classList.remove("hidden");
         }
     }
-    typeChar();
+
+    typeNextChar();
 }
 
-function closeLetterToEnvelope() {
+function closeSecretLetter() {
     playSound('paper');
-    clearTimeout(typewriterTimeout);
-    isTypingActive = false;
+    
+    document.getElementById("closeLetterContainer").classList.add("hidden");
 
-    const flap = document.getElementById("envelopeFlap");
-    const ribbon = document.getElementById("ribbonRed");
-    const paper = document.getElementById("letterPaper");
-    const hint = document.getElementById("envelopeHint");
-    const btnClose = document.getElementById("btnCloseLetter");
+    if (typingTimeout) clearTimeout(typingTimeout);
+    isTyping = false;
 
-    paper.classList.remove("paper-full-front");
-    paper.classList.remove("paper-peek");
-    document.getElementById("typewriterTarget").innerHTML = "";
-    btnClose.classList.add("hidden");
+    const envBox = document.getElementById("envelopeBox");
+    const typedContainer = document.getElementById("typedLetterContent");
+
+    envBox.classList.remove("step-2");
+    envBox.classList.add("step-1");
 
     setTimeout(() => {
-        flap.classList.remove("flap-open");
-        ribbon.classList.remove("ribbon-detached");
-        hint.innerText = "Klik amplop untuk membuka (1/2)";
-        envelopeStage = 0;
-    }, 500);
+        envBox.classList.remove("step-1");
+        
+        setTimeout(() => {
+            typedContainer.innerText = "";
+            letterState = 0;
+        }, 800);
+    }, 800);
 }
 
 // REALISTIS TURNTABLE MUSIC PLAYER LOGIC
