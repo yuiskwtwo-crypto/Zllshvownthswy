@@ -3,7 +3,7 @@ const tanggalLahirBenar = "2708";
 
 // PLAYLIST LAGU FAVORIT
 const playlist = [
-    { title: "Blank Space", artist: "Taylor Swift", src: "" },
+    { title: "Blank Space", artist: "Taylor Swift", src: "https://github.com/yuiskwtwo-crypto/Zllshvownthswy/blob/main/Taylor%20Swift%20%E2%80%93%20Blank%20Space%20Lyrics.mp3" },
     { title: "K.", artist: "Cigarettes After Sex", src: "https://github.com/yuiskwtwo-crypto/Zllshvownthswy/blob/main/K.%20-%20Cigarettes%20After%20Sex.mp3" },
     { title: "Watch", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
     { title: "Rocketeer", artist: "Far East Movement", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
