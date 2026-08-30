@@ -3,8 +3,8 @@ const tanggalLahirBenar = "2708";
 
 // PLAYLIST LAGU FAVORIT
 const playlist = [
-    { title: "Blank Space", artist: "Taylor Swift", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { title: "K.", artist: "Cigarettes After Sex", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { title: "Blank Space", artist: "Taylor Swift", src: "" },
+    { title: "K.", artist: "Cigarettes After Sex", src: "https://github.com/yuiskwtwo-crypto/Zllshvownthswy/blob/main/K.%20-%20Cigarettes%20After%20Sex.mp3" },
     { title: "Watch", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
     { title: "Rocketeer", artist: "Far East Movement", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
     { title: "Wildflower", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
