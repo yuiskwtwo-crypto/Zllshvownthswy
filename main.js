@@ -19,44 +19,46 @@ let currentTrackIdx = 0;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    const now = audioCtx.currentTime;
+    try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
 
-    if (type === 'click') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
-        gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-        osc.start(now); osc.stop(now + 0.08);
-    } else if (type === 'coin') {
-        osc.type = 'triangle'; osc.frequency.setValueAtTime(987.77, now);
-        osc.frequency.setValueAtTime(1318.51, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
-    } else if (type === 'paper') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
-        gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        osc.start(now); osc.stop(now + 0.15);
-    } else if (type === 'drop') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(659.25, now);
-        osc.frequency.setValueAtTime(880.00, now + 0.1);
-        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.start(now); osc.stop(now + 0.25);
-    } else if (type === 'success') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.08);
-        osc.frequency.setValueAtTime(783.99, now + 0.16);
-        osc.frequency.setValueAtTime(1046.50, now + 0.24);
-        gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-        osc.start(now); osc.stop(now + 0.4);
-    } else if (type === 'error') {
-        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now);
-        gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-    }
+        if (type === 'click') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+            gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.start(now); osc.stop(now + 0.08);
+        } else if (type === 'coin') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(987.77, now);
+            osc.frequency.setValueAtTime(1318.51, now + 0.08);
+            gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'paper') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+            gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            osc.start(now); osc.stop(now + 0.15);
+        } else if (type === 'drop') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(659.25, now);
+            osc.frequency.setValueAtTime(880.00, now + 0.1);
+            gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            osc.start(now); osc.stop(now + 0.25);
+        } else if (type === 'success') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.08);
+            osc.frequency.setValueAtTime(783.99, now + 0.16);
+            osc.frequency.setValueAtTime(1046.50, now + 0.24);
+            gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now);
+            gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.start(now); osc.stop(now + 0.2);
+        }
+    } catch(e) {}
 }
 
 // BGM CONTROL
@@ -78,16 +80,26 @@ function cekNama() {
     playSound('click');
     startBGM();
     
-    const input = document.getElementById("inputNama").value.trim().toLowerCase();
-    const error = document.getElementById("errorMsg");
+    const inputEl = document.getElementById("inputNama");
+    const errorEl = document.getElementById("errorMsg");
+
+    if (!inputEl) return;
+
+    const input = inputEl.value.trim().toLowerCase();
 
     if (input === namaBenar) {
+        if (errorEl) {
+            errorEl.classList.add("hidden");
+            errorEl.style.display = "none";
+        }
         document.getElementById("loginBox").classList.add("hidden");
         document.getElementById("candleStep").classList.remove("hidden");
-        error.style.display = "none";
     } else {
         playSound('error');
-        error.style.display = "block";
+        if (errorEl) {
+            errorEl.classList.remove("hidden");
+            errorEl.style.display = "block";
+        }
     }
 }
 
@@ -405,10 +417,7 @@ function triggerCertificateAnimation() {
     }, 700);
 }
 
-// ==========================================
-// SECRET MESSAGE LOGIC FIX (SPASI & POSISI)
-// ==========================================
-
+// SECRET MESSAGE LOGIC FIX
 const secretLetterFullText = `Haii, i just want you to know that i'm so fuckng proud of you.
 
 Saking bangga nya kayaknya kata hebat juga udah lebih buat kamu. Akumah nggatau ya apa yang udah kamu alami dari dulu, tapi yang pastinya itu bukan suatu hal yang bisa dianggap mudah, kan?
@@ -450,7 +459,7 @@ function startLetterTyping() {
     isTyping = true;
 
     const typedContainer = document.getElementById("typedLetterContent");
-    typedContainer.textContent = ""; // Menggunakan textContent agar spasi terjaga utuh
+    typedContainer.textContent = "";
     
     let charIndex = 0;
     const speed = 50; 
@@ -592,13 +601,13 @@ if (favAudio) {
     };
 }
 
-// PHOTO STACK LOGIC
+// PHOTO STACK LOGIC (FIXED SYNTAX ERROR)
 const photoData = [
     { src: "IMG-20250806-WA0016.jpg", caption: "First foto di hp gue nihyee 🤭" },
     { src: "IMG-20250913-WA0038.jpg", caption: "WOPPP UDAHH BAIKANN 🥳" },
     { src: "IMG-20260205-WA0184(1).jpg", caption: "Alhamdulillah fans sama aidol fotbar bareng 😎🤍" },
-    { src: "IMG-20260620-WA0026.jpg, caption: "Makasih, iya sama sama. #imissmabar 🫠" },
-    { src: "IMG-20260827-WA0124.jpg", caption: "MAHADASYATT SYAKIRA ZILFA 🛐🛐" }
+    { src: "IMG-20260620-WA0026.jpg", caption: "Makasih, iya sama sama. #imissmabar 🫠" },
+    { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "MAHADASYATT SYAKIRA ZILFA 🛐🛐" }
 ];
 
 const stackLayouts = [
@@ -623,8 +632,10 @@ function renderPhotoStack() {
         
         if (relativePos === 0) {
             card.classList.add("active-front");
+            card.style.pointerEvents = "auto";
         } else {
             card.classList.remove("active-front");
+            card.style.pointerEvents = "none";
         }
     });
 
