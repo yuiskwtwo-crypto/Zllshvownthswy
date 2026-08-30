@@ -303,23 +303,55 @@
             <button class="btn-close-letter hidden" id="btnCloseLetter" onclick="closeLetterToEnvelope()">✉️ Tutup & Masukkan Surat</button>
         </div>
 
-        <!-- HALAMAN B2: GALERI FOTO -->
+        <!-- HALAMAN B2: PHOTO STACK FEATURE -->
         <div id="pagePhoto" class="step-box detail-page hidden">
             <div class="detail-header">
                 <button class="btn-back-header" onclick="backToVending()">←</button>
                 <h2 class="title-aesthetic mini">📸 Photo's</h2>
             </div>
-            <div class="flash-overlay" id="flashOverlay"></div>
-            <div class="polaroid-frame" id="polaroidCard" onclick="shakePolaroid()">
-                <div class="polaroid-img-wrapper">
-                    <img id="polaroidImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Memory Photo">
+
+            <!-- CONTAINER PHOTO STACK -->
+            <div class="photo-stack-wrapper">
+                <div class="photo-stack" id="photoStack">
+                    <!-- 5 Foto Polaroid Ditumpuk -->
+                    <div class="stack-card" onclick="nextPhotoStack(0)">
+                        <div class="stack-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80" alt="Photo 1">
+                        </div>
+                    </div>
+                    <div class="stack-card" onclick="nextPhotoStack(1)">
+                        <div class="stack-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80" alt="Photo 2">
+                        </div>
+                    </div>
+                    <div class="stack-card" onclick="nextPhotoStack(2)">
+                        <div class="stack-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Photo 3">
+                        </div>
+                    </div>
+                    <div class="stack-card" onclick="nextPhotoStack(3)">
+                        <div class="stack-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&q=80" alt="Photo 4">
+                        </div>
+                    </div>
+                    <div class="stack-card" onclick="nextPhotoStack(4)">
+                        <div class="stack-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80" alt="Photo 5">
+                        </div>
+                    </div>
                 </div>
-                <p id="polaroidCaption" class="polaroid-caption">Aesthetic Birthday Cake 🎂</p>
-                <div class="photo-hint">Klik foto buat bergoyang! ✨</div>
-            </div>
-            <div class="gallery-controls">
-                <button class="btn-small" onclick="prevPhoto()">⬅️ Prev</button>
-                <button class="btn-small" onclick="nextPhoto()">Next ➡️</button>
+
+                <!-- CAPTION DENGAN TRANSISI FADE HALUS -->
+                <p id="stackCaption" class="stack-caption">Aesthetic Birthday Cake 🎂</p>
+
+                <!-- 5 INDIKATOR TITIK -->
+                <div class="stack-dots" id="stackDots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
             </div>
         </div>
 
