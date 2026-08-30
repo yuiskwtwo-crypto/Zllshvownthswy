@@ -425,7 +425,7 @@ Saking bangga nya kayaknya kata hebat juga udah lebih buat kamu. Akumah nggatau 
 Terimakasih yaa sudah mau bertahan sampai sekarang, ketemu aku dan bertahan juga dari aku. Thanks a lot, zilless.
 
 -With heart,
-Hillzz`;
+Hillzz 🤍🫂`;
 
 let letterState = 0; // 0: Closed, 1: Slightly Opened, 2: Fully Out
 let isTyping = false;
