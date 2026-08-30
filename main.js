@@ -358,6 +358,7 @@ function openPage(pageId) {
     }
 
     if (pageId === "pageSong") renderPlaylist();
+    if (pageId === "pagePhoto") renderPhotoStack();
 }
 
 function backToVending() {
@@ -572,43 +573,97 @@ if (favAudio) {
     };
 }
 
-// POLAROID GALLERY LOGIC
-const photos = [
+// ==========================================
+// PHOTO STACK LOGIC (5 POLAROID STACK)
+// ==========================================
+const photoData = [
     { src: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=80", caption: "Aesthetic Birthday Cake 🎂" },
     { src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80", caption: "Party Party! 🎈✨" },
-    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "Best Wishes For You 🎁" }
+    { src: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80", caption: "Best Wishes For You 🎁" },
+    { src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&q=80", caption: "Sweet Memories 💕" },
+    { src: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=80", caption: "Cheers To Another Year 🎉" }
 ];
-let photoIdx = 0;
 
-function triggerCameraFlash() {
-    const flash = document.getElementById("flashOverlay");
-    flash.classList.add("flash-active");
-    setTimeout(() => flash.classList.remove("flash-active"), 300);
+// POSISI TERTUMPUK 5 FOTO (Transform & Rotasi Fisik)
+const stackLayouts = [
+    { transform: "translate(0px, 0px) rotate(0deg) scale(1)", zIndex: 5 },       // Paling depan (Foto 1)
+    { transform: "translate(-12px, 6px) rotate(-6deg) scale(0.96)", zIndex: 4 },  // Belakang 1
+    { transform: "translate(14px, 12px) rotate(5deg) scale(0.92)", zIndex: 3 },   // Belakang 2
+    { transform: "translate(-18px, 18px) rotate(-3deg) scale(0.88)", zIndex: 2 }, // Belakang 3
+    { transform: "translate(10px, 24px) rotate(7deg) scale(0.84)", zIndex: 1 }    // Paling belakang
+];
+
+let activeStackIdx = 0; // Foto yang berada di paling depan
+let isSwiping = false;
+
+// INVENTARISASI ELEMENT & INISIALISASI
+function renderPhotoStack() {
+    const cards = document.querySelectorAll('.stack-card');
+    cards.forEach((card, index) => {
+        // Hitung offset relatif dari foto aktif saat ini
+        const layoutIdx = (index - activeStackIdx + 5) % 5;
+        const style = stackLayouts[layoutIdx];
+        
+        card.style.transform = style.transform;
+        card.style.zIndex = style.zIndex;
+    });
+
+    updateStackCaptionAndDots();
 }
 
-function shakePolaroid() {
-    playSound('click');
-    const card = document.getElementById("polaroidCard");
-    card.classList.add("polaroid-shake");
-    setTimeout(() => card.classList.remove("polaroid-shake"), 600);
-}
+// GANTI CAPTION DENGAN TRANSISI FADE HALUS & INDIKATOR TITIK
+function updateStackCaptionAndDots() {
+    const captionEl = document.getElementById("stackCaption");
+    const dots = document.querySelectorAll("#stackDots .dot");
 
-function nextPhoto() {
-    playSound('click');
-    triggerCameraFlash();
-    photoIdx = (photoIdx + 1) % photos.length;
+    if (!captionEl) return;
+
+    // Fade Out Caption
+    captionEl.classList.add("fade-out");
+
     setTimeout(() => {
-        document.getElementById("polaroidImg").src = photos[photoIdx].src;
-        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
+        captionEl.innerText = photoData[activeStackIdx].caption;
+        captionEl.classList.remove("fade-out");
     }, 150);
+
+    // Update Dots
+    dots.forEach((dot, idx) => {
+        if (idx === activeStackIdx) {
+            dot.classList.add("active");
+        } else {
+            dot.classList.remove("active");
+        }
+    });
 }
 
-function prevPhoto() {
-    playSound('click');
-    triggerCameraFlash();
-    photoIdx = (photoIdx - 1 + photos.length) % photos.length;
+// INTERAKSI KLIK SWIPE OUT & DIPINDAH KE BELAKANG
+function nextPhotoStack(cardIdx) {
+    // Hanya respon jika foto paling depan yang diklik
+    if (cardIdx !== activeStackIdx || isSwiping) return;
+    
+    isSwiping = true;
+    playSound('paper'); // Memutar SFX Suara Kertas
+
+    const cards = document.querySelectorAll('.stack-card');
+    const activeCard = cards[activeStackIdx];
+
+    // 1. Animasi keluar ke samping kanan dengan rotasi
+    activeCard.classList.add("swiping-out");
+
     setTimeout(() => {
-        document.getElementById("polaroidImg").src = photos[photoIdx].src;
-        document.getElementById("polaroidCaption").innerText = photos[photoIdx].caption;
-    }, 150);
+        // 2. Majukan index foto berikutnya
+        activeStackIdx = (activeStackIdx + 1) % 5;
+
+        // 3. Update susunan tumpukan (posisi, scale, z-index)
+        renderPhotoStack();
+
+        // 4. Bawa kembali foto lama ke posisi paling belakang
+        activeCard.classList.remove("swiping-out");
+        isSwiping = false;
+    }, 350);
 }
+
+// Inisialisasi awal saat DOM siap
+document.addEventListener("DOMContentLoaded", () => {
+    renderPhotoStack();
+});
